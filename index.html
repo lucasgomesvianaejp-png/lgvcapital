@@ -1029,7 +1029,7 @@
     }
 
     function renderPgblTool() {
-      return `<div class="tool-panel"><div class="tool-header"><h2>Calculadora de Eficiência PGBL</h2><p>Estime quanto você ainda poderia aportar em PGBL dentro do limite fiscal de 12% e como isso poderia impactar seu imposto.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>Renda tributável anual</label><input id="g_income" data-money inputmode="decimal" value="R$ 180.000,00" oninput="markToolEdited('pgbl')"><div class="field-note">Exemplo inicial: renda tributável de aproximadamente R$ 15 mil por mês.</div></div><div class="field"><label>Declara no modelo completo?</label><select id="g_complete" onchange="markToolEdited('pgbl')"><option value="sim">Sim, modelo completo</option><option value="nao">Não / não tenho certeza</option></select></div><div class="field"><label>Já aplicou em PGBL no ano?</label><select id="g_has_pgbl" onchange="togglePgblAlready(); markToolEdited('pgbl')"><option value="nao">Não</option><option value="sim">Sim</option></select></div><div class="field" id="g_already_wrap" style="display:none;"><label>Valor já aplicado em PGBL no ano</label><input id="g_already" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('pgbl')"></div><div class="field"><label>Imposto devido na declaração</label><input id="g_tax_due" data-money inputmode="decimal" value="R$ 24.300,00" oninput="markToolEdited('pgbl')"></div><div class="inline-2"><div class="field"><label>Resultado atual da declaração</label><select id="g_result_type" onchange="markToolEdited('pgbl')"><option value="pagar">Imposto a pagar</option><option value="restituir">Imposto a restituir</option></select></div><div class="field"><label>Valor a pagar/restituir</label><input id="g_result_value" data-money inputmode="decimal" value="R$ 4.800,00" oninput="markToolEdited('pgbl')"></div></div><div class="field"><label>Aporte mensal desejado (opcional)</label><input id="g_monthly" data-money inputmode="decimal" placeholder="Deixe vazio para usar o máximo eficiente" oninput="markToolEdited('pgbl')"><div class="field-note">Se deixar vazio, a calculadora usa o espaço fiscal disponível dentro do limite de 12%.</div></div><button class="btn btn-primary" onclick="calcPgbl()">Simular resultado</button><div class="simulate-note">Após simular, o botão para baixar o PDF aparecerá junto ao resultado.</div></div><div id="pgblResult" class="result-card result-placeholder"><h3>Pronto para simular</h3><div class="subtle">Revise os dados da declaração e toque em <b>Simular resultado</b>.</div></div></div></div>`;
+      return `<div class="tool-panel"><div class="tool-header"><h2>Calculadora de Eficiência PGBL</h2><p>Estime quanto você ainda poderia aportar em PGBL dentro do limite fiscal de 12% e como isso poderia impactar seu imposto.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>Renda tributável anual</label><input id="g_income" data-money inputmode="decimal" value="R$ 180.000,00" oninput="markToolEdited('pgbl')"><div class="field-note">Exemplo inicial: renda tributável de aproximadamente R$ 15 mil por mês.</div></div><div class="field"><label>Declara no modelo completo?</label><select id="g_complete" onchange="markToolEdited('pgbl')"><option value="sim">Sim, modelo completo</option><option value="nao">Não / não tenho certeza</option></select></div><div class="field"><label>Já aplicou em PGBL no ano?</label><select id="g_has_pgbl" onchange="togglePgblAlready(); markToolEdited('pgbl')"><option value="nao">Não</option><option value="sim">Sim</option></select></div><div class="field" id="g_already_wrap" style="display:none;"><label>Valor já aplicado em PGBL no ano</label><input id="g_already" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('pgbl')"></div><div class="field"><label>Imposto devido na declaração</label><input id="g_tax_due" data-money inputmode="decimal" value="R$ 24.300,00" oninput="markToolEdited('pgbl')"></div><div class="inline-2"><div class="field"><label>Na declaração atual, você tem...</label><select id="g_result_type" onchange="markToolEdited('pgbl')"><option value="pagar">Imposto a pagar</option><option value="restituir">Imposto a restituir</option></select></div><div class="field"><label>Valor atual do resultado</label><input id="g_result_value" data-money inputmode="decimal" value="R$ 4.800,00" oninput="markToolEdited('pgbl')"></div></div><div class="field"><label>Aporte mensal desejado (opcional)</label><input id="g_monthly" data-money inputmode="decimal" placeholder="Deixe vazio para usar o máximo eficiente" oninput="markToolEdited('pgbl')"><div class="field-note">Se deixar vazio, a calculadora usa o espaço fiscal disponível dentro do limite de 12%.</div></div><button class="btn btn-primary" onclick="calcPgbl()">Simular resultado</button><div class="simulate-note">Após simular, o botão para baixar o PDF aparecerá junto ao resultado.</div></div><div id="pgblResult" class="result-card result-placeholder"><h3>Pronto para simular</h3><div class="subtle">Revise os dados da declaração e toque em <b>Simular resultado</b>.</div></div></div></div>`;
     }
 
     function renderProfileTool() {
@@ -1078,29 +1078,83 @@
       const tipoResultado = document.getElementById('g_result_type')?.value || 'pagar';
       const valorResultado = money('g_result_value');
       const aporteMensalDesejado = money('g_monthly');
+
       if (!modeloCompleto) {
-        document.getElementById('pgblResult').classList.remove('result-placeholder'); document.getElementById('pgblResult').innerHTML = `<h3>Atenção ao modelo de declaração</h3><div class="big-number">—</div><div class="notice">O PGBL costuma gerar benefício fiscal para quem faz declaração completa. No modelo simplificado, a dedução pode não gerar economia.</div>`;
+        document.getElementById('pgblResult').classList.remove('result-placeholder');
+        document.getElementById('pgblResult').innerHTML = `<h3>Atenção ao modelo de declaração</h3><div class="big-number">—</div><div class="notice">O PGBL costuma gerar benefício fiscal para quem faz declaração completa. No modelo simplificado, a dedução pode não gerar economia.</div>`;
         return;
       }
       if (rendaTributavel <= 0 || impostoDevido <= 0) {
-        document.getElementById('pgblResult').classList.remove('result-placeholder'); document.getElementById('pgblResult').innerHTML = `<h3>Preencha os dados</h3><div class="big-number">—</div><div class="notice">Informe renda tributável anual e imposto devido para estimar a eficiência do PGBL.</div>`;
+        document.getElementById('pgblResult').classList.remove('result-placeholder');
+        document.getElementById('pgblResult').innerHTML = `<h3>Preencha os dados</h3><div class="big-number">—</div><div class="notice">Informe renda tributável anual e imposto devido para estimar a eficiência do PGBL.</div>`;
         return;
       }
+
       const limitePgbl = rendaTributavel * 0.12;
       const espacoDisponivel = Math.max(0, limitePgbl - pgblJaAportado);
       const aporteDesejadoAnual = aporteMensalDesejado > 0 ? aporteMensalDesejado * 12 : espacoDisponivel;
       const aporteSimulado = Math.min(espacoDisponivel, aporteDesejadoAnual);
+
       const baseAtual = inferBaseByTax(impostoDevido, rendaTributavel);
       const baseNova = Math.max(0, baseAtual - aporteSimulado);
       const impostoNovo = impostoProgressivoAnual2026(baseNova, rendaTributavel);
       const economiaFiscal = Math.max(0, impostoDevido - impostoNovo);
-      const impostoRetido = tipoResultado === 'pagar' ? impostoDevido - valorResultado : impostoDevido + valorResultado;
-      const novoSaldo = impostoNovo - impostoRetido;
-      const fraseResultado = novoSaldo > 1 ? `Com PGBL, seu imposto a pagar poderia cair para aproximadamente ${brl(novoSaldo)}.` : novoSaldo < -1 ? `Com PGBL, você poderia ter aproximadamente ${brl(Math.abs(novoSaldo))} a restituir.` : 'Com PGBL, sua guia poderia ficar praticamente zerada.';
+
+      // Interpretação do resultado atual:
+      // - "pagar": saldoAtual = +valor. Ex.: deve R$ 4.800.
+      // - "restituir": saldoAtual = -valor. Ex.: tem R$ 4.800 a receber.
+      // A economia fiscal reduz o saldo. Portanto:
+      // - se estava a pagar, pode diminuir a guia ou virar restituição;
+      // - se já estava a restituir, a restituição estimada aumenta.
+      const saldoAtualDeclaracao = tipoResultado === 'pagar' ? valorResultado : -valorResultado;
+      const novoSaldo = saldoAtualDeclaracao - economiaFiscal;
+      const resultadoAtualTipo = tipoResultado === 'pagar' ? 'Imposto a pagar' : 'Imposto a restituir';
+      const resultadoAtualDescricao = tipoResultado === 'pagar'
+        ? `Hoje sua declaração indica imposto a pagar de ${brl(valorResultado)}.`
+        : `Hoje sua declaração indica restituição de ${brl(valorResultado)}.`;
+      const resultadoProjetadoTipo = novoSaldo > 1 ? 'Imposto a pagar estimado' : novoSaldo < -1 ? 'Restituição estimada' : 'Resultado estimado zerado';
+      const resultadoProjetadoValor = Math.abs(novoSaldo);
+      const resultadoProjetadoDescricao = novoSaldo > 1
+        ? `Após a simulação com PGBL, o imposto a pagar poderia cair para aproximadamente ${brl(novoSaldo)}.`
+        : novoSaldo < -1
+          ? `Após a simulação com PGBL, a restituição estimada poderia ser de aproximadamente ${brl(Math.abs(novoSaldo))}.`
+          : 'Após a simulação com PGBL, o saldo da declaração ficaria praticamente zerado.';
+      const variacaoResultado = tipoResultado === 'pagar'
+        ? (novoSaldo > 1
+            ? `Redução estimada do imposto a pagar: ${brl(economiaFiscal)}.`
+            : `A economia estimada de ${brl(economiaFiscal)} eliminaria o imposto a pagar e poderia gerar restituição.`)
+        : `A economia estimada de ${brl(economiaFiscal)} aumentaria a restituição atual.`;
+
       const semEspaco = espacoDisponivel <= 0;
-      document.getElementById('pgblResult').classList.remove('result-placeholder'); document.getElementById('pgblResult').innerHTML = `<div class="pgbl-impact"><h3>${semEspaco ? 'Limite já utilizado' : 'Economia fiscal estimada'}</h3><div class="big-number">${brl(economiaFiscal)}</div><p class="subtle" style="color:rgba(248,247,244,.72);">Você poderia transformar parte do imposto em patrimônio, respeitando o limite fiscal eficiente.</p></div><div class="result-grid"><div class="mini-result"><span>Limite PGBL 12%</span><b>${brl(limitePgbl)}</b></div><div class="mini-result"><span>Espaço disponível</span><b>${brl(espacoDisponivel)}</b></div><div class="mini-result"><span>Aporte simulado</span><b>${brl(aporteSimulado)}</b></div><div class="mini-result"><span>Aporte mensal equivalente</span><b>${brl(aporteSimulado/12)}</b></div></div><div class="notice"><b>Resultado prático:</b> ${fraseResultado}</div><div class="notice">Simulação ilustrativa. O resultado pode variar conforme deduções, retenções, contribuição previdenciária, modelo de declaração, valores já aportados em PGBL e informações completas da declaração.</div>${save ? '' : pdfResultAction('calcPgbl(true)')}`; showResultActions('pgblResult');
-      if (save) trackEvent('Calculadora PGBL', { rendaTributavel, modeloCompleto, pgblJaAportado, impostoDevido, tipoResultado, valorResultado, aporteMensalDesejado, aporteDesejadoAnual, modoAporte: aporteMensalDesejado > 0 ? 'Aporte mensal informado pelo usuário' : 'Máximo espaço fiscal disponível', limitePgbl, espacoDisponivel, aporteSimulado, economiaFiscal, novoSaldo }, { resumo: `Economia fiscal estimada: ${brl(economiaFiscal)} | aporte eficiente: ${brl(aporteSimulado)}` });
+      document.getElementById('pgblResult').classList.remove('result-placeholder');
+      document.getElementById('pgblResult').innerHTML = `<div class="pgbl-impact"><h3>${semEspaco ? 'Limite já utilizado' : 'Economia fiscal estimada'}</h3><div class="big-number">${brl(economiaFiscal)}</div><p class="subtle" style="color:rgba(248,247,244,.72);">Você poderia transformar parte do imposto em patrimônio, respeitando o limite fiscal eficiente.</p></div><div class="result-grid"><div class="mini-result"><span>Resultado atual informado</span><b>${resultadoAtualTipo}</b><em class="explain">${resultadoAtualDescricao}</em></div><div class="mini-result"><span>${resultadoProjetadoTipo}</span><b>${brl(resultadoProjetadoValor)}</b><em class="explain">${resultadoProjetadoDescricao}</em></div><div class="mini-result"><span>Limite PGBL 12%</span><b>${brl(limitePgbl)}</b></div><div class="mini-result"><span>Espaço disponível</span><b>${brl(espacoDisponivel)}</b></div><div class="mini-result"><span>Aporte simulado</span><b>${brl(aporteSimulado)}</b></div><div class="mini-result"><span>Aporte mensal equivalente</span><b>${brl(aporteSimulado/12)}</b></div></div><div class="notice"><b>Leitura correta:</b> ${resultadoAtualDescricao} ${resultadoProjetadoDescricao} ${variacaoResultado}</div><div class="notice"><b>Atenção:</b> “imposto devido” não é a mesma coisa que “imposto a pagar”. O imposto devido é o cálculo total da declaração; o resultado a pagar ou a restituir depende também do imposto já retido na fonte e de outras deduções.</div><div class="notice">Simulação ilustrativa. O resultado pode variar conforme deduções, retenções, contribuição previdenciária, modelo de declaração, valores já aportados em PGBL e informações completas da declaração.</div>${save ? '' : pdfResultAction('calcPgbl(true)')}`;
+      showResultActions('pgblResult');
+
+      if (save) trackEvent('Calculadora PGBL', {
+        rendaTributavel,
+        modeloCompleto,
+        pgblJaAportado,
+        impostoDevido,
+        tipoResultado,
+        resultadoAtualTipo,
+        valorResultado,
+        saldoAtualDeclaracao,
+        aporteMensalDesejado,
+        aporteDesejadoAnual,
+        modoAporte: aporteMensalDesejado > 0 ? 'Aporte mensal informado pelo usuário' : 'Máximo espaço fiscal disponível',
+        limitePgbl,
+        espacoDisponivel,
+        aporteSimulado,
+        economiaFiscal,
+        novoSaldo,
+        resultadoProjetadoTipo,
+        resultadoProjetadoValor,
+        resultadoAtualDescricao,
+        resultadoProjetadoDescricao,
+        variacaoResultado
+      }, { resumo: `${resultadoProjetadoTipo}: ${brl(resultadoProjetadoValor)} | economia fiscal: ${brl(economiaFiscal)} | aporte eficiente: ${brl(aporteSimulado)}` });
     }
+
 
     function togglePgblAlready() {
       const wrap = document.getElementById('g_already_wrap');
@@ -1747,6 +1801,9 @@
 
       if (tool === 'Calculadora PGBL') {
         const novo = Number(d.novoSaldo || 0);
+        const tipoAtual = d.resultadoAtualTipo || (d.tipoResultado === 'pagar' ? 'Imposto a pagar' : 'Imposto a restituir');
+        const valorProjetado = Number(d.resultadoProjetadoValor) || Math.abs(novo);
+        const tipoProjetado = d.resultadoProjetadoTipo || (novo > 0 ? 'Imposto a pagar estimado' : novo < 0 ? 'Restituição estimada' : 'Resultado estimado zerado');
         return {
           title: 'Eficiência fiscal com PGBL',
           subtitle: 'Estimativa rápida de quanto imposto poderia ser direcionado para previdência dentro do limite fiscal eficiente.',
@@ -1757,24 +1814,28 @@
             { label: 'Renda tributável anual', value: moneyFmt(d.rendaTributavel) },
             { label: 'Modelo completo', value: d.modeloCompleto ? 'Sim' : 'Não / dúvida' },
             { label: 'PGBL já aportado', value: moneyFmt(d.pgblJaAportado) },
+            { label: 'Aporte mensal desejado', value: Number(d.aporteMensalDesejado) > 0 ? moneyFmt(d.aporteMensalDesejado) : 'Não informado' },
+            { label: 'Modo de aporte', value: d.modoAporte || '—' },
             { label: 'Imposto devido atual', value: moneyFmt(d.impostoDevido) },
-            { label: 'Resultado informado', value: `${d.tipoResultado === 'a_pagar' ? 'A pagar' : 'A restituir'}` },
-            { label: 'Valor informado', value: moneyFmt(d.valorResultado) }
+            { label: 'Resultado atual informado', value: tipoAtual },
+            { label: tipoAtual === 'Imposto a pagar' ? 'Valor atual a pagar' : 'Valor atual a restituir', value: moneyFmt(d.valorResultado) }
           ],
           results: [
             { label: 'Limite PGBL 12%', value: moneyFmt(d.limitePgbl), note: 'Limite fiscal estimado' },
             { label: 'Espaço disponível', value: moneyFmt(d.espacoDisponivel), note: 'Dentro do limite anual' },
             { label: 'Aporte simulado', value: moneyFmt(d.aporteSimulado), note: 'Valor usado na conta' },
             { label: 'Aporte mensal equivalente', value: moneyFmt((Number(d.aporteSimulado)||0)/12), note: 'Divisão em 12 meses' },
-            { label: novo < 0 ? 'Restituição estimada' : 'Novo saldo estimado', value: moneyFmt(Math.abs(novo)), note: novo < 0 ? 'Possível restituição' : 'Possível imposto a pagar' },
+            { label: tipoProjetado, value: moneyFmt(valorProjetado), note: novo < -1 ? 'Possível restituição' : novo > 1 ? 'Possível imposto a pagar' : 'Saldo próximo de zero' },
             { label: 'Economia fiscal', value: moneyFmt(d.economiaFiscal), note: 'Estimativa ilustrativa' }
           ],
           explanations: [
-            { title: 'Leitura prática', text: 'O PGBL pode reduzir a base tributável quando usado dentro do limite fiscal e no modelo completo.' },
+            { title: 'Leitura correta', text: `${d.resultadoAtualDescricao || ''} ${d.resultadoProjetadoDescricao || ''}`.trim() || 'O resultado projetado deve ser lido como imposto a pagar ou restituição estimada, conforme o sinal do saldo.' },
+            { title: 'A pagar x a restituir', text: 'Imposto devido é o cálculo total. O resultado a pagar ou a restituir depende do imposto já retido e de outras deduções.' },
             { title: 'Atenção', text: 'O resultado depende dos dados completos da declaração, retenções, deduções e valores já aplicados.' }
           ]
         };
       }
+
 
       if (tool === 'Perfil de Investidor') {
         const alloc = d.allocations || {};
