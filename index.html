@@ -1040,7 +1040,7 @@
         ['p_reserve','Você já possui reserva de emergência?', [['Não tenho',1],['Menos de 3 meses de custo de vida',2],['Entre 3 e 6 meses',3],['Entre 6 e 12 meses',4],['Mais de 12 meses',5]]],
         ['p_goal','Qual é seu principal objetivo hoje?', [['Montar reserva de emergência',1],['Proteger patrimônio',2],['Comprar imóvel, carro ou objetivo específico',2],['Aposentadoria',4],['Crescimento patrimonial',5],['Independência financeira',5]]],
         ['p_horizon','Em quanto tempo você pretende usar esse dinheiro?', [['Menos de 1 ano',1],['Entre 1 e 3 anos',2],['Entre 3 e 5 anos',3],['Entre 5 e 10 anos',4],['Mais de 10 anos',5],['Mais de 20 anos',5]]],
-        ['p_experience','Qual sua experiência com investimentos?', [['Só poupança',1],['Tesouro, CDB, LCI, LCA ou renda fixa',2],['Fundos de investimento',3],['Ações e fundos imobiliários',4],['Exterior, cripto ou ativos de maior risco',5]]],
+        ['p_experience','Qual sua experiência com investimentos?', [['Só poupança',1],['Poupança + Tesouro, CDB, LCI, LCA ou renda fixa',2],['Todos os anteriores + fundos de investimento',3],['Todos os anteriores + ações e fundos imobiliários',4],['Todos os anteriores + exterior, cripto ou ativos de maior risco',5]]],
         ['p_understand','Você entende que investimentos com maior potencial de retorno podem passar por quedas temporárias?', [['Não entendo bem',1],['Entendo pouco',2],['Entendo, mas tenho muito receio',3],['Entendo e aceito alguma oscilação',4],['Entendo e aceito oscilações fortes no longo prazo',5]]],
         ['p_reaction','Se sua carteira caísse 10% em um mês, o que você faria?', [['Venderia tudo para evitar perder mais',1],['Ficaria preocupado e reduziria risco',2],['Não faria nada e aguardaria',3],['Aproveitaria para investir mais aos poucos',4],['Veria como oportunidade de longo prazo',5]]],
         ['p_drawdown','Qual queda temporária você aceitaria suportar?', [['Nenhuma',1],['Até 5%',2],['Até 10%',3],['Até 20%',4],['Mais de 20%',5]]],
@@ -1149,7 +1149,7 @@
       const profile = profileLevels[idx];
       const alloc = applyCryptoRules(profileAllocations[profile], v, notes);
       const payload = { profile, score: Number(score.toFixed(2)), allocations: alloc, answers: Object.fromEntries(ids.map(id => [id, label(id)])), notes };
-      renderProfileResult(payload);
+      renderProfileResult(payload, save);
       if (save) trackEvent('Perfil de Investidor', payload, { resumo: `Perfil identificado: ${profile}` });
     }
     function applyCryptoRules(base, v, notes) {
@@ -1158,7 +1158,7 @@
       if (!canCrypto && alloc.Cripto > 0) { notes.push('A exposição a cripto foi redirecionada para renda fixa por causa de prazo, reserva, tolerância a oscilação ou compreensão de risco.'); alloc['Renda Fixa'] += alloc.Cripto; alloc.Cripto = 0; }
       return alloc;
     }
-    function renderProfileResult(payload) {
+    function renderProfileResult(payload, save=false) {
       const res = document.getElementById('profileResult');
       const legend = Object.entries(payload.allocations).map(([k, val], i) => `<div class="legend-item"><span class="legend-left"><span class="swatch" style="background:${palette[i]}"></span>${k}</span><b>${val}%</b></div>`).join('');
       let start = 0;
