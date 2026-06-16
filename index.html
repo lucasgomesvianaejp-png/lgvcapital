@@ -1050,7 +1050,7 @@
     }
 
     function renderMillionTool() {
-      return `<div class="tool-panel"><div class="tool-header"><h2>Calculadora do Primeiro Milhão</h2><p>Escolha se quer descobrir em quanto tempo chega ao primeiro milhão ou quanto precisa aportar por mês para atingir a meta no prazo desejado.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>O que você quer estimar?</label><select id="m_mode" onchange="updateMillionMode(); markToolEdited('milhao')"><option value="tempo">Quando chego ao objetivo?</option><option value="aporte">Quanto preciso aportar por mês?</option></select></div><div class="field"><label>Objetivo financeiro</label><input id="m_goal" data-money inputmode="decimal" value="R$ 1.000.000,00" oninput="markToolEdited('milhao')"></div><div class="field"><label>Patrimônio inicial</label><input id="m_initial" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('milhao')"></div><div class="field"><label>Rentabilidade anual estimada (%)</label><input id="m_rate" inputmode="decimal" value="14,50" oninput="markToolEdited('milhao')"><div class="field-note">Todas as rentabilidades desta ferramenta são ao ano. Padrão atual: 14,5% a.a.</div></div><div id="m_time_fields" class="mode-block"><div class="field"><label>Aporte mensal</label><input id="m_monthly" data-money inputmode="decimal" value="R$ 1.000,00" oninput="markToolEdited('milhao')"></div></div><div id="m_contribution_fields" class="mode-block hidden"><div class="field"><label>Prazo desejado (anos)</label><input id="m_years" inputmode="decimal" value="20" oninput="markToolEdited('milhao')"></div></div><button class="btn btn-primary" onclick="calcMillion()">Simular resultado</button><div class="simulate-note">Depois do resultado, você poderá baixar um PDF com a simulação.</div></div><div id="millionResult" class="result-card result-placeholder"><h3>Pronto para simular</h3><div class="subtle">Preencha as premissas e toque em <b>Simular resultado</b>.</div></div></div></div>`;
+      return `<div class="tool-panel"><div class="tool-header"><h2>Calculadora do Primeiro Milhão</h2><p>Escolha se quer descobrir em quanto tempo chega ao primeiro milhão ou quanto precisa aportar por mês para atingir a meta no prazo desejado.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>O que você quer estimar?</label><select id="m_mode" onchange="updateMillionMode(); markToolEdited('milhao')"><option value="tempo">Quando chego ao objetivo?</option><option value="aporte">Quanto preciso aportar por mês?</option></select></div><div class="field"><label>Objetivo financeiro</label><input id="m_goal" data-money inputmode="decimal" value="R$ 1.000.000,00" oninput="markToolEdited('milhao')"></div><div class="field"><label>Patrimônio inicial</label><input id="m_initial" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('milhao')"></div><div class="inline-2"><div class="field"><label>Rentabilidade anual estimada (%)</label><input id="m_rate" inputmode="decimal" value="14,50" oninput="markToolEdited('milhao')"><div class="field-note">Todas as rentabilidades desta ferramenta são ao ano. Padrão atual: 14,5% a.a.</div></div><div class="field"><label>Inflação anual estimada (%)</label><input id="m_inflation" inputmode="decimal" value="5,50" oninput="markToolEdited('milhao')"><div class="field-note">Usada para estimar o equivalente em poder de compra de hoje.</div></div></div><div id="m_time_fields" class="mode-block"><div class="field"><label>Aporte mensal</label><input id="m_monthly" data-money inputmode="decimal" value="R$ 1.000,00" oninput="markToolEdited('milhao')"></div></div><div id="m_contribution_fields" class="mode-block hidden"><div class="field"><label>Prazo desejado (anos)</label><input id="m_years" inputmode="decimal" value="20" oninput="markToolEdited('milhao')"></div></div><button class="btn btn-primary" onclick="calcMillion()">Simular resultado</button><div class="simulate-note">Depois do resultado, você poderá baixar um PDF com a simulação.</div></div><div id="millionResult" class="result-card result-placeholder"><h3>Pronto para simular</h3><div class="subtle">Preencha as premissas e toque em <b>Simular resultado</b>.</div></div></div></div>`;
     }
 
     function fixedInvestmentSlot(n, product='cdb') {
@@ -1218,7 +1218,10 @@
       let start = 0;
       const gradient = Object.values(payload.allocations).map((val, i) => { const end = start + val; const part = `${palette[i]} ${start}% ${end}%`; start = end; return part; }).join(', ');
       const notes = payload.notes.length ? `<div class="notice"><b>Ajustes aplicados:</b><br>${payload.notes.map(n => `• ${n}`).join('<br>')}</div>` : '';
-      res.innerHTML = `<div class="profile-result-layout"><div class="donut-wrap"><div class="donut" style="background:conic-gradient(${gradient})"></div><div class="legend">${legend}</div></div><div><span class="risk-tag">Perfil inicial</span><div class="profile-name">${payload.profile}</div><p class="profile-desc">${profileDescriptions[payload.profile]}</p>${notes}<div class="notice"><b>Importante:</b> este diagnóstico tem caráter educativo e não substitui uma análise individual completa. A carteira adequada depende de entrevista, objetivos, patrimônio, renda, liquidez, horizonte de investimento e tolerância real a risco.</div><a class="btn btn-primary" style="margin-top:16px;" href="https://wa.me/${LGV_CONFIG.whatsapp}?text=${encodeURIComponent('Olá, Lucas. Fiz o diagnóstico de perfil no site da LGV Capital e gostaria de uma análise personalizada.') }" target="_blank">Quero uma análise personalizada</a>${save ? '' : pdfResultAction('calcProfile(true)')}</div></div>`; showResultActions('profileResult');
+      const scoreText = Number.isFinite(Number(payload.score)) ? `${Number(payload.score).toFixed(2).replace('.', ',')} / 5,00` : '—';
+      const cryptoNote = Number(payload.allocations?.Cripto || 0) > 0 ? `<div class="notice"><b>Nota sobre criptoativos:</b> criptoativos envolvem alta volatilidade, risco de perda relevante e não devem ser tratados como recomendação individual. A exposição depende de avaliação específica do investidor.</div>` : '';
+      res.innerHTML = `<div class="profile-result-layout"><div class="donut-wrap"><div class="donut" style="background:conic-gradient(${gradient})"></div><div class="legend">${legend}</div></div><div><span class="risk-tag">Perfil inicial</span><div class="profile-name">${payload.profile}</div><p class="profile-desc">${profileDescriptions[payload.profile]}</p><div class="mini-result" style="margin:12px 0;"><span>Pontuação do diagnóstico</span><b>${scoreText}</b><em class="explain">Escala educativa de 1 a 5, combinando comportamento, capacidade financeira e horizonte.</em></div>${notes}${cryptoNote}<div class="notice"><b>Importante:</b> este diagnóstico tem caráter educativo e não substitui uma análise individual completa. A carteira adequada depende de entrevista, objetivos, patrimônio, renda, liquidez, horizonte de investimento e tolerância real a risco.</div><a class="btn btn-primary" style="margin-top:16px;" href="https://wa.me/${LGV_CONFIG.whatsapp}?text=${encodeURIComponent('Olá, Lucas. Fiz o diagnóstico de perfil no site da LGV Capital e gostaria de uma análise personalizada.') }" target="_blank">Quero uma análise personalizada</a>${save ? '' : pdfResultAction('calcProfile(true)')}</div></div>`;
+      showResultActions('profileResult');
     }
 
     function updateMillionMode() {
@@ -1234,10 +1237,22 @@
     function calcMillion(save=false) {
       if (!document.getElementById('m_initial')) return;
       const mode = document.getElementById('m_mode')?.value || 'tempo';
-      const initial = money('m_initial'), annualRate = percentAnnual('m_rate'), rate = annualToMonthly(annualRate), goal = money('m_goal') || 1000000;
-      let payload = { mode, initial, annualRate, goal };
+      const initial = money('m_initial');
+      const annualRate = percentAnnual('m_rate');
+      const inflation = percentAnnual('m_inflation');
+      const rate = annualToMonthly(annualRate);
+      const goal = money('m_goal') || 1000000;
+      let payload = { mode, initial, annualRate, inflation, goal };
       let html = '';
-      if (initial >= goal) { html = `<h3>Objetivo já atingido</h3><div class="big-number">${brl(initial)}</div><div class="notice">Seu patrimônio inicial informado já é maior ou igual ao objetivo.</div>`; document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)'); showResultActions('millionResult'); if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: 'Objetivo já atingido.' }); return; }
+
+      if (initial >= goal) {
+        html = `<h3>Objetivo já atingido</h3><div class="big-number">${brl(initial)}</div><div class="notice">Seu patrimônio inicial informado já é maior ou igual ao objetivo.</div>`;
+        document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)');
+        showResultActions('millionResult');
+        if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: 'Objetivo já atingido.' });
+        return;
+      }
+
       if (mode === 'aporte') {
         const yearsTarget = Math.max(0.1, num('m_years'));
         const months = Math.max(1, Math.round(yearsTarget * 12));
@@ -1247,20 +1262,29 @@
         const totalContrib = initial + requiredMonthly * months;
         const finalBalance = compound(initial, requiredMonthly, rate, months);
         const interest = finalBalance - totalContrib;
+        const finalReal = finalBalance / Math.pow(1 + inflation, months / 12);
         const y = Math.floor(months / 12), rem = months % 12;
-        html = `<h3>Aporte mensal necessário</h3><div class="big-number">${brl(requiredMonthly)}</div><div class="subtle">Para chegar a ${brl(goal)} em ${y} anos${rem ? ` e ${rem} meses` : ''}, usando rentabilidade anual de ${(annualRate*100).toFixed(2).replace('.',',')}%.</div><div class="result-grid"><div class="mini-result"><span>Patrimônio projetado</span><b>${brl(finalBalance)}</b></div><div class="mini-result"><span>Total investido</span><b>${brl(totalContrib)}</b></div><div class="mini-result"><span>Juros acumulados</span><b>${brl(interest)}</b></div><div class="mini-result"><span>Prazo desejado</span><b>${y}a ${rem}m</b></div></div><div class="notice">Simulação educativa com rentabilidade anual constante. A rentabilidade futura não é garantida.</div>`;
-        payload = { ...payload, yearsTarget, months, requiredMonthly, finalBalance, totalContrib, interest };
-        if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: `Aporte necessário: ${brl(requiredMonthly)}` });
+        html = `<h3>Aporte mensal necessário</h3><div class="big-number">${brl(requiredMonthly)}</div><div class="subtle">Para chegar a ${brl(goal)} em ${y} anos${rem ? ` e ${rem} meses` : ''}, usando rentabilidade anual de ${(annualRate*100).toFixed(2).replace('.',',')}%.</div><div class="result-grid"><div class="mini-result"><span>Patrimônio projetado nominal</span><b>${brl(finalBalance)}</b></div><div class="mini-result"><span>Equivalente em reais de hoje</span><b>${brl(finalReal)}</b><em class="explain">Estimado com inflação de ${(inflation*100).toFixed(2).replace('.', ',')}% a.a.</em></div><div class="mini-result"><span>Total investido</span><b>${brl(totalContrib)}</b></div><div class="mini-result"><span>Juros acumulados</span><b>${brl(interest)}</b></div><div class="mini-result"><span>Prazo desejado</span><b>${y}a ${rem}m</b></div></div><div class="notice"><b>Nominal x real:</b> o valor nominal é o saldo futuro. O equivalente em reais de hoje desconta a inflação estimada para mostrar poder de compra aproximado.</div><div class="notice">Simulação educativa com rentabilidade anual constante. A rentabilidade futura não é garantida.</div>`;
+        payload = { ...payload, yearsTarget, months, requiredMonthly, finalBalance, finalReal, totalContrib, interest };
+        if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: `Aporte necessário: ${brl(requiredMonthly)} | valor real estimado: ${brl(finalReal)}` });
       } else {
-        const monthly = money('m_monthly'); let balance = initial, months = 0, totalContrib = initial;
-        if (monthly <= 0 && rate <= 0) { html = `<h3>Simulação indisponível</h3><div class="big-number">—</div><div class="notice">Informe um aporte mensal ou uma rentabilidade positiva para estimar o tempo até o objetivo.</div>`; document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)'); showResultActions('millionResult'); return; }
+        const monthly = money('m_monthly');
+        let balance = initial, months = 0, totalContrib = initial;
+        if (monthly <= 0 && rate <= 0) {
+          html = `<h3>Simulação indisponível</h3><div class="big-number">—</div><div class="notice">Informe um aporte mensal ou uma rentabilidade positiva para estimar o tempo até o objetivo.</div>`;
+          document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)');
+          showResultActions('millionResult');
+          return;
+        }
         while (balance < goal && months < 1200) { balance = balance * (1 + rate) + monthly; totalContrib += monthly; months++; }
         const years = Math.floor(months / 12), rem = months % 12, interest = balance - totalContrib, reached = balance >= goal;
-        html = `<h3>${reached ? 'Tempo estimado' : 'Prazo acima de 100 anos'}</h3><div class="big-number">${reached ? `${years} anos e ${rem} meses` : '—'}</div><div class="result-grid"><div class="mini-result"><span>Patrimônio final</span><b>${brl(balance)}</b></div><div class="mini-result"><span>Total investido</span><b>${brl(totalContrib)}</b></div><div class="mini-result"><span>Juros acumulados</span><b>${brl(interest)}</b></div><div class="mini-result"><span>Rentabilidade anual</span><b>${(annualRate*100).toFixed(2).replace('.',',')}%</b></div></div><div class="notice">Simulação educativa com rentabilidade anual constante. Na prática, investimentos oscilam e a rentabilidade futura não é garantida.</div>`;
-        payload = { ...payload, monthly, years, months: rem, totalMonths: months, balance, totalContrib, interest };
-        if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: `Tempo estimado: ${years} anos e ${rem} meses` });
+        const finalReal = balance / Math.pow(1 + inflation, months / 12);
+        html = `<h3>${reached ? 'Tempo estimado' : 'Prazo acima de 100 anos'}</h3><div class="big-number">${reached ? `${years} anos e ${rem} meses` : '—'}</div><div class="result-grid"><div class="mini-result"><span>Patrimônio final nominal</span><b>${brl(balance)}</b></div><div class="mini-result"><span>Equivalente em reais de hoje</span><b>${brl(finalReal)}</b><em class="explain">Estimado com inflação de ${(inflation*100).toFixed(2).replace('.', ',')}% a.a.</em></div><div class="mini-result"><span>Total investido</span><b>${brl(totalContrib)}</b></div><div class="mini-result"><span>Juros acumulados</span><b>${brl(interest)}</b></div><div class="mini-result"><span>Rentabilidade anual</span><b>${(annualRate*100).toFixed(2).replace('.',',')}%</b></div></div><div class="notice"><b>Nominal x real:</b> o valor nominal é o saldo futuro. O equivalente em reais de hoje desconta a inflação estimada para mostrar poder de compra aproximado.</div><div class="notice">Simulação educativa com rentabilidade anual constante. Na prática, investimentos oscilam e a rentabilidade futura não é garantida.</div>`;
+        payload = { ...payload, monthly, years, months: rem, totalMonths: months, balance, finalReal, totalContrib, interest };
+        if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: `Tempo estimado: ${years} anos e ${rem} meses | valor real estimado: ${brl(finalReal)}` });
       }
-      document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)'); showResultActions('millionResult');
+      document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)');
+      showResultActions('millionResult');
     }
 
     function updateFiCount() {
@@ -1290,9 +1314,17 @@
 
     function calcFixedIncome(save=false) {
       if (!document.getElementById('c_initial')) return;
-      const count = Number(document.getElementById('c_count')?.value || 2), initial = money('c_initial'), monthly = money('c_monthly'), years = Math.max(0.01, num('c_years'));
-      const months = Math.max(1, Math.round(years * 12)), cdi = percentAnnual('c_cdi'), ipca = percentAnnual('c_ipca'), contrib = initial + monthly * months;
+      const count = Number(document.getElementById('c_count')?.value || 2);
+      const initial = money('c_initial');
+      const monthly = money('c_monthly');
+      const years = Math.max(0.01, num('c_years'));
+      const months = Math.max(1, Math.round(years * 12));
+      const estimatedDays = Math.round(months * 365 / 12);
+      const cdi = percentAnnual('c_cdi');
+      const ipca = percentAnnual('c_ipca');
+      const contrib = initial + monthly * months;
       const items = [];
+
       for (let i=1; i<=count; i++) {
         const product = document.getElementById(`fi_product_${i}`)?.value || 'cdb';
         const cfg = fixedIncomeProducts[product] || fixedIncomeProducts.cdb;
@@ -1301,23 +1333,29 @@
         const annualRate = fixedAnnualRateFrom(indexer, rateInput, cdi, ipca);
         const monthlyRate = annualToMonthly(annualRate);
         const gross = compound(initial, monthly, monthlyRate, months);
+        const grossIncome = Math.max(0, gross - contrib);
         const taxRate = cfg.tax === 'isento' ? 0 : taxRateByTerm(document.getElementById(`fi_tax_term_${i}`)?.value || 'auto', months);
-        const net = contrib + Math.max(0, gross - contrib) * (1 - taxRate);
-        items.push({ i, product, label: cfg.label, indexer, annualRate, gross, net, taxRate, contrib });
+        const taxValue = grossIncome * taxRate;
+        const net = gross - taxValue;
+        const netIncome = Math.max(0, net - contrib);
+        const taxLabel = cfg.tax === 'isento' ? 'Isento' : `${(taxRate*100).toFixed(1).replace('.', ',')}%`;
+        items.push({ i, product, label: cfg.label, indexer, annualRate, gross, net, taxRate, taxValue, grossIncome, netIncome, contrib, taxLabel, estimatedDays });
       }
+
       const best = items.reduce((a,b) => b.net > a.net ? b : a, items[0]);
       const maxNet = Math.max(...items.map(x => x.net));
       const rows = items.map(x => {
-        const grossIncome = Math.max(0, x.gross - x.contrib);
-        const taxValue = Math.max(0, x.gross - x.net);
-        const netIncome = Math.max(0, x.net - x.contrib);
-        const taxText = x.taxRate > 0 ? `IR estimado de ${(x.taxRate*100).toFixed(1).replace('.',',')}% sobre o rendimento` : 'Isento de IR para pessoa física nesta simulação';
-        return `<div class="comparison-row expanded-row"><div><b>${x.label}</b><br><span>${fixedIndexerText(x.indexer, x.annualRate)} · ${taxText}</span><div class="field-note">Bruto: ${brl(x.gross)} · Líquido: ${brl(x.net)} · Rendimento bruto: ${brl(grossIncome)} · IR estimado: ${brl(taxValue)} · Rendimento líquido: ${brl(netIncome)}</div></div><b>${brl(x.net)}</b></div>`;
+        const taxText = x.taxRate > 0 ? `IR estimado de ${x.taxLabel} sobre o rendimento` : 'Isento de IR para pessoa física nesta simulação';
+        return `<div class="comparison-row expanded-row"><div><b>${x.label}</b><br><span>${fixedIndexerText(x.indexer, x.annualRate)} · ${taxText}</span><div class="field-note">Bruto: ${brl(x.gross)} · Líquido: ${brl(x.net)} · Rendimento bruto: ${brl(x.grossIncome)} · IR estimado: ${brl(x.taxValue)} · Rendimento líquido: ${brl(x.netIncome)}</div></div><b>${brl(x.net)}</b></div>`;
       }).join('');
       const bars = items.map(x => `<div class="bar-line"><span>${x.label}</span><div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, (x.net/maxNet)*100)}%"></div></div><div class="field-note">Líquido: ${brl(x.net)}</div></div></div>`).join('');
       const ranking = [...items].sort((a,b)=>b.net-a.net).map((x,idx)=>`${idx+1}º ${x.label}: ${brl(x.net)}`).join(' · ');
-      document.getElementById('cdbResult').classList.remove('result-placeholder'); document.getElementById('cdbResult').innerHTML = `<h3>Comparação líquida estimada</h3><div class="big-number">${best.label}</div><div class="subtle">Maior valor líquido estimado no prazo informado: ${brl(best.net)}. Ranking: ${ranking}.</div><div class="comparison-table">${rows}</div><div class="bar-chart">${bars}</div><div class="result-grid"><div class="mini-result"><span>Valor investido</span><b>${brl(contrib)}</b></div><div class="mini-result"><span>Prazo</span><b>${years.toFixed(1).replace('.',',')} anos</b></div><div class="mini-result"><span>Maior bruto</span><b>${brl(Math.max(...items.map(x=>x.gross)))}</b></div><div class="mini-result"><span>Diferença 1º x último</span><b>${brl(Math.max(...items.map(x=>x.net))-Math.min(...items.map(x=>x.net)))}</b></div></div><div class="notice"><b>Como ler:</b> valor bruto é o saldo antes de imposto; valor líquido é o saldo estimado depois do IR, quando houver. Produtos tributáveis usam IR regressivo sobre os rendimentos; produtos isentos foram tratados com IR zero para pessoa física. Não considera taxas, spread de compra/venda, marcação a mercado, risco de crédito ou liquidez.</div>${save ? '' : pdfResultAction('calcFixedIncome(true)')}`; showResultActions('cdbResult');
-      if (save) trackEvent('Comparador de Renda Fixa', { initial, monthly, years, cdi, ipca, items, best }, { resumo: `Melhor resultado: ${best.label} com ${brl(best.net)}` });
+      const irRuler = `<div class="notice"><b>Régua de IR regressivo:</b> até 180 dias: 22,5% · 181 a 360 dias: 20% · 361 a 720 dias: 17,5% · acima de 720 dias: 15%. Prazo estimado desta simulação: ${estimatedDays} dias.</div>`;
+
+      document.getElementById('cdbResult').classList.remove('result-placeholder');
+      document.getElementById('cdbResult').innerHTML = `<h3>Comparação líquida estimada</h3><div class="big-number">${best.label}</div><div class="subtle">Maior valor líquido estimado no prazo informado: ${brl(best.net)}. Ranking: ${ranking}.</div><div class="comparison-table">${rows}</div><div class="bar-chart">${bars}</div><div class="result-grid"><div class="mini-result"><span>Valor investido</span><b>${brl(contrib)}</b></div><div class="mini-result"><span>Prazo</span><b>${years.toFixed(1).replace('.',',')} anos</b></div><div class="mini-result"><span>Maior bruto</span><b>${brl(Math.max(...items.map(x=>x.gross)))}</b></div><div class="mini-result"><span>Diferença 1º x último</span><b>${brl(Math.max(...items.map(x=>x.net))-Math.min(...items.map(x=>x.net)))}</b></div></div>${irRuler}<div class="notice"><b>Como ler:</b> valor bruto é o saldo antes de imposto; valor líquido é o saldo estimado depois do IR, quando houver. O ranking, a tabela e o PDF usam a mesma variável líquida calculada. Produtos isentos foram tratados com IR zero para pessoa física. Não considera taxas, spread de compra/venda, marcação a mercado, risco de crédito ou liquidez.</div>${save ? '' : pdfResultAction('calcFixedIncome(true)')}`;
+      showResultActions('cdbResult');
+      if (save) trackEvent('Comparador de Renda Fixa', { initial, monthly, years, months, estimatedDays, cdi, ipca, items, best }, { resumo: `Melhor resultado: ${best.label} com ${brl(best.net)}` });
     }
 
     function fixedIndexerText(indexer, annualRate) {
@@ -1375,10 +1413,12 @@
       const capitalIncomePreserve = capitalForIncome(goalIncome, realMonthlyRet, monthsUse, true);
       const monthlyIncomeConsume = requiredMonthlyForGoal(capitalIncomeConsume, initial, realMonthlyAccum, monthsAccum);
       const monthlyIncomePreserve = requiredMonthlyForGoal(capitalIncomePreserve, initial, realMonthlyAccum, monthsAccum);
+      const goalPct = goalWealth > 0 ? Math.min(999, (futureReal / goalWealth) * 100) : 0;
+      const goalGap = Math.max(0, goalWealth - futureReal);
       const pct = v => `${(v * 100).toFixed(2).replace('.', ',')}% a.a.`;
       const yearsUse = Math.round(monthsUse / 12);
-      document.getElementById('retirementResult').classList.remove('result-placeholder'); document.getElementById('retirementResult').innerHTML = `<h3>Situação atual projetada</h3><div class="big-number">${brl(futureReal)}</div><div class="subtle">Patrimônio real estimado na aposentadoria. Valor nominal estimado: ${brl(futureNominal)}.</div><div class="result-hero-note"><b>Premissa líquida usada:</b> rentabilidade bruta de ${pct(grossAccumRate)} na acumulação e ${pct(grossRetRate)} na aposentadoria, com IR estimado de ${(taxEstimate*100).toFixed(2).replace('.', ',')}% sobre os rendimentos. Rentabilidades líquidas aproximadas: ${pct(accumRate)} e ${pct(retRate)}.</div><div class="result-grid"><div class="mini-result"><span>Renda real - consumo</span><b>${brl(incomeConsumeReal)}</b><em class="explain">Renda em reais de hoje, consumindo gradualmente o patrimônio até os ${finalAge} anos.</em></div><div class="mini-result"><span>Renda real - preservar</span><b>${brl(incomePreserveReal)}</b><em class="explain">Renda em reais de hoje, buscando viver apenas da rentabilidade real líquida.</em></div><div class="mini-result"><span>Renda nominal - consumo</span><b>${brl(incomeConsumeNom)}</b><em class="explain">Valor futuro estimado já corrigido pela inflação até a aposentadoria.</em></div><div class="mini-result"><span>Renda nominal - preservar</span><b>${brl(incomePreserveNom)}</b><em class="explain">Renda futura estimada tentando manter o capital principal preservado.</em></div></div><div class="explain-pair"><div class="explain-card"><b>Consumo planejado</b>Considera uma retirada mensal com juros durante ${yearsUse} anos de aposentadoria. O patrimônio continua rendendo, mas pode ser consumido gradualmente até a idade final do plano.</div><div class="explain-card"><b>Preservação patrimonial</b>Considera retirar apenas o juro real líquido estimado. A ideia é preservar o capital principal em termos reais, gerando uma renda mais conservadora.</div></div><div class="comparison-table"><div class="comparison-row"><div><b>Para atingir a meta patrimonial</b><br><span>Meta real: ${brl(goalWealth)} · renda real consumo: ${brl(incomeFromGoalConsume)} · renda real preservação: ${brl(incomeFromGoalPreserve)}</span></div><b>${brl(requiredMonthlyWealth)}/mês</b></div><div class="comparison-row"><div><b>Para atingir a renda desejada</b><br><span>Capital real necessário no consumo planejado: ${brl(capitalIncomeConsume)} · preservando patrimônio: ${brl(capitalIncomePreserve)}</span></div><b>${brl(monthlyIncomeConsume)} a ${brl(monthlyIncomePreserve)}/mês</b></div></div><div class="notice"><b>Importante:</b> esta projeção usa uma estimativa simplificada de IR sobre os rendimentos. Custos, taxas, tipo de produto, regime tributário, mudanças de legislação e comportamento real dos mercados podem alterar o resultado.</div>${save ? '' : pdfResultAction('calcRetirement(true)')}`; showResultActions('retirementResult');
-      if (save) trackEvent('Calculadora de Aposentadoria', { age, retire, finalAge, initial, monthly, extra: money('r_extra'), goalWealth, goalIncome, inflation, grossAccumRate, grossRetRate, taxEstimate, accumRate, retRate, realAnnualAccum, realAnnualRet, futureReal, futureNominal, incomeConsumeReal, incomePreserveReal, incomeConsumeNom, incomePreserveNom, requiredMonthlyWealth, capitalIncomeConsume, capitalIncomePreserve, monthlyIncomeConsume, monthlyIncomePreserve }, { resumo: `Patrimônio real projetado: ${brl(futureReal)} | renda real consumo: ${brl(incomeConsumeReal)} | IR estimado: ${(taxEstimate*100).toFixed(2).replace('.', ',')}%` });
+      document.getElementById('retirementResult').classList.remove('result-placeholder'); document.getElementById('retirementResult').innerHTML = `<h3>Situação atual projetada</h3><div class="big-number">${brl(futureReal)}</div><div class="subtle">Patrimônio real estimado na aposentadoria. Valor nominal estimado: ${brl(futureNominal)}.</div><div class="result-hero-note"><b>Meta patrimonial:</b> com as premissas atuais, você atingiria aproximadamente ${goalPct.toFixed(0).replace('.', ',')}% da meta de ${brl(goalWealth)}. Gap estimado: ${brl(goalGap)}. Aporte mensal estimado para atingir 100%: ${brl(requiredMonthlyWealth)}.</div><div class="result-hero-note"><b>Premissa líquida usada:</b> rentabilidade bruta de ${pct(grossAccumRate)} na acumulação e ${pct(grossRetRate)} na aposentadoria, com IR estimado de ${(taxEstimate*100).toFixed(2).replace('.', ',')}% sobre os rendimentos. Rentabilidades líquidas aproximadas: ${pct(accumRate)} e ${pct(retRate)}.</div><div class="result-grid"><div class="mini-result"><span>Renda real - consumo</span><b>${brl(incomeConsumeReal)}</b><em class="explain">Renda em reais de hoje, consumindo gradualmente o patrimônio até os ${finalAge} anos.</em></div><div class="mini-result"><span>Renda real - preservar</span><b>${brl(incomePreserveReal)}</b><em class="explain">Renda em reais de hoje, buscando viver apenas da rentabilidade real líquida.</em></div><div class="mini-result"><span>Renda nominal - consumo</span><b>${brl(incomeConsumeNom)}</b><em class="explain">Valor futuro estimado já corrigido pela inflação até a aposentadoria.</em></div><div class="mini-result"><span>Renda nominal - preservar</span><b>${brl(incomePreserveNom)}</b><em class="explain">Renda futura estimada tentando manter o capital principal preservado.</em></div><div class="mini-result"><span>Meta patrimonial atingida</span><b>${goalPct.toFixed(0).replace('.', ',')}%</b><em class="explain">Percentual da meta real alcançado com os aportes atuais.</em></div><div class="mini-result"><span>Gap da meta</span><b>${brl(goalGap)}</b><em class="explain">Diferença estimada para atingir 100% da meta patrimonial.</em></div></div><div class="explain-pair"><div class="explain-card"><b>Consumo planejado</b>Considera uma retirada mensal com juros durante ${yearsUse} anos de aposentadoria. O patrimônio continua rendendo, mas pode ser consumido gradualmente até a idade final do plano.</div><div class="explain-card"><b>Preservação patrimonial</b>Considera retirar apenas o juro real líquido estimado. A ideia é preservar o capital principal em termos reais, gerando uma renda mais conservadora.</div></div><div class="comparison-table"><div class="comparison-row"><div><b>Para atingir a meta patrimonial</b><br><span>Meta real: ${brl(goalWealth)} · renda real consumo: ${brl(incomeFromGoalConsume)} · renda real preservação: ${brl(incomeFromGoalPreserve)}</span></div><b>${brl(requiredMonthlyWealth)}/mês</b></div><div class="comparison-row"><div><b>Para atingir a renda desejada</b><br><span>Capital real necessário no consumo planejado: ${brl(capitalIncomeConsume)} · preservando patrimônio: ${brl(capitalIncomePreserve)}</span></div><b>${brl(monthlyIncomeConsume)} a ${brl(monthlyIncomePreserve)}/mês</b></div></div><div class="notice"><b>IR estimado:</b> usamos uma alíquota simplificada e editável. A alíquota real varia conforme produto, prazo e regime tributário, como renda fixa, fundos, ações ou previdência. Esta projeção usa uma estimativa simplificada de IR sobre os rendimentos. Custos, taxas, tipo de produto, regime tributário, mudanças de legislação e comportamento real dos mercados podem alterar o resultado.</div>${save ? '' : pdfResultAction('calcRetirement(true)')}`; showResultActions('retirementResult');
+      if (save) trackEvent('Calculadora de Aposentadoria', { age, retire, finalAge, initial, monthly, extra: money('r_extra'), goalWealth, goalIncome, inflation, grossAccumRate, grossRetRate, taxEstimate, accumRate, retRate, realAnnualAccum, realAnnualRet, futureReal, futureNominal, incomeConsumeReal, incomePreserveReal, incomeConsumeNom, incomePreserveNom, goalPct, goalGap, requiredMonthlyWealth, capitalIncomeConsume, capitalIncomePreserve, monthlyIncomeConsume, monthlyIncomePreserve }, { resumo: `Patrimônio real projetado: ${brl(futureReal)} | renda real consumo: ${brl(incomeConsumeReal)} | IR estimado: ${(taxEstimate*100).toFixed(2).replace('.', ',')}%` });
     }
 
     function paymentFromCapital(capital, monthlyRate, months) {
@@ -1408,8 +1448,8 @@
       const months = suggestedMonthly > 0 ? Math.ceil(missing / suggestedMonthly) : Infinity;
       const years = Number.isFinite(months) ? Math.floor(months / 12) : 0, rem = Number.isFinite(months) ? months % 12 : 0;
       const profileLabel = emergencyProfileLabel(monthsGoal);
-      document.getElementById('emergencyResult').classList.remove('result-placeholder'); document.getElementById('emergencyResult').innerHTML = `<h3>Reserva recomendada</h3><div class="big-number">${brl(target)}</div><div class="subtle">Mini perfil: ${profileLabel}. Recomendação de ${monthsGoal} meses de custo de vida.</div><div class="result-grid"><div class="mini-result"><span>Falta formar</span><b>${brl(missing)}</b></div><div class="mini-result"><span>Aporte mínimo sugerido</span><b>${brl(suggestedMonthly)}</b></div><div class="mini-result"><span>Prazo estimado para formar</span><b>${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}</b></div><div class="mini-result"><span>Reserva atual</span><b>${brl(current)}</b></div></div><div class="asset-list"><div><b>CDB DI com liquidez diária:</b> alternativa comum para reserva, priorizando liquidez e baixo risco de mercado.</div><div><b>Tesouro Selic:</b> pode ser usado como parte da reserva, respeitando prazos operacionais de resgate.</div><div><b>Fundo DI simples com taxa baixa:</b> pode facilitar gestão, desde que tenha liquidez adequada e baixo custo.</div></div><div class="notice"><b>Prazo estimado para formar:</b> mostra em quanto tempo a reserva recomendada seria completada se você direcionasse pelo menos 10% da renda mensal para esse objetivo. A reserva de emergência deve priorizar liquidez, segurança e baixa oscilação.</div>${save ? '' : pdfResultAction('calcEmergency(true)')}`; showResultActions('emergencyResult');
-      if (save) trackEvent('Reserva de Emergência', { occupationRisk, stabilityRisk, dependentsRisk, income, cost, monthsGoal, current, target, missing, suggestedMonthly, estimatedMonths: months, profileLabel }, { resumo: `Reserva recomendada: ${brl(target)} (${monthsGoal} meses) | aporte sugerido: ${brl(suggestedMonthly)}` });
+      document.getElementById('emergencyResult').classList.remove('result-placeholder'); document.getElementById('emergencyResult').innerHTML = `<h3>Reserva recomendada</h3><div class="big-number">${brl(target)}</div><div class="subtle">Mini perfil: ${profileLabel}. Recomendação de ${monthsGoal} meses do seu custo mensal, não da renda.</div><div class="result-grid"><div class="mini-result"><span>Falta formar</span><b>${brl(missing)}</b></div><div class="mini-result"><span>Aporte mínimo sugerido</span><b>${brl(suggestedMonthly)}</b></div><div class="mini-result"><span>Prazo estimado para formar</span><b>${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}</b></div><div class="mini-result"><span>Reserva atual</span><b>${brl(current)}</b></div></div><div class="asset-list"><div><b>CDB DI com liquidez diária:</b> alternativa comum para reserva, priorizando liquidez e baixo risco de mercado.</div><div><b>Tesouro Selic:</b> pode ser usado como parte da reserva, respeitando prazos operacionais de resgate.</div><div><b>Fundo DI simples com taxa baixa:</b> pode facilitar gestão, desde que tenha liquidez adequada e baixo custo.</div></div><div class="notice"><b>Base do cálculo:</b> a reserva é calculada sobre seu custo de vida mensal, não sobre sua renda. Exemplo: 9 meses de reserva = 9 × custo mensal.</div><div class="notice"><b>Prazo estimado para formar:</b> mostra em quanto tempo a reserva recomendada seria completada se você direcionasse pelo menos 10% da renda mensal para esse objetivo. O prazo é arredondado para cima e não considera rendimento da reserva durante a formação.</div>${save ? '' : pdfResultAction('calcEmergency(true)')}`; showResultActions('emergencyResult');
+      if (save) trackEvent('Reserva de Emergência', { occupationRisk, stabilityRisk, dependentsRisk, income, cost, monthsGoal, current, target, missing, suggestedMonthly, estimatedMonths: months, profileLabel, baseCalculo: 'custo mensal', prazoArredondadoParaCima: true }, { resumo: `Reserva recomendada: ${brl(target)} (${monthsGoal} meses) | aporte sugerido: ${brl(suggestedMonthly)}` });
     }
 
     function recommendedEmergencyMonths(occupationRisk, stabilityRisk, dependentsRisk) { return Math.max(3, Math.min(12, 3 + occupationRisk + stabilityRisk + dependentsRisk)); }
@@ -1846,13 +1886,14 @@
           mainValue: d.profile || '—',
           mainNote: 'Diagnóstico educativo que considera comportamento, estrutura financeira, reserva, horizonte e conhecimento.',
           premises: [
-            { label: 'Pontuação interna', value: String(d.score || '—') },
+            { label: 'Pontuação interna', value: d.score ? `${Number(d.score).toFixed(2).replace('.', ',')} / 5,00` : '—' },
             { label: 'Ajustes aplicados', value: d.notes && d.notes.length ? `${d.notes.length} ajuste(s)` : 'Nenhum' }
           ],
-          results: Object.entries(alloc).map(([k, v]) => ({ label: k, value: `${v}%`, note: k === 'Renda Fixa' ? 'Base defensiva' : k === 'Cripto' ? 'Alternativo' : 'Diversificação' })),
+          results: Object.entries(alloc).map(([k, v]) => ({ label: k, value: `${v}%`, note: k === 'Renda Fixa' ? 'Base defensiva' : k === 'Cripto' ? 'Risco elevado' : 'Diversificação' })),
           explanations: [
             { title: 'Como interpretar', text: (d.notes && d.notes[0]) || 'A alocação apresentada é apenas uma referência educativa inicial.' },
-            { title: 'Próximo passo', text: 'A carteira adequada depende de entrevista, objetivos, patrimônio, prazo e tolerância real a risco.' }
+            { title: 'Próximo passo', text: 'A carteira adequada depende de entrevista, objetivos, patrimônio, prazo e tolerância real a risco.' },
+            { title: 'Criptoativos', text: 'Criptoativos envolvem alta volatilidade, risco de perda relevante e dependem de avaliação específica do investidor.' }
           ]
         };
       }
@@ -1869,16 +1910,19 @@
             { label: 'Objetivo financeiro', value: moneyFmt(d.goal) },
             { label: 'Patrimônio inicial', value: moneyFmt(d.initial) },
             { label: 'Rentabilidade anual', value: pctAa(d.annualRate) },
+            { label: 'Inflação anual', value: pctAa(d.inflation) },
             { label: tempo ? 'Aporte mensal' : 'Prazo desejado', value: tempo ? moneyFmt(d.monthly) : `${d.yearsTarget || d.years || '—'} anos` }
           ],
           results: [
             { label: tempo ? 'Tempo estimado' : 'Aporte necessário', value: tempo ? `${d.years || 0}a ${d.months || 0}m` : moneyFmt(d.requiredMonthly), note: 'Estimativa aproximada' },
-            { label: 'Patrimônio projetado', value: moneyFmt(d.finalBalance || d.balance || d.goal), note: 'No fim da simulação' },
+            { label: 'Patrimônio projetado nominal', value: moneyFmt(d.finalBalance || d.balance || d.goal), note: 'No fim da simulação' },
+            { label: 'Equivalente em reais de hoje', value: moneyFmt(d.finalReal), note: 'Poder de compra estimado' },
             { label: 'Total investido', value: moneyFmt(d.totalContrib), note: 'Inicial + aportes' },
             { label: 'Juros estimados', value: moneyFmt(d.interest), note: 'Efeito dos juros compostos' }
           ],
           explanations: [
             { title: 'Juros compostos', text: 'Prazo, aporte e rentabilidade têm grande impacto no resultado final.' },
+            { title: 'Nominal x real', text: 'O valor nominal é o saldo futuro. O equivalente em reais de hoje desconta a inflação estimada para mostrar poder de compra aproximado.' },
             { title: 'Importante', text: 'A rentabilidade futura não é garantida e pode variar ao longo do tempo.' }
           ]
         };
@@ -1902,14 +1946,15 @@
             { label: 'IPCA estimado', value: pctAa(d.ipca) },
             { label: 'Valor investido', value: moneyFmt(contrib) }
           ],
-          results: items.map((x, i) => ({ label: `${i+1}º · ${x.label}`, value: moneyFmt(x.net), note: `Bruto ${moneyFmt(x.gross)} · IR ${moneyFmt(x.tax)}` })),
+          results: items.map((x, i) => ({ label: `${i+1}º · ${x.label}`, value: moneyFmt(x.net), note: `Bruto ${moneyFmt(x.gross)} · IR ${moneyFmt(x.taxValue)}` })),
           table: {
             title: 'Detalhe dos ativos comparados',
             headers: ['Ativo', 'Bruto', 'IR', 'Líquido'],
-            rows: items.map(x => [x.label, moneyFmt(x.gross), moneyFmt(x.tax), moneyFmt(x.net)])
+            rows: items.map(x => [x.label, moneyFmt(x.gross), moneyFmt(x.taxValue), moneyFmt(x.net)])
           },
           explanations: [
-            { title: 'Líquido x bruto', text: 'O valor líquido considera a tributação quando aplicável. Produtos isentos foram simulados com IR zero para pessoa física.' }
+            { title: 'Líquido x bruto', text: 'O valor líquido considera a tributação quando aplicável. Ranking, tabela e PDF usam a mesma variável líquida.' },
+            { title: 'IR regressivo', text: 'Tabela usada: até 180 dias 22,5%; 181 a 360 dias 20%; 361 a 720 dias 17,5%; acima de 720 dias 15%.' }
           ]
         };
       }
@@ -1940,12 +1985,16 @@
             { label: 'Renda real preservar', value: moneyFmt(d.incomePreserveReal), note: 'Preservando capital' },
             { label: 'Renda nominal consumo', value: moneyFmt(d.incomeConsumeNom), note: 'Corrigida pela inflação' },
             { label: 'Renda nominal preservar', value: moneyFmt(d.incomePreserveNom), note: 'Renda futura estimada' },
+            { label: 'Meta atingida', value: `${Number(d.goalPct || 0).toFixed(0).replace('.', ',')}%`, note: 'Da meta patrimonial' },
+            { label: 'Gap da meta', value: moneyFmt(d.goalGap), note: 'Diferença para 100%' },
             { label: 'Aporte meta patrimonial', value: `${moneyFmt(d.requiredMonthlyWealth)}/mês`, note: 'Para atingir patrimônio' },
             { label: 'Aporte renda desejada', value: `${moneyFmt(d.monthlyIncomeConsume)} a ${moneyFmt(d.monthlyIncomePreserve)}/mês`, note: 'Faixa estimada' }
           ],
           explanations: [
             { title: 'Consumo planejado', text: `Considera retirada mensal com juros durante ${d.yearsUse || Math.max(0,(d.finalAge||0)-(d.retire||0))} anos. O patrimônio continua rendendo, mas pode ser consumido gradualmente.` },
-            { title: 'Preservação patrimonial', text: 'Considera retirar apenas o juro real líquido estimado, buscando preservar o capital principal em termos reais.' }
+            { title: 'Preservação patrimonial', text: 'Considera retirar apenas o juro real líquido estimado, buscando preservar o capital principal em termos reais.' },
+            { title: 'Meta patrimonial', text: `Com os aportes atuais, a projeção alcança cerca de ${Number(d.goalPct || 0).toFixed(0)}% da meta. O gap estimado é ${moneyFmt(d.goalGap)}.` },
+            { title: 'IR estimado', text: 'A alíquota informada é uma simplificação editável. A alíquota real varia conforme produto, prazo e regime tributário.' }
           ]
         };
       }
@@ -1954,7 +2003,7 @@
         const months = Number.isFinite(d.estimatedMonths) ? `${Math.floor(d.estimatedMonths / 12)}a ${d.estimatedMonths % 12}m` : '—';
         return {
           title: 'Reserva de emergência',
-          subtitle: 'Estimativa de reserva mínima baseada em ocupação, estabilidade de renda, dependentes e custo mensal.',
+          subtitle: 'Estimativa de reserva mínima baseada em ocupação, estabilidade de renda, dependentes e custo mensal. A base usada é o custo mensal, não a renda.',
           mainLabel: 'Reserva recomendada',
           mainValue: moneyFmt(d.target),
           mainNote: `Equivale a aproximadamente ${d.monthsGoal || 0} meses do seu custo de vida mensal.`,
@@ -1972,6 +2021,8 @@
           ],
           explanations: [
             { title: 'Onde manter', text: 'A reserva deve priorizar liquidez, segurança e baixa oscilação. Exemplos: CDB DI liquidez diária, Tesouro Selic ou fundo DI simples de baixa taxa.' },
+            { title: 'Base do cálculo', text: 'A reserva é calculada sobre o custo mensal. Exemplo: 9 meses de reserva = 9 × custo mensal.' },
+            { title: 'Prazo', text: 'O prazo é arredondado para cima e não considera rendimento da reserva durante a formação.' },
             { title: 'Como interpretar', text: 'Quanto maior a oscilação da renda e o número de dependentes, maior tende a ser a reserva necessária.' }
           ]
         };
@@ -2063,11 +2114,13 @@
       return balance;
     }
     function taxRateByMonths(months) {
-      if (months <= 6) return .225;
-      if (months <= 12) return .20;
-      if (months <= 24) return .175;
+      const days = Math.max(1, Math.round((Number(months) || 0) * 365 / 12));
+      if (days <= 180) return .225;
+      if (days <= 360) return .20;
+      if (days <= 720) return .175;
       return .15;
     }
+
     function showToast(message) {
       const el = document.getElementById('toast');
       el.textContent = message;
