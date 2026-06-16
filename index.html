@@ -1486,9 +1486,15 @@
 
     function calcEmergency(save=false) {
       if (!document.getElementById('e_cost')) return;
-      const occupationRisk = Number(document.getElementById('e_occupation')?.value || 0);
-      const stabilityRisk = Number(document.getElementById('e_stability')?.value || 0);
-      const dependentsRisk = Number(document.getElementById('e_dependents')?.value || 0);
+      const occupationEl = document.getElementById('e_occupation');
+      const stabilityEl = document.getElementById('e_stability');
+      const dependentsEl = document.getElementById('e_dependents');
+      const occupationRisk = Number(occupationEl?.value || 0);
+      const stabilityRisk = Number(stabilityEl?.value || 0);
+      const dependentsRisk = Number(dependentsEl?.value || 0);
+      const occupationLabel = occupationEl?.selectedOptions?.[0]?.textContent || '—';
+      const stabilityLabel = stabilityEl?.selectedOptions?.[0]?.textContent || '—';
+      const dependentsLabel = dependentsEl?.selectedOptions?.[0]?.textContent || '—';
       const income = money('e_income'), cost = money('e_cost'), current = money('e_current');
       const reserveRate = percentAnnual('e_rate');
       const reserveMonthlyRate = annualToMonthly(reserveRate);
@@ -1505,7 +1511,7 @@
       document.getElementById('emergencyResult').classList.remove('result-placeholder');
       document.getElementById('emergencyResult').innerHTML = `<h3>Reserva recomendada</h3><div class="big-number">${brl(target)}</div><div class="subtle">Mini perfil: ${profileLabel}. Recomendação de ${monthsGoal} meses do seu custo mensal, não da renda.</div><div class="result-grid"><div class="mini-result"><span>Falta formar hoje</span><b>${brl(missing)}</b></div><div class="mini-result"><span>Aporte mínimo sugerido</span><b>${brl(suggestedMonthly)}</b><em class="explain">10% da renda mensal informada.</em></div><div class="mini-result"><span>Prazo estimado com rendimento</span><b>${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}</b><em class="explain">Considera reserva atual e aportes rendendo ${(reserveRate*100).toFixed(2).replace('.', ',')}% a.a.</em></div><div class="mini-result"><span>Reserva atual projetada</span><b>${brl(futureCurrentAtGoal)}</b><em class="explain">Valor estimado da reserva atual no prazo calculado.</em></div><div class="mini-result"><span>Total de aportes no período</span><b>${brl(totalContributions)}</b></div><div class="mini-result"><span>Reserva atual</span><b>${brl(current)}</b></div></div><div class="notice"><b>Por que ${monthsGoal} meses?</b> ${reason}</div><div class="asset-list"><div><b>CDB DI com liquidez diária:</b> alternativa comum para reserva, priorizando liquidez e baixo risco de mercado.</div><div><b>Tesouro Selic:</b> pode ser usado como parte da reserva, respeitando prazos operacionais de resgate.</div><div><b>Fundo DI simples com taxa baixa:</b> pode facilitar gestão, desde que tenha liquidez adequada e baixo custo.</div></div><div class="notice"><b>Base do cálculo:</b> a reserva é calculada sobre seu custo de vida mensal, não sobre sua renda. Exemplo: ${monthsGoal} meses de reserva = ${monthsGoal} × ${brl(cost)}.</div><div class="notice"><b>Prazo estimado para formar:</b> considera a reserva atual e os aportes mensais rendendo a taxa informada. O prazo é arredondado para cima para evitar subestimar o tempo necessário.</div>${save ? '' : pdfResultAction('calcEmergency(true)')}`;
       showResultActions('emergencyResult');
-      if (save) trackEvent('Reserva de Emergência', { occupationRisk, stabilityRisk, dependentsRisk, income, cost, reserveRate, monthsGoal, current, target, missing, suggestedMonthly, estimatedMonths: months, profileLabel, reason, futureCurrentAtGoal, totalContributions, baseCalculo: 'custo mensal', prazoArredondadoParaCima: true }, { resumo: `Reserva recomendada: ${brl(target)} (${monthsGoal} meses) | aporte sugerido: ${brl(suggestedMonthly)} | prazo estimado: ${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}` });
+      if (save) trackEvent('Reserva de Emergência', { occupationRisk, stabilityRisk, dependentsRisk, occupationLabel, stabilityLabel, dependentsLabel, income, cost, reserveRate, monthsGoal, current, target, missing, suggestedMonthly, estimatedMonths: months, profileLabel, reason, futureCurrentAtGoal, totalContributions, baseCalculo: 'custo mensal', prazoArredondadoParaCima: true }, { resumo: `Reserva recomendada: ${brl(target)} (${monthsGoal} meses) | aporte sugerido: ${brl(suggestedMonthly)} | prazo estimado: ${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}` });
     }
 
 
@@ -1723,8 +1729,8 @@
           doc.setFontSize(18);
           doc.text(`Perfil inicial: ${d.profile || '—'}`, margin, y);
           y += 8;
-          drawWrapped('Diagnóstico educativo baseado nas respostas do questionário: comportamento, capacidade financeira, horizonte e conhecimento.', margin, y, pageW - margin * 2, 8, [82,76,69], 'normal', 4, 2);
-          y += 14;
+          drawWrapped('Diagnóstico educativo baseado nas respostas do questionário: comportamento, capacidade financeira, horizonte e conhecimento.', margin, y, pageW - margin * 2, 7.4, [82,76,69], 'normal', 3.7, 2);
+          y += 12;
 
           // Donut gerado em canvas para manter visual semelhante ao site
           const canvas = document.createElement('canvas');
@@ -1755,21 +1761,21 @@
           ctx.fillText(String(d.profile || 'Perfil'), cx, cy - 8);
           ctx.font = '22px Arial';
           ctx.fillText(d.score ? `${Number(d.score).toFixed(2).replace('.', ',')} / 5,00` : '', cx, cy + 28);
-          doc.addImage(canvas.toDataURL('image/png'), 'PNG', margin, y, 70, 70);
+          doc.addImage(canvas.toDataURL('image/png'), 'PNG', margin, y, 54, 54);
 
-          const legendX = margin + 82;
+          const legendX = margin + 64;
           let ly = y + 4;
-          doc.setFontSize(8);
+          doc.setFontSize(7.1);
           Object.entries(alloc).forEach(([k, val], i) => {
             const rgb = hexToRgb(palette[i % palette.length]);
             doc.setFillColor(rgb.r, rgb.g, rgb.b);
-            doc.roundedRect(legendX, ly - 3.2, 4, 4, 1, 1, 'F');
+            doc.roundedRect(legendX, ly - 2.8, 3.4, 3.4, .8, .8, 'F');
             doc.setTextColor(55, 51, 47);
             doc.setFont('helvetica', 'normal');
-            doc.text(`${k}: ${val}%`, legendX + 7, ly);
-            ly += 7.5;
+            doc.text(`${k}: ${val}%`, legendX + 5.8, ly);
+            ly += 6.25;
           });
-          y += 78;
+          y += 60;
 
           drawSectionTitle('Premissas consideradas', margin, y);
           y += 5;
@@ -1782,7 +1788,7 @@
             { title: 'Pontuação', text: `Escala de 1 a 5. Resultado: ${d.score ? Number(d.score).toFixed(2).replace('.', ',') : '—'} / 5,00.` }
           ];
           if (crypto > 0) exp.push({ title: 'Criptoativos', text: 'Criptoativos envolvem alta volatilidade, risco de perda relevante e dependem de avaliação específica do investidor.' });
-          y = drawExplanationGrid(exp, margin, y, pageW - margin * 2, 46);
+          y = drawExplanationGrid(exp, margin, y, pageW - margin * 2, 34);
           drawComplianceBlock(246);
           drawFooter();
         }
@@ -1790,22 +1796,22 @@
         function drawProfileAnswersTable(answers, labels, x, yy, w) {
           const rows = Object.entries(labels).map(([k, label]) => [label, answers[k] || '—']);
           doc.setFillColor(17, 17, 17);
-          doc.roundedRect(x, yy, w, 8, 2, 2, 'F');
+          doc.roundedRect(x, yy, w, 7, 2, 2, 'F');
           doc.setFont('helvetica', 'bold');
-          doc.setFontSize(6.5);
+          doc.setFontSize(5.8);
           doc.setTextColor(239, 159, 39);
-          doc.text('Premissa', x + 3, yy + 5.3);
-          doc.text('Resposta informada', x + w * .38, yy + 5.3);
-          let cy = yy + 8;
+          doc.text('Premissa', x + 3, yy + 4.8);
+          doc.text('Resposta informada', x + w * .36, yy + 4.8);
+          let cy = yy + 7;
           rows.forEach((r, ri) => {
-            if (ri % 2 === 0) { doc.setFillColor(255, 255, 255); doc.rect(x, cy, w, 7.4, 'F'); }
+            if (ri % 2 === 0) { doc.setFillColor(255, 255, 255); doc.rect(x, cy, w, 5.8, 'F'); }
             doc.setTextColor(55, 51, 47);
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(6.2);
-            doc.text(String(r[0]).slice(0, 34), x + 3, cy + 4.8);
+            doc.setFontSize(5.25);
+            doc.text(String(r[0]).slice(0, 32), x + 3, cy + 3.9);
             doc.setFont('helvetica', 'normal');
-            doc.text(String(r[1]).slice(0, 72), x + w * .38, cy + 4.8);
-            cy += 7.4;
+            doc.text(String(r[1]).slice(0, 76), x + w * .36, cy + 3.9);
+            cy += 5.8;
           });
           return cy;
         }
@@ -2242,10 +2248,14 @@
           mainValue: moneyFmt(d.target),
           mainNote: `Equivale a aproximadamente ${d.monthsGoal || 0} meses do seu custo de vida mensal.`,
           premises: [
+            { label: 'Tipo de ocupação', value: d.occupationLabel || `Risco ${d.occupationRisk ?? '—'}` },
+            { label: 'Estabilidade salarial', value: d.stabilityLabel || `Risco ${d.stabilityRisk ?? '—'}` },
+            { label: 'Dependentes', value: d.dependentsLabel || `Risco ${d.dependentsRisk ?? '—'}` },
             { label: 'Renda mensal', value: moneyFmt(d.income) },
             { label: 'Custo mensal', value: moneyFmt(d.cost) },
             { label: 'Reserva atual', value: moneyFmt(d.current) },
             { label: 'Rentabilidade da reserva', value: pctAa(d.reserveRate) },
+            { label: 'Base do cálculo', value: 'Custo mensal' },
             { label: 'Perfil do risco', value: d.profileLabel || '—' }
           ],
           results: [
@@ -2258,8 +2268,8 @@
           explanations: [
             { title: 'Onde manter', text: 'A reserva deve priorizar liquidez, segurança e baixa oscilação. Exemplos: CDB DI liquidez diária, Tesouro Selic ou fundo DI simples de baixa taxa.' },
             { title: 'Por que essa quantidade?', text: d.reason || 'A recomendação considera ocupação, estabilidade salarial e dependentes.' },
-            { title: 'Base do cálculo', text: 'A reserva é calculada sobre o custo mensal. Exemplo: 9 meses de reserva = 9 × custo mensal.' },
-            { title: 'Prazo', text: 'O prazo considera a reserva atual e os aportes mensais rendendo a taxa informada, com arredondamento para cima.' },
+            { title: 'Base do cálculo', text: `A reserva é calculada sobre o custo mensal: ${d.monthsGoal || 0} meses × ${moneyFmt(d.cost)} = ${moneyFmt(d.target)}.` },
+            { title: 'Prazo', text: `O prazo considera reserva atual de ${moneyFmt(d.current)}, aportes de ${moneyFmt(d.suggestedMonthly)}/mês e rentabilidade de ${pctAa(d.reserveRate)}, com arredondamento para cima.` },
             { title: 'Como interpretar', text: 'Quanto maior a oscilação da renda e o número de dependentes, maior tende a ser a reserva necessária.' }
           ]
         };
