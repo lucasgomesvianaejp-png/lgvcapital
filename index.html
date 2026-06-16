@@ -967,13 +967,13 @@
     }
 
     const fixedIncomeProducts = {
-      cdb: { label: 'CDB', tax: 'regressivo', defaultIndexer: 'cdi', defaultRate: 100, hint: 'Tributado pela tabela regressiva de renda fixa sobre os rendimentos.' },
-      lci_lca: { label: 'LCI / LCA', tax: 'isento', defaultIndexer: 'cdi', defaultRate: 92, hint: 'Considerado isento de IR para pessoa física nesta simulação.' },
-      tesouro_selic: { label: 'Tesouro Selic', tax: 'regressivo', defaultIndexer: 'cdi', defaultRate: 100, hint: 'Tributado pela tabela regressiva de renda fixa; simulação não considera taxa de custódia.' },
-      tesouro_prefixado: { label: 'Tesouro Prefixado', tax: 'regressivo', defaultIndexer: 'pre', defaultRate: 11, hint: 'Tributado pela tabela regressiva; marcação a mercado não foi simulada.' },
-      tesouro_ipca: { label: 'Tesouro IPCA+', tax: 'regressivo', defaultIndexer: 'ipca', defaultRate: 6, hint: 'Tributado pela tabela regressiva; usa IPCA estimado + taxa real ao ano.' },
-      deb_incentivada: { label: 'Debênture incentivada', tax: 'isento', defaultIndexer: 'ipca', defaultRate: 6, hint: 'Considerada isenta para pessoa física; atenção ao risco de crédito e liquidez.' },
-      poupanca: { label: 'Poupança', tax: 'isento', defaultIndexer: 'poupanca', defaultRate: 6.17, hint: 'Considerada isenta de IR, com rentabilidade anual preenchida pelo usuário.' }
+      cdb: { label: 'CDB', tax: 'regressivo', defaultIndexer: 'cdi', defaultRate: 100, hint: 'Sugestão inicial: CDB a 100% do CDI. Tributado pela tabela regressiva de renda fixa sobre os rendimentos.' },
+      lci_lca: { label: 'LCI / LCA', tax: 'isento', defaultIndexer: 'cdi', defaultRate: 92, hint: 'Sugestão inicial: LCI/LCA a 92% do CDI. Considerado isento de IR para pessoa física nesta simulação.' },
+      tesouro_selic: { label: 'Tesouro Selic', tax: 'regressivo', defaultIndexer: 'cdi', defaultRate: 100, hint: 'Sugestão inicial: Tesouro Selic próximo de 100% do CDI. Simulação não considera taxa de custódia.' },
+      tesouro_prefixado: { label: 'Tesouro Prefixado', tax: 'regressivo', defaultIndexer: 'pre', defaultRate: 10.15, hint: 'Sugestão inicial: taxa prefixada equivalente a cerca de 70% do CDI informado. Editável.' },
+      tesouro_ipca: { label: 'Tesouro IPCA+', tax: 'regressivo', defaultIndexer: 'ipca', defaultRate: 6, hint: 'Sugestão inicial: IPCA + 6% a.a. Use apenas a taxa acima do IPCA, por exemplo 5 ou 6.' },
+      deb_incentivada: { label: 'Debênture incentivada', tax: 'isento', defaultIndexer: 'ipca', defaultRate: 6, hint: 'Sugestão inicial: IPCA + 6% a.a. Isenta para pessoa física; atenção a risco de crédito e liquidez.' },
+      poupanca: { label: 'Poupança', tax: 'isento', defaultIndexer: 'poupanca', defaultRate: 6.17, hint: 'Sugestão inicial: 6,17% a.a. Considerada isenta de IR.' }
     };
 
     const irpfAnual2026 = [
@@ -1054,7 +1054,7 @@
     }
 
     function fixedInvestmentSlot(n, product='cdb') {
-      return `<div class="fi-item" id="fi_slot_${n}"><div class="fi-item-title"><b>Investimento ${n}</b><span class="tax-pill" id="fi_tax_${n}">IR regressivo</span></div><div class="form-grid"><div class="field"><label>Ativo</label><select id="fi_product_${n}" onchange="updateFiProduct(${n}); markToolEdited('cdb')">${Object.entries(fixedIncomeProducts).map(([key,p]) => `<option value="${key}" ${key===product?'selected':''}>${p.label}</option>`).join('')}</select></div><div class="inline-2"><div class="field"><label>Tipo de indexador</label><select id="fi_indexer_${n}" onchange="updateFiIndexer(${n}); markToolEdited('cdb')"><option value="cdi">% do CDI</option><option value="pre">Prefixado</option><option value="ipca">IPCA + taxa</option><option value="poupanca">Poupança / taxa anual direta</option></select></div><div class="field"><label id="fi_rate_label_${n}">Rentabilidade ao ano</label><input id="fi_rate_${n}" inputmode="decimal" value="100" oninput="markToolEdited('cdb')"></div></div><div class="field"><label>Vencimento fiscal</label><select id="fi_tax_term_${n}" onchange="markToolEdited('cdb')"><option value="auto">Usar prazo da simulação</option><option value="180">Até 180 dias</option><option value="360">181 a 360 dias</option><option value="720">361 a 720 dias</option><option value="721">Acima de 720 dias</option></select></div><div class="field-note" id="fi_hint_${n}"></div></div></div>`;
+      return `<div class="fi-item" id="fi_slot_${n}"><div class="fi-item-title"><b>Investimento ${n}</b><span class="tax-pill" id="fi_tax_${n}">IR regressivo</span></div><div class="form-grid"><div class="field"><label>Ativo</label><select id="fi_product_${n}" onchange="updateFiProduct(${n}, true); markToolEdited('cdb')">${Object.entries(fixedIncomeProducts).map(([key,p]) => `<option value="${key}" ${key===product?'selected':''}>${p.label}</option>`).join('')}</select></div><div class="inline-2"><div class="field"><label>Tipo de indexador</label><select id="fi_indexer_${n}" onchange="updateFiIndexer(${n}, true); markToolEdited('cdb')"><option value="cdi">% do CDI</option><option value="pre">Prefixado</option><option value="ipca">IPCA + taxa</option><option value="poupanca">Poupança / taxa anual direta</option></select></div><div class="field"><label id="fi_rate_label_${n}">Rentabilidade ao ano</label><input id="fi_rate_${n}" inputmode="decimal" value="" oninput="markToolEdited('cdb')"><div class="field-note" id="fi_rate_note_${n}"></div></div></div><div class="field"><label>Vencimento fiscal</label><select id="fi_tax_term_${n}" onchange="markToolEdited('cdb')"><option value="auto">Usar prazo da simulação</option><option value="180">Até 180 dias</option><option value="360">181 a 360 dias</option><option value="720">361 a 720 dias</option><option value="721">Acima de 720 dias</option></select></div><div class="field-note" id="fi_hint_${n}"></div></div></div>`;
     }
 
     function renderFixedIncomeTool() {
@@ -1066,7 +1066,7 @@
     }
 
     function renderEmergencyTool() {
-      return `<div class="tool-panel"><div class="tool-header"><h2>Reserva de Emergência</h2><p>Calcule uma reserva recomendada de 3 a 12 meses conforme ocupação, estabilidade de renda e dependentes.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>Tipo de ocupação</label><select id="e_occupation" onchange="markToolEdited('reserva')"><option value="0">Servidor público / renda muito previsível</option><option value="1">CLT com boa estabilidade</option><option value="2">CLT comum / setor privado</option><option value="3">Autônomo / profissional liberal</option><option value="4">Empresário / comissionado / renda variável</option></select></div><div class="field"><label>Estabilidade salarial</label><select id="e_stability" onchange="markToolEdited('reserva')"><option value="0">Muito estável</option><option value="1">Estável</option><option value="2">Oscila um pouco</option><option value="3">Oscila muito</option></select></div><div class="field"><label>Número de dependentes</label><select id="e_dependents" onchange="markToolEdited('reserva')"><option value="0">Nenhum</option><option value="1">1 dependente</option><option value="2">2 dependentes</option><option value="3">3 ou mais dependentes</option></select></div><div class="field"><label>Renda mensal</label><input id="e_income" data-money inputmode="decimal" value="R$ 8.000,00" oninput="markToolEdited('reserva')"></div><div class="field"><label>Custo de vida mensal</label><input id="e_cost" data-money inputmode="decimal" value="R$ 5.000,00" oninput="markToolEdited('reserva')"></div><div class="field"><label>Reserva atual</label><input id="e_current" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('reserva')"></div><button class="btn btn-primary" onclick="calcEmergency()">Simular reserva</button><div class="simulate-note">Depois do resultado, você poderá baixar um PDF com a recomendação.</div></div><div id="emergencyResult" class="result-card result-placeholder"><h3>Pronto para calcular</h3><div class="subtle">Informe renda, custo e perfil de estabilidade. Depois toque em <b>Simular reserva</b>.</div></div></div></div>`;
+      return `<div class="tool-panel"><div class="tool-header"><h2>Reserva de Emergência</h2><p>Calcule uma reserva recomendada de 3 a 12 meses conforme ocupação, estabilidade de renda e dependentes.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>Tipo de ocupação</label><select id="e_occupation" onchange="markToolEdited('reserva')"><option value="0">Servidor público / renda muito previsível</option><option value="1">CLT com boa estabilidade</option><option value="2">CLT comum / setor privado</option><option value="3">Autônomo / profissional liberal</option><option value="4">Empresário / comissionado / renda variável</option></select></div><div class="field"><label>Estabilidade salarial</label><select id="e_stability" onchange="markToolEdited('reserva')"><option value="0">Muito estável</option><option value="1">Estável</option><option value="2">Oscila um pouco</option><option value="3">Oscila muito</option></select></div><div class="field"><label>Número de dependentes</label><select id="e_dependents" onchange="markToolEdited('reserva')"><option value="0">Nenhum</option><option value="1">1 dependente</option><option value="2">2 dependentes</option><option value="3">3 ou mais dependentes</option></select></div><div class="field"><label>Renda mensal</label><input id="e_income" data-money inputmode="decimal" value="R$ 8.000,00" oninput="markToolEdited('reserva')"></div><div class="field"><label>Custo de vida mensal</label><input id="e_cost" data-money inputmode="decimal" value="R$ 5.000,00" oninput="markToolEdited('reserva')"></div><div class="field"><label>Reserva atual</label><input id="e_current" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('reserva')"></div><div class="field"><label>Rentabilidade anual estimada da reserva (%)</label><input id="e_rate" inputmode="decimal" value="14,50" oninput="markToolEdited('reserva')"><div class="field-note">Sugestão: 100% do CDI estimado. Editável conforme o produto usado para reserva.</div></div><button class="btn btn-primary" onclick="calcEmergency()">Simular reserva</button><div class="simulate-note">Depois do resultado, você poderá baixar um PDF com a recomendação.</div></div><div id="emergencyResult" class="result-card result-placeholder"><h3>Pronto para calcular</h3><div class="subtle">Informe renda, custo e perfil de estabilidade. Depois toque em <b>Simular reserva</b>.</div></div></div></div>`;
     }
 
     function calcPgbl(save=false) {
@@ -1289,27 +1289,73 @@
 
     function updateFiCount() {
       const count = Number(document.getElementById('c_count')?.value || 2);
-      [1,2,3].forEach(i => { const slot = document.getElementById(`fi_slot_${i}`); if (slot) slot.style.display = i <= count ? '' : 'none'; updateFiProduct(i); });
+      [1,2,3].forEach(i => {
+        const slot = document.getElementById(`fi_slot_${i}`);
+        if (slot) slot.style.display = i <= count ? '' : 'none';
+        updateFiProduct(i, false);
+      });
     }
 
-    function updateFiProduct(n) {
+    function updateFiProduct(n, forceDefault=false) {
       const product = document.getElementById(`fi_product_${n}`)?.value || 'cdb';
       const cfg = fixedIncomeProducts[product] || fixedIncomeProducts.cdb;
       const indexerEl = document.getElementById(`fi_indexer_${n}`);
+      if (indexerEl && (forceDefault || !indexerEl.value)) indexerEl.value = cfg.defaultIndexer;
       const rateEl = document.getElementById(`fi_rate_${n}`);
-      if (indexerEl && indexerEl.dataset.manual !== '1') indexerEl.value = cfg.defaultIndexer;
-      if (rateEl && !rateEl.value) rateEl.value = String(cfg.defaultRate).replace('.', ',');
-      if (rateEl && product === 'poupanca') rateEl.value = String(cfg.defaultRate).replace('.', ',');
-      updateFiIndexer(n);
-      const tax = document.getElementById(`fi_tax_${n}`); if (tax) tax.textContent = cfg.tax === 'isento' ? 'Isento para PF' : 'IR regressivo';
-      const hint = document.getElementById(`fi_hint_${n}`); if (hint) hint.textContent = cfg.hint;
+      if (rateEl && (forceDefault || !rateEl.value)) rateEl.value = formatSuggestedRate(suggestedRateForSlot(n, cfg.defaultIndexer));
+      updateFiIndexer(n, forceDefault);
+      const tax = document.getElementById(`fi_tax_${n}`);
+      if (tax) tax.textContent = cfg.tax === 'isento' ? 'Isento para PF' : 'IR regressivo';
+      const hint = document.getElementById(`fi_hint_${n}`);
+      if (hint) hint.textContent = cfg.hint;
     }
 
-    function updateFiIndexer(n) {
-      const indexerEl = document.getElementById(`fi_indexer_${n}`); if (!indexerEl) return;
+    function updateFiIndexer(n, forceDefault=false) {
+      const indexerEl = document.getElementById(`fi_indexer_${n}`);
+      if (!indexerEl) return;
       const label = document.getElementById(`fi_rate_label_${n}`);
       const map = { cdi: 'Rentabilidade (% do CDI)', pre: 'Taxa prefixada ao ano (%)', ipca: 'Taxa acima do IPCA ao ano (%)', poupanca: 'Rentabilidade ao ano (%)' };
       if (label) label.textContent = map[indexerEl.value] || 'Rentabilidade ao ano (%)';
+      const rateEl = document.getElementById(`fi_rate_${n}`);
+      if (rateEl && (forceDefault || !rateEl.value)) rateEl.value = formatSuggestedRate(suggestedRateForSlot(n, indexerEl.value));
+      const note = document.getElementById(`fi_rate_note_${n}`);
+      if (note) note.textContent = suggestedRateNote(n);
+    }
+
+
+    function suggestedRateForSlot(n, indexer) {
+      const product = document.getElementById(`fi_product_${n}`)?.value || 'cdb';
+      const cfg = fixedIncomeProducts[product] || fixedIncomeProducts.cdb;
+      const cdiPct = Math.max(0, num('c_cdi') || 14.5);
+      if (indexer === 'cdi') return cfg.defaultIndexer === 'cdi' ? cfg.defaultRate : 100;
+      if (indexer === 'ipca') return cfg.defaultIndexer === 'ipca' ? cfg.defaultRate : 6;
+      if (indexer === 'pre') return Math.max(0.01, cdiPct * 0.70);
+      if (indexer === 'poupanca') return fixedIncomeProducts.poupanca.defaultRate;
+      return cfg.defaultRate || 0;
+    }
+
+    function formatSuggestedRate(v) {
+      const n = Number(v) || 0;
+      const decimals = Math.abs(n - Math.round(n)) < 0.005 ? 0 : 2;
+      return n.toFixed(decimals).replace('.', ',');
+    }
+
+    function fixedRateAssumption(label, indexer, rateInput, annualRate) {
+      const r = Number(rateInput) || 0;
+      if (indexer === 'cdi') return `${label} a ${formatSuggestedRate(r)}% do CDI`;
+      if (indexer === 'ipca') return `${label} IPCA + ${formatSuggestedRate(r)}% a.a.`;
+      if (indexer === 'pre') return `${label} prefixado a ${formatSuggestedRate(r)}% a.a.`;
+      if (indexer === 'poupanca') return `${label} a ${formatSuggestedRate(r)}% a.a.`;
+      return `${label} com rentabilidade anual equivalente de ${formatSuggestedRate((Number(annualRate)||0)*100)}% a.a.`;
+    }
+
+    function suggestedRateNote(n) {
+      const indexer = document.getElementById(`fi_indexer_${n}`)?.value || 'cdi';
+      const rate = num(`fi_rate_${n}`);
+      if (indexer === 'cdi') return `Premissa editável: ${formatSuggestedRate(rate)}% do CDI. Ex.: CDB 100% do CDI ou LCI/LCA 92% do CDI.`;
+      if (indexer === 'ipca') return `Premissa editável: informe só a taxa acima do IPCA. Ex.: IPCA + 5 ou IPCA + 6.`;
+      if (indexer === 'pre') return `Premissa editável: sugestão inicial equivalente a cerca de 70% do CDI informado.`;
+      return `Premissa editável: rentabilidade anual direta.`;
     }
 
     function calcFixedIncome(save=false) {
@@ -1339,14 +1385,15 @@
         const net = gross - taxValue;
         const netIncome = Math.max(0, net - contrib);
         const taxLabel = cfg.tax === 'isento' ? 'Isento' : `${(taxRate*100).toFixed(1).replace('.', ',')}%`;
-        items.push({ i, product, label: cfg.label, indexer, annualRate, gross, net, taxRate, taxValue, grossIncome, netIncome, contrib, taxLabel, estimatedDays });
+        const assumption = fixedRateAssumption(cfg.label, indexer, rateInput, annualRate);
+        items.push({ i, product, label: cfg.label, indexer, rateInput, assumption, annualRate, gross, net, taxRate, taxValue, grossIncome, netIncome, contrib, taxLabel, estimatedDays });
       }
 
       const best = items.reduce((a,b) => b.net > a.net ? b : a, items[0]);
       const maxNet = Math.max(...items.map(x => x.net));
       const rows = items.map(x => {
         const taxText = x.taxRate > 0 ? `IR estimado de ${x.taxLabel} sobre o rendimento` : 'Isento de IR para pessoa física nesta simulação';
-        return `<div class="comparison-row expanded-row"><div><b>${x.label}</b><br><span>${fixedIndexerText(x.indexer, x.annualRate)} · ${taxText}</span><div class="field-note">Bruto: ${brl(x.gross)} · Líquido: ${brl(x.net)} · Rendimento bruto: ${brl(x.grossIncome)} · IR estimado: ${brl(x.taxValue)} · Rendimento líquido: ${brl(x.netIncome)}</div></div><b>${brl(x.net)}</b></div>`;
+        return `<div class="comparison-row expanded-row"><div><b>${x.label}</b><br><span>Premissa usada: ${x.assumption} · ${fixedIndexerText(x.indexer, x.annualRate)} · ${taxText}</span><div class="field-note">Bruto: ${brl(x.gross)} · Líquido: ${brl(x.net)} · Rendimento bruto: ${brl(x.grossIncome)} · IR estimado: ${brl(x.taxValue)} · Rendimento líquido: ${brl(x.netIncome)}</div></div><b>${brl(x.net)}</b></div>`;
       }).join('');
       const bars = items.map(x => `<div class="bar-line"><span>${x.label}</span><div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, (x.net/maxNet)*100)}%"></div></div><div class="field-note">Líquido: ${brl(x.net)}</div></div></div>`).join('');
       const ranking = [...items].sort((a,b)=>b.net-a.net).map((x,idx)=>`${idx+1}º ${x.label}: ${brl(x.net)}`).join(' · ');
@@ -1439,17 +1486,55 @@
 
     function calcEmergency(save=false) {
       if (!document.getElementById('e_cost')) return;
-      const occupationRisk = Number(document.getElementById('e_occupation')?.value || 0), stabilityRisk = Number(document.getElementById('e_stability')?.value || 0), dependentsRisk = Number(document.getElementById('e_dependents')?.value || 0);
+      const occupationRisk = Number(document.getElementById('e_occupation')?.value || 0);
+      const stabilityRisk = Number(document.getElementById('e_stability')?.value || 0);
+      const dependentsRisk = Number(document.getElementById('e_dependents')?.value || 0);
       const income = money('e_income'), cost = money('e_cost'), current = money('e_current');
+      const reserveRate = percentAnnual('e_rate');
+      const reserveMonthlyRate = annualToMonthly(reserveRate);
       const monthsGoal = recommendedEmergencyMonths(occupationRisk, stabilityRisk, dependentsRisk);
       const target = cost * monthsGoal;
       const missing = Math.max(0, target - current);
       const suggestedMonthly = Math.max(0, income * 0.10);
-      const months = suggestedMonthly > 0 ? Math.ceil(missing / suggestedMonthly) : Infinity;
+      const months = monthsToReachGoal(current, suggestedMonthly, reserveMonthlyRate, target);
       const years = Number.isFinite(months) ? Math.floor(months / 12) : 0, rem = Number.isFinite(months) ? months % 12 : 0;
       const profileLabel = emergencyProfileLabel(monthsGoal);
-      document.getElementById('emergencyResult').classList.remove('result-placeholder'); document.getElementById('emergencyResult').innerHTML = `<h3>Reserva recomendada</h3><div class="big-number">${brl(target)}</div><div class="subtle">Mini perfil: ${profileLabel}. Recomendação de ${monthsGoal} meses do seu custo mensal, não da renda.</div><div class="result-grid"><div class="mini-result"><span>Falta formar</span><b>${brl(missing)}</b></div><div class="mini-result"><span>Aporte mínimo sugerido</span><b>${brl(suggestedMonthly)}</b></div><div class="mini-result"><span>Prazo estimado para formar</span><b>${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}</b></div><div class="mini-result"><span>Reserva atual</span><b>${brl(current)}</b></div></div><div class="asset-list"><div><b>CDB DI com liquidez diária:</b> alternativa comum para reserva, priorizando liquidez e baixo risco de mercado.</div><div><b>Tesouro Selic:</b> pode ser usado como parte da reserva, respeitando prazos operacionais de resgate.</div><div><b>Fundo DI simples com taxa baixa:</b> pode facilitar gestão, desde que tenha liquidez adequada e baixo custo.</div></div><div class="notice"><b>Base do cálculo:</b> a reserva é calculada sobre seu custo de vida mensal, não sobre sua renda. Exemplo: 9 meses de reserva = 9 × custo mensal.</div><div class="notice"><b>Prazo estimado para formar:</b> mostra em quanto tempo a reserva recomendada seria completada se você direcionasse pelo menos 10% da renda mensal para esse objetivo. O prazo é arredondado para cima e não considera rendimento da reserva durante a formação.</div>${save ? '' : pdfResultAction('calcEmergency(true)')}`; showResultActions('emergencyResult');
-      if (save) trackEvent('Reserva de Emergência', { occupationRisk, stabilityRisk, dependentsRisk, income, cost, monthsGoal, current, target, missing, suggestedMonthly, estimatedMonths: months, profileLabel, baseCalculo: 'custo mensal', prazoArredondadoParaCima: true }, { resumo: `Reserva recomendada: ${brl(target)} (${monthsGoal} meses) | aporte sugerido: ${brl(suggestedMonthly)}` });
+      const reason = emergencyReasonText(occupationRisk, stabilityRisk, dependentsRisk, monthsGoal);
+      const futureCurrentAtGoal = Number.isFinite(months) ? current * Math.pow(1 + reserveMonthlyRate, months) : current;
+      const totalContributions = Number.isFinite(months) ? suggestedMonthly * months : 0;
+      document.getElementById('emergencyResult').classList.remove('result-placeholder');
+      document.getElementById('emergencyResult').innerHTML = `<h3>Reserva recomendada</h3><div class="big-number">${brl(target)}</div><div class="subtle">Mini perfil: ${profileLabel}. Recomendação de ${monthsGoal} meses do seu custo mensal, não da renda.</div><div class="result-grid"><div class="mini-result"><span>Falta formar hoje</span><b>${brl(missing)}</b></div><div class="mini-result"><span>Aporte mínimo sugerido</span><b>${brl(suggestedMonthly)}</b><em class="explain">10% da renda mensal informada.</em></div><div class="mini-result"><span>Prazo estimado com rendimento</span><b>${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}</b><em class="explain">Considera reserva atual e aportes rendendo ${(reserveRate*100).toFixed(2).replace('.', ',')}% a.a.</em></div><div class="mini-result"><span>Reserva atual projetada</span><b>${brl(futureCurrentAtGoal)}</b><em class="explain">Valor estimado da reserva atual no prazo calculado.</em></div><div class="mini-result"><span>Total de aportes no período</span><b>${brl(totalContributions)}</b></div><div class="mini-result"><span>Reserva atual</span><b>${brl(current)}</b></div></div><div class="notice"><b>Por que ${monthsGoal} meses?</b> ${reason}</div><div class="asset-list"><div><b>CDB DI com liquidez diária:</b> alternativa comum para reserva, priorizando liquidez e baixo risco de mercado.</div><div><b>Tesouro Selic:</b> pode ser usado como parte da reserva, respeitando prazos operacionais de resgate.</div><div><b>Fundo DI simples com taxa baixa:</b> pode facilitar gestão, desde que tenha liquidez adequada e baixo custo.</div></div><div class="notice"><b>Base do cálculo:</b> a reserva é calculada sobre seu custo de vida mensal, não sobre sua renda. Exemplo: ${monthsGoal} meses de reserva = ${monthsGoal} × ${brl(cost)}.</div><div class="notice"><b>Prazo estimado para formar:</b> considera a reserva atual e os aportes mensais rendendo a taxa informada. O prazo é arredondado para cima para evitar subestimar o tempo necessário.</div>${save ? '' : pdfResultAction('calcEmergency(true)')}`;
+      showResultActions('emergencyResult');
+      if (save) trackEvent('Reserva de Emergência', { occupationRisk, stabilityRisk, dependentsRisk, income, cost, reserveRate, monthsGoal, current, target, missing, suggestedMonthly, estimatedMonths: months, profileLabel, reason, futureCurrentAtGoal, totalContributions, baseCalculo: 'custo mensal', prazoArredondadoParaCima: true }, { resumo: `Reserva recomendada: ${brl(target)} (${monthsGoal} meses) | aporte sugerido: ${brl(suggestedMonthly)} | prazo estimado: ${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}` });
+    }
+
+
+    function monthsToReachGoal(current, monthly, monthlyRate, target) {
+      if (target <= current) return 0;
+      if (monthly <= 0 && monthlyRate <= 0) return Infinity;
+      let balance = current;
+      for (let m = 1; m <= 1200; m++) {
+        balance = balance * (1 + monthlyRate) + monthly;
+        if (balance >= target) return m;
+      }
+      return Infinity;
+    }
+
+    function emergencyReasonText(occupationRisk, stabilityRisk, dependentsRisk, monthsGoal) {
+      const parts = [];
+      if (occupationRisk <= 1) parts.push('a ocupação informada tende a dar mais previsibilidade de renda');
+      else if (occupationRisk >= 3) parts.push('a ocupação informada pode ter maior oscilação de renda');
+      else parts.push('a ocupação informada tem risco intermediário de renda');
+
+      if (stabilityRisk <= 1) parts.push('a estabilidade salarial informada aumenta a segurança');
+      else if (stabilityRisk >= 3) parts.push('a oscilação salarial informada aumenta a necessidade de proteção');
+      else parts.push('a estabilidade salarial informada exige uma margem moderada');
+
+      if (dependentsRisk === 0) parts.push('a ausência de dependentes reduz a necessidade de caixa');
+      else if (dependentsRisk >= 2) parts.push('a quantidade de dependentes aumenta a necessidade de caixa');
+      else parts.push('a existência de dependente exige uma reserva um pouco maior');
+
+      return `A recomendação foi de ${monthsGoal} meses porque ${parts.join('; ')}.`;
     }
 
     function recommendedEmergencyMonths(occupationRisk, stabilityRisk, dependentsRisk) { return Math.max(3, Math.min(12, 3 + occupationRisk + stabilityRisk + dependentsRisk)); }
@@ -1503,6 +1588,12 @@
         const leadPhone = event.lead?.phone || 'WhatsApp não informado';
 
         const fileSafeTool = String(event.tool || 'simulacao').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+        if ((event.tool || '') === 'Perfil de Investidor') {
+          renderProfilePdf();
+          doc.save(`lgv_capital_${fileSafeTool}_${Date.now()}.pdf`);
+          return;
+        }
+
         if ((event.tool || '') === 'Calculadora de Aposentadoria') {
           renderRetirementPdf();
           doc.save(`lgv_capital_${fileSafeTool}_${Date.now()}.pdf`);
@@ -1585,6 +1676,149 @@
         drawFooter();
 
         doc.save(`lgv_capital_${fileSafeTool}_${Date.now()}.pdf`);
+
+
+        function renderProfilePdf() {
+          const d = event.data || {};
+          const alloc = d.allocations || {};
+          const answers = d.answers || {};
+          const answerLabels = {
+            p_age: 'Idade',
+            p_dependents: 'Dependentes financeiros',
+            p_income: 'Estabilidade da renda',
+            p_reserve: 'Reserva de emergência',
+            p_goal: 'Objetivo principal',
+            p_horizon: 'Horizonte de uso',
+            p_experience: 'Experiência com investimentos',
+            p_understand: 'Entendimento de oscilações',
+            p_reaction: 'Reação a queda de 10%',
+            p_drawdown: 'Queda temporária aceita',
+            p_priority: 'Prioridade declarada'
+          };
+
+          doc.setFillColor(248, 247, 244);
+          doc.rect(0, 0, pageW, pageH, 'F');
+          doc.setFillColor(17, 17, 17);
+          doc.rect(0, 0, pageW, 24, 'F');
+          doc.setFillColor(239, 159, 39);
+          doc.rect(0, 0, pageW, 2.4, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(239, 159, 39);
+          doc.setFontSize(15);
+          doc.text('LGV CAPITAL', margin, 11);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(211, 209, 199);
+          doc.setFontSize(7.8);
+          doc.text('Diagnóstico educativo de perfil de investidor', margin, 17);
+          doc.text(`${leadName} · ${leadPhone}`, pageW - margin, 10.5, { align: 'right' });
+          doc.text(now, pageW - margin, 16.7, { align: 'right' });
+
+          let y = 35;
+          doc.setTextColor(186, 117, 23);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8.5);
+          doc.text('PERFIL DE INVESTIDOR', margin, y);
+          y += 7;
+          doc.setTextColor(17, 17, 17);
+          doc.setFontSize(18);
+          doc.text(`Perfil inicial: ${d.profile || '—'}`, margin, y);
+          y += 8;
+          drawWrapped('Diagnóstico educativo baseado nas respostas do questionário: comportamento, capacidade financeira, horizonte e conhecimento.', margin, y, pageW - margin * 2, 8, [82,76,69], 'normal', 4, 2);
+          y += 14;
+
+          // Donut gerado em canvas para manter visual semelhante ao site
+          const canvas = document.createElement('canvas');
+          canvas.width = 520;
+          canvas.height = 520;
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const cx = 260, cy = 260, outer = 205, inner = 112;
+          let startAngle = -Math.PI / 2;
+          Object.entries(alloc).forEach(([k, val], i) => {
+            const angle = (Number(val) || 0) / 100 * Math.PI * 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, outer, startAngle, startAngle + angle);
+            ctx.closePath();
+            ctx.fillStyle = palette[i % palette.length];
+            ctx.fill();
+            startAngle += angle;
+          });
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.beginPath();
+          ctx.arc(cx, cy, inner, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.fillStyle = '#111111';
+          ctx.font = 'bold 30px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(String(d.profile || 'Perfil'), cx, cy - 8);
+          ctx.font = '22px Arial';
+          ctx.fillText(d.score ? `${Number(d.score).toFixed(2).replace('.', ',')} / 5,00` : '', cx, cy + 28);
+          doc.addImage(canvas.toDataURL('image/png'), 'PNG', margin, y, 70, 70);
+
+          const legendX = margin + 82;
+          let ly = y + 4;
+          doc.setFontSize(8);
+          Object.entries(alloc).forEach(([k, val], i) => {
+            const rgb = hexToRgb(palette[i % palette.length]);
+            doc.setFillColor(rgb.r, rgb.g, rgb.b);
+            doc.roundedRect(legendX, ly - 3.2, 4, 4, 1, 1, 'F');
+            doc.setTextColor(55, 51, 47);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`${k}: ${val}%`, legendX + 7, ly);
+            ly += 7.5;
+          });
+          y += 78;
+
+          drawSectionTitle('Premissas consideradas', margin, y);
+          y += 5;
+          y = drawProfileAnswersTable(answers, answerLabels, margin, y, pageW - margin * 2);
+          y += 6;
+
+          const crypto = Number(alloc.Cripto || 0);
+          const exp = [
+            { title: 'Como interpretar', text: (d.notes && d.notes[0]) || 'A alocação apresentada é uma referência educativa inicial, não uma recomendação individual final.' },
+            { title: 'Pontuação', text: `Escala de 1 a 5. Resultado: ${d.score ? Number(d.score).toFixed(2).replace('.', ',') : '—'} / 5,00.` }
+          ];
+          if (crypto > 0) exp.push({ title: 'Criptoativos', text: 'Criptoativos envolvem alta volatilidade, risco de perda relevante e dependem de avaliação específica do investidor.' });
+          y = drawExplanationGrid(exp, margin, y, pageW - margin * 2, 46);
+          drawComplianceBlock(246);
+          drawFooter();
+        }
+
+        function drawProfileAnswersTable(answers, labels, x, yy, w) {
+          const rows = Object.entries(labels).map(([k, label]) => [label, answers[k] || '—']);
+          doc.setFillColor(17, 17, 17);
+          doc.roundedRect(x, yy, w, 8, 2, 2, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(6.5);
+          doc.setTextColor(239, 159, 39);
+          doc.text('Premissa', x + 3, yy + 5.3);
+          doc.text('Resposta informada', x + w * .38, yy + 5.3);
+          let cy = yy + 8;
+          rows.forEach((r, ri) => {
+            if (ri % 2 === 0) { doc.setFillColor(255, 255, 255); doc.rect(x, cy, w, 7.4, 'F'); }
+            doc.setTextColor(55, 51, 47);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(6.2);
+            doc.text(String(r[0]).slice(0, 34), x + 3, cy + 4.8);
+            doc.setFont('helvetica', 'normal');
+            doc.text(String(r[1]).slice(0, 72), x + w * .38, cy + 4.8);
+            cy += 7.4;
+          });
+          return cy;
+        }
+
+        function hexToRgb(hex) {
+          const h = String(hex || '#000000').replace('#', '');
+          return {
+            r: parseInt(h.substring(0, 2), 16) || 0,
+            g: parseInt(h.substring(2, 4), 16) || 0,
+            b: parseInt(h.substring(4, 6), 16) || 0
+          };
+        }
+
 
         function renderRetirementPdf() {
           const rd = event.data || {};
@@ -1946,11 +2180,11 @@
             { label: 'IPCA estimado', value: pctAa(d.ipca) },
             { label: 'Valor investido', value: moneyFmt(contrib) }
           ],
-          results: items.map((x, i) => ({ label: `${i+1}º · ${x.label}`, value: moneyFmt(x.net), note: `Bruto ${moneyFmt(x.gross)} · IR ${moneyFmt(x.taxValue)}` })),
+          results: items.map((x, i) => ({ label: `${i+1}º · ${x.label}`, value: moneyFmt(x.net), note: `${x.assumption || ''} · IR ${moneyFmt(x.taxValue)}` })),
           table: {
             title: 'Detalhe dos ativos comparados',
-            headers: ['Ativo', 'Bruto', 'IR', 'Líquido'],
-            rows: items.map(x => [x.label, moneyFmt(x.gross), moneyFmt(x.taxValue), moneyFmt(x.net)])
+            headers: ['Ativo', 'Premissa', 'IR', 'Líquido'],
+            rows: items.map(x => [x.label, x.assumption || '', moneyFmt(x.taxValue), moneyFmt(x.net)])
           },
           explanations: [
             { title: 'Líquido x bruto', text: 'O valor líquido considera a tributação quando aplicável. Ranking, tabela e PDF usam a mesma variável líquida.' },
@@ -2011,18 +2245,21 @@
             { label: 'Renda mensal', value: moneyFmt(d.income) },
             { label: 'Custo mensal', value: moneyFmt(d.cost) },
             { label: 'Reserva atual', value: moneyFmt(d.current) },
+            { label: 'Rentabilidade da reserva', value: pctAa(d.reserveRate) },
             { label: 'Perfil do risco', value: d.profileLabel || '—' }
           ],
           results: [
             { label: 'Reserva recomendada', value: moneyFmt(d.target), note: `${d.monthsGoal || 0} meses de custo` },
             { label: 'Falta formar', value: moneyFmt(d.missing), note: 'Diferença para a meta' },
             { label: 'Aporte sugerido', value: moneyFmt(d.suggestedMonthly), note: 'Mínimo de 10% da renda' },
-            { label: 'Prazo estimado', value: months, note: 'Até completar a reserva' }
+            { label: 'Prazo estimado', value: months, note: 'Com reserva e aportes rendendo' },
+            { label: 'Reserva atual projetada', value: moneyFmt(d.futureCurrentAtGoal), note: 'No prazo calculado' }
           ],
           explanations: [
             { title: 'Onde manter', text: 'A reserva deve priorizar liquidez, segurança e baixa oscilação. Exemplos: CDB DI liquidez diária, Tesouro Selic ou fundo DI simples de baixa taxa.' },
+            { title: 'Por que essa quantidade?', text: d.reason || 'A recomendação considera ocupação, estabilidade salarial e dependentes.' },
             { title: 'Base do cálculo', text: 'A reserva é calculada sobre o custo mensal. Exemplo: 9 meses de reserva = 9 × custo mensal.' },
-            { title: 'Prazo', text: 'O prazo é arredondado para cima e não considera rendimento da reserva durante a formação.' },
+            { title: 'Prazo', text: 'O prazo considera a reserva atual e os aportes mensais rendendo a taxa informada, com arredondamento para cima.' },
             { title: 'Como interpretar', text: 'Quanto maior a oscilação da renda e o número de dependentes, maior tende a ser a reserva necessária.' }
           ]
         };
