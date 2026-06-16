@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LGV Capital — Consultoria Financeira e Investimentos</title>
+  <meta name="description" content="Consultoria financeira e de investimentos com Lucas Gomes Viana, Consultor de Investimentos CVM com certificações CPA e C-PRO R pela ANBIMA. Ferramentas gratuitas: PGBL, perfil de investidor, primeiro milhão, comparador de renda fixa, aposentadoria e reserva de emergência." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --black: #111111;
+      --gold: #EF9F27;
+      --gold-d: #BA7517;
+      --gold-l: #FAC775;
+      --gray: #5F5E5A;
+      --gray-l: #D3D1C7;
+      --off: #F8F7F4;
+      --white: #FFFFFF;
+      --bg: #161412;
+      --panel: #1C1A17;
+      --panel-2: #24211d;
+      --border: #2A2825;
+      --green: #1D9E75;
+      --red: #C24C3A;
+      --shadow: 0 18px 80px rgba(0, 0, 0, .42);
+      --radius: 18px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(239,159,39,.18), transparent 28%),
+        radial-gradient(circle at 90% 12%, rgba(250,199,117,.08), transparent 24%),
+        var(--bg);
+      color: var(--off);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    .container { width: min(1120px, calc(100% - 36px)); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(22,20,18,.86);
+      border-bottom: 1px solid rgba(211,209,199,.08);
+    }
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: max-content; }
+    .mark { width: 38px; height: 38px; flex: 0 0 38px; }
+    .brand-text .lgv {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      letter-spacing: 4px;
+      font-size: 19px;
+      line-height: .95;
+      color: var(--gold);
+    }
+    .brand-text .capital { font-size: 8px; letter-spacing: 4px; color: var(--gray-l); }
+    .nav-links { display: flex; align-items: center; gap: 20px; color: rgba(248,247,244,.72); font-size: 12px; letter-spacing: .8px; }
+    .nav-links a:hover { color: var(--gold-l); }
+    .btn {
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--gold); color: var(--black); }
+    .btn-primary:hover { background: var(--gold-l); }
+    .btn-ghost { border: 1px solid rgba(211,209,199,.18); color: var(--off); background: transparent; }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold-l); }
+    .btn-soft { background: rgba(239,159,39,.10); color: var(--gold-l); border: 1px solid rgba(239,159,39,.24); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold-l);
+      border: 1px solid rgba(239,159,39,.24);
+      background: rgba(239,159,39,.08);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 11px;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .hero { padding: 74px 0 52px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 46px; align-items: center; }
+    h1, h2, h3 { margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+    h1 { font-size: clamp(44px, 7vw, 82px); line-height: .94; letter-spacing: -.6px; margin: 20px 0 20px; }
+    h1 em { color: var(--gold); font-style: italic; }
+    .lead { color: rgba(248,247,244,.74); line-height: 1.9; font-size: 16px; max-width: 660px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(28,26,23,.92), rgba(17,17,17,.92));
+      border: 1px solid rgba(211,209,199,.10);
+      border-radius: 30px;
+      min-height: 470px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+    .hero-card::before { content: ''; position: absolute; inset: 0 0 auto; height: 4px; background: linear-gradient(90deg, var(--gold), transparent); }
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      right: -160px;
+      top: -120px;
+      background: radial-gradient(circle, rgba(239,159,39,.18), transparent 64%);
+    }
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; position: relative; z-index: 1; margin-top: 28px; }
+    .metric {
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(211,209,199,.10);
+      border-radius: 18px;
+      padding: 20px;
+      min-height: 126px;
+    }
+    .metric strong { display:block; color: var(--gold); font-size: 28px; font-family: 'Cormorant Garamond', serif; font-weight: 600; margin-bottom: 8px; }
+    .metric strong small { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--gold-l); }
+    .metric span { color: rgba(248,247,244,.66); font-size: 12px; line-height: 1.6; }
+    .profile-line { position: relative; z-index: 1; margin-top: 28px; padding: 20px; border-radius: 20px; background: rgba(239,159,39,.08); border: 1px solid rgba(239,159,39,.22); }
+    .profile-line .small-title { color: var(--gold-l); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+    .profile-line p { margin: 0; color: rgba(248,247,244,.78); line-height: 1.75; font-size: 13px; }
+    section { padding: 62px 0; }
+    .section-head { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-bottom: 28px; }
+    .section-title { font-size: clamp(34px, 5vw, 52px); line-height: 1; }
+    .section-kicker { color: var(--gold-d); font-size: 11px; letter-spacing: 2.4px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+    .muted { color: rgba(248,247,244,.66); line-height: 1.8; }
+    .about-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    .about-grid .bio-card { max-width: 920px; margin: 0 auto; }
+    .card {
+      background: rgba(28,26,23,.74);
+      border: 1px solid rgba(211,209,199,.10);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.18);
+    }
+    .bio-card { background: var(--off); color: var(--black); }
+    .bio-card .section-kicker { color: var(--gold-d); }
+    .bio-card p { color: #44413b; line-height: 1.85; }
+    .credential-list { display: grid; gap: 12px; }
+    .credential {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(211,209,199,.09);
+    }
+    .credential b { display:block; color: var(--gold-l); font-size: 13px; margin-bottom: 4px; }
+    .credential span { color: rgba(248,247,244,.62); font-size: 12px; line-height: 1.55; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .service-card { min-height: 185px; display:flex; flex-direction: column; justify-content: space-between; }
+    .service-card h3 { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; color: var(--off); margin-bottom: 12px; }
+    .service-card p { font-size: 13px; line-height: 1.75; color: rgba(248,247,244,.62); margin: 0; }
+    .service-num { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 34px; font-weight: 600; line-height: 1; opacity: .9; }
+    .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .tool-card { position: relative; overflow: hidden; padding: 26px; min-height: 210px; }
+    .tool-card::before { content:''; position:absolute; inset:0 0 auto; height: 3px; background: var(--gold); opacity: .85; }
+    .tool-card h3 { font-size: 26px; line-height: 1.1; margin-bottom: 12px; }
+    .tool-card p { margin: 0 0 22px; color: rgba(248,247,244,.64); line-height: 1.75; font-size: 13px; }
+    .lock-pill { display:inline-flex; gap:7px; align-items:center; padding: 7px 10px; border-radius:999px; color: rgba(248,247,244,.58); border:1px solid rgba(211,209,199,.12); font-size: 10px; letter-spacing: .8px; text-transform: uppercase; }
+    .tool-workspace { display: none; margin-top: 34px; }
+    .tool-workspace.active { display: block; animation: fadeIn .22s ease; }
+    @keyframes fadeIn { from { opacity:.2; transform: translateY(5px);} to { opacity:1; transform: translateY(0);} }
+    .tool-panel {
+      background: var(--off);
+      color: var(--black);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .tool-header { padding: 26px 28px; background: #111; color: var(--off); border-bottom: 3px solid var(--gold); }
+    .tool-header h2 { font-size: 38px; line-height: 1; }
+    .tool-header p { margin: 10px 0 0; color: rgba(248,247,244,.66); line-height: 1.75; }
+    .tool-body { padding: 28px; display: grid; grid-template-columns: .9fr 1.1fr; gap: 24px; align-items: start; }
+    .form-grid { display: grid; gap: 14px; }
+    .field label { display: block; font-size: 11px; color: #6d675f; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; margin-bottom: 7px; }
+    .field input, .field select {
+      width: 100%;
+      border: 1px solid #DCD9CF;
+      background: #fff;
+      color: #111;
+      border-radius: 14px;
+      padding: 13px 14px;
+      outline: none;
+      transition: border .18s ease, box-shadow .18s ease;
+    }
+    .field input:focus, .field select:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(239,159,39,.14); }
+    .inline-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .inline-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .result-card {
+      background: #fff;
+      border: 1px solid #ECE9DF;
+      border-radius: 22px;
+      padding: 22px;
+      min-height: 180px;
+    }
+    .result-card h3 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--gold-d); margin-bottom: 14px; }
+    .big-number { font-size: clamp(32px, 5vw, 50px); font-weight: 800; color: #111; letter-spacing: -1px; line-height: 1; }
+    .result-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 18px; }
+    .mini-result { background: #F8F7F4; border: 1px solid #ECE9DF; border-radius: 16px; padding: 14px; }
+    .mini-result span { display:block; color:#716b63; font-size: 11px; text-transform: uppercase; letter-spacing: .8px; font-weight: 700; margin-bottom: 6px; }
+    .mini-result b { font-size: 18px; color:#111; }
+
+    .mini-result .explain { display:block; color:#7a736a; font-size:11px; line-height:1.45; margin-top:7px; text-transform:none; letter-spacing:0; font-weight:500; }
+    .result-hero-note { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background:#F8F7F4; border:1px solid #ECE9DF; color:#514b44; font-size:12px; line-height:1.6; }
+    .result-hero-note b { color:#111; }
+    .explain-pair { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+    .explain-card { background:#FFF8EE; border:1px solid #F3D4A2; border-left:3px solid var(--gold); border-radius:16px; padding:13px 14px; color:#4d463f; font-size:12px; line-height:1.65; }
+    .explain-card b { display:block; color:#111; margin-bottom:4px; }
+    .pdf-note { color:#716b63; font-size:11px; line-height:1.6; margin-top:8px; }
+    .notice { border-left: 3px solid var(--gold); padding: 13px 14px; background: #FFF8EE; color: #4d463f; border-radius: 12px; font-size: 12px; line-height: 1.7; margin-top: 14px; }
+    .risk-questions { display: grid; gap: 14px; }
+    .question { background:#fff; border: 1px solid #ECE9DF; border-radius: 18px; padding: 16px; }
+    .question label { display:block; font-weight: 800; color:#111; font-size: 13px; line-height:1.45; margin-bottom: 10px; }
+    .question select { width: 100%; border: 1px solid #DCD9CF; border-radius: 14px; padding: 12px; background: #F8F7F4; color:#111; }
+    .profile-result-layout { display:grid; grid-template-columns: .8fr 1.2fr; gap: 22px; align-items: center; }
+    .donut-wrap { display:flex; flex-direction:column; align-items:center; gap: 16px; }
+    .donut {
+      width: 225px;
+      height: 225px;
+      border-radius: 50%;
+      background: conic-gradient(#111 0 50%, #EF9F27 50% 70%, #BA7517 70% 82%, #FAC775 82% 92%, #D3D1C7 92% 97%, #5F5E5A 97% 100%);
+      position:relative;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+    }
+    .donut::after { content:''; position:absolute; inset: 42px; border-radius:50%; background:#fff; box-shadow: inset 0 0 0 1px #ECE9DF; }
+    .legend { display:grid; gap: 8px; width:100%; }
+    .legend-item { display:flex; align-items:center; justify-content:space-between; gap:8px; color:#2f2b27; font-size:12px; }
+    .legend-left { display:flex; align-items:center; gap:8px; }
+    .swatch { width:10px; height:10px; border-radius:50%; flex:0 0 10px; }
+    .profile-name { font-size: 38px; font-family:'Cormorant Garamond', serif; color:#111; font-weight:600; line-height:1; margin-bottom: 10px; }
+    .profile-desc { color:#5d564e; line-height:1.8; font-size:13px; }
+    .risk-tag { display:inline-flex; padding: 7px 10px; border-radius: 999px; background:#111; color:var(--gold); font-size:10px; text-transform:uppercase; letter-spacing:1px; font-weight:800; margin-bottom: 12px; }
+    .lead-status { display:none; align-items:center; gap:10px; border:1px solid rgba(239,159,39,.25); background:rgba(239,159,39,.08); border-radius:999px; padding:8px 12px; color:var(--gold-l); font-size:11px; }
+    .lead-status.active { display:flex; }
+    .lead-reset { display:none; border:1px solid rgba(211,209,199,.14); background:transparent; color:rgba(248,247,244,.70); border-radius:999px; padding:8px 11px; font-size:10px; letter-spacing:.7px; text-transform:uppercase; cursor:pointer; }
+    .lead-reset.active { display:inline-flex; }
+    .lead-reset:hover { color:var(--gold-l); border-color:rgba(239,159,39,.35); }
+    .cta-strip { margin-top: 36px; background: linear-gradient(135deg, #111, #1C1A17); border:1px solid rgba(239,159,39,.24); border-radius: 28px; padding: 32px; display:flex; align-items:center; justify-content:space-between; gap: 22px; }
+    .cta-strip h2 { font-size: 38px; line-height:1; }
+    .cta-strip p { margin: 8px 0 0; color:rgba(248,247,244,.66); line-height:1.7; }
+    footer { border-top: 1px solid rgba(211,209,199,.08); padding: 34px 0; color:rgba(248,247,244,.52); font-size: 12px; }
+    .footer-grid { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; align-items:center; }
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.68); z-index:100; display:none; align-items:center; justify-content:center; padding:20px; }
+    .modal-backdrop.active { display:flex; }
+    .modal { width:min(460px, 100%); background:var(--off); color:var(--black); border-radius: 26px; box-shadow: var(--shadow); overflow:hidden; border: 1px solid rgba(255,255,255,.18); }
+    .modal-head { background:#111; color:var(--off); padding:24px; border-bottom:3px solid var(--gold); }
+    .modal-head h2 { font-size:34px; line-height:1; }
+    .modal-head p { color:rgba(248,247,244,.66); line-height:1.65; margin:10px 0 0; font-size:13px; }
+    .modal-body { padding:24px; display:grid; gap:14px; }
+    .consent { display:flex; gap:10px; align-items:flex-start; color:#5a534a; font-size:12px; line-height:1.6; }
+    .consent input { margin-top:4px; accent-color:var(--gold); }
+    .toast { position:fixed; right:18px; bottom:18px; background:#111; color:var(--off); border:1px solid rgba(239,159,39,.28); border-radius:16px; padding:14px 16px; z-index:200; box-shadow:var(--shadow); display:none; max-width:330px; font-size:13px; line-height:1.55; }
+    .toast.active { display:block; animation: fadeIn .2s ease; }
+    .hidden { display:none !important; }
+
+    .helper-text { color:#716b63; font-size: 12px; line-height:1.65; margin-top: -4px; }
+    .mode-block.hidden { display:none !important; }
+    .field-note { font-size: 11px; color:#7b746b; line-height:1.55; margin-top: 6px; }
+    .result-card .subtle { color:#5F5E5A; font-size: 13px; line-height:1.65; margin-top: 8px; }
+    .tax-pill { display:inline-flex; padding:6px 9px; border-radius:999px; background:#FFF8EE; color:#7a4d09; border:1px solid #F3D4A2; font-size:10px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; margin-top:8px; }
+    .select-row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+
+    .featured-tool {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(239,159,39,.18), rgba(28,26,23,.78));
+      border-color: rgba(239,159,39,.32);
+      min-height: 230px;
+    }
+    .featured-tool h3 { font-size: clamp(30px, 4vw, 44px); }
+    .fi-investments { display:grid; gap:14px; }
+    .fi-item { background:#fff; border:1px solid #ECE9DF; border-radius:18px; padding:16px; }
+    .fi-item-title { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .fi-item-title b { font-size:13px; text-transform:uppercase; letter-spacing:1.1px; color:#111; }
+    .comparison-table { display:grid; gap:10px; margin-top:18px; }
+    .comparison-row { display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:center; background:#F8F7F4; border:1px solid #ECE9DF; border-radius:14px; padding:12px; }
+    .comparison-row b { font-size:13px; color:#111; }
+    .comparison-row span { color:#716b63; font-size:11px; line-height:1.5; }
+    .bar-chart { display:grid; gap:10px; margin-top:18px; }
+    .bar-line { display:grid; grid-template-columns: 105px 1fr; gap:10px; align-items:center; font-size:11px; color:#5a534a; }
+    .bar-track { height:18px; background:#F0EEE8; border-radius:999px; overflow:hidden; }
+    .bar-fill { height:100%; border-radius:999px; background:linear-gradient(90deg, #BA7517, #EF9F27); min-width:4px; }
+    .pgbl-impact { background:linear-gradient(135deg,#111,#1C1A17); color:#F8F7F4; border-radius:22px; padding:22px; border:1px solid rgba(239,159,39,.28); }
+    .pgbl-impact h3 { color:#EF9F27; }
+    .pgbl-impact .big-number { color:#EF9F27; }
+    .asset-list { display:grid; gap:8px; margin-top:14px; }
+    .asset-list div { background:#F8F7F4; border:1px solid #ECE9DF; border-radius:14px; padding:12px; font-size:12px; color:#4d463f; line-height:1.55; }
+    @media (max-width: 920px) { .featured-tool { grid-column: span 1; } }
+    @media (max-width: 920px) {
+      .nav { height: 64px; }
+      .nav-links { display:none; }
+      .hero { padding: 44px 0 32px; }
+      .hero-grid, .about-grid, .tool-body, .profile-result-layout { grid-template-columns: 1fr; }
+      .hero-card { min-height: auto; }
+      .services-grid, .tools-grid { grid-template-columns: 1fr; }
+      .section-head { align-items:flex-start; flex-direction:column; }
+      .cta-strip { flex-direction:column; align-items:flex-start; }
+    }
+    @media (max-width: 620px) {
+      .container { width: min(100% - 24px, 1120px); }
+      .brand-text .lgv { font-size: 17px; }
+      .brand-text .capital { font-size: 7px; }
+      .mark { width:34px; height:34px; flex-basis:34px; }
+      .hero-actions, .btn { width: 100%; }
+      .btn { padding: 13px 15px; }
+      .metric-grid, .inline-2, .inline-3, .result-grid, .select-row, .explain-pair { grid-template-columns: 1fr; }
+      section { padding: 42px 0; }
+      .card, .tool-card, .tool-body, .tool-header, .cta-strip { padding: 20px; }
+      .tool-panel { border-radius: 22px; }
+      .tool-header h2 { font-size: 31px; }
+      .field input, .field select, .question select { font-size: 16px; }
+      .donut { width: 190px; height: 190px; }
+      .donut::after { inset: 36px; }
+    }
+
+    .mobile-dock {
+      display: none;
+    }
+    .mobile-tool-rail {
+      display: none;
+    }
+    .tool-actions-mobile {
+      display: none;
+    }
+
+    @media (max-width: 860px) {
+      body { padding-bottom: 86px; }
+      .container { width: min(100% - 24px, 1120px); }
+      .topbar {
+        position: sticky;
+        top: 0;
+        background: rgba(22,20,18,.94);
+      }
+      .nav {
+        height: 62px;
+        gap: 10px;
+      }
+      .brand .mark { width: 32px; height: 32px; flex-basis: 32px; }
+      .brand-text .lgv { font-size: 16px; }
+      .brand-text .capital { font-size: 7px; }
+      .nav-links {
+        display: none;
+      }
+      .nav .btn-primary {
+        display: none;
+      }
+      .lead-status {
+        font-size: 9px;
+        max-width: 118px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .lead-reset {
+        font-size: 9px;
+        padding: 7px 9px;
+      }
+
+      .hero { padding: 38px 0 30px; }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      h1 {
+        font-size: clamp(38px, 12vw, 54px);
+      }
+      .lead {
+        font-size: 14px;
+        line-height: 1.75;
+      }
+      .hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .hero-actions .btn {
+        width: 100%;
+        min-height: 48px;
+      }
+      .hero-card {
+        min-height: auto;
+        padding: 22px;
+        border-radius: 24px;
+      }
+      .metric-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .metric {
+        min-height: 112px;
+        padding: 16px;
+      }
+      .metric strong {
+        font-size: 25px;
+      }
+
+      section { padding: 42px 0; }
+      .section-head {
+        display: block;
+      }
+      .section-title {
+        font-size: 38px;
+      }
+      .services-grid,
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+      .tool-card {
+        min-height: auto;
+        padding: 22px;
+      }
+      .tool-card h3 {
+        font-size: 28px;
+      }
+
+      .mobile-tool-rail {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 3px 0 14px;
+        margin: -8px 0 18px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+      .mobile-tool-rail::-webkit-scrollbar {
+        display: none;
+      }
+      .mobile-tool-chip {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+        border: 1px solid rgba(239,159,39,.24);
+        background: rgba(239,159,39,.08);
+        color: var(--gold-l);
+        border-radius: 999px;
+        padding: 10px 13px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .8px;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .tool-workspace {
+        margin-top: 22px;
+        scroll-margin-top: 74px;
+      }
+      .tool-panel {
+        border-radius: 22px;
+        margin-left: -2px;
+        margin-right: -2px;
+      }
+      .tool-header {
+        padding: 22px 20px;
+      }
+      .tool-header h2 {
+        font-size: 32px;
+      }
+      .tool-header p {
+        font-size: 13px;
+      }
+      .tool-body {
+        grid-template-columns: 1fr;
+        padding: 18px;
+        gap: 18px;
+      }
+      .form-grid {
+        gap: 13px;
+      }
+      .inline-2,
+      .inline-3 {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
+      .field label {
+        font-size: 10.5px;
+      }
+      .field input,
+      .field select {
+        border-radius: 16px;
+        min-height: 50px;
+        font-size: 16px;
+        padding: 13px 14px;
+      }
+      .form-grid > .btn,
+      .result-card .btn {
+        width: 100%;
+        min-height: 50px;
+        margin-top: 4px;
+      }
+      .result-card {
+        position: relative;
+        padding: 18px;
+        border-radius: 20px;
+      }
+      .result-card .big-number {
+        font-size: clamp(34px, 11vw, 48px);
+        line-height: 1.05;
+      }
+      .result-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .mini-result {
+        padding: 15px;
+        border-radius: 15px;
+      }
+      .mini-result b {
+        font-size: 20px;
+      }
+      .explain-pair {
+        grid-template-columns: 1fr;
+      }
+      .comparison-row {
+        display: block;
+      }
+      .comparison-row > b {
+        display: block;
+        margin-top: 8px;
+        text-align: left;
+      }
+      .asset-list {
+        grid-template-columns: 1fr;
+      }
+      .pdf-note {
+        text-align: center;
+      }
+      .bug-box {
+        margin-top: 18px;
+      }
+
+      .tool-actions-mobile {
+        display: flex;
+        position: sticky;
+        bottom: 74px;
+        z-index: 20;
+        gap: 8px;
+        background: rgba(248,247,244,.92);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(17,17,17,.08);
+        border-radius: 999px;
+        padding: 8px;
+        box-shadow: 0 12px 40px rgba(0,0,0,.16);
+      }
+      .tool-actions-mobile .btn {
+        flex: 1;
+        padding: 10px 12px;
+        font-size: 10px;
+        min-height: 42px;
+      }
+
+      .mobile-dock {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        z-index: 90;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        padding: 8px;
+        background: rgba(17,17,17,.94);
+        border: 1px solid rgba(239,159,39,.24);
+        box-shadow: 0 18px 60px rgba(0,0,0,.42);
+        border-radius: 24px;
+        backdrop-filter: blur(14px);
+      }
+      .mobile-dock a,
+      .mobile-dock button {
+        border: 0;
+        background: transparent;
+        color: rgba(248,247,244,.72);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 8px 4px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+        border-radius: 16px;
+      }
+      .mobile-dock a:active,
+      .mobile-dock button:active {
+        background: rgba(239,159,39,.12);
+        color: var(--gold-l);
+      }
+      .mobile-dock .dock-ico {
+        font-size: 17px;
+        line-height: 1;
+        color: var(--gold);
+      }
+
+      .modal-card {
+        width: calc(100% - 24px);
+        border-radius: 24px;
+        padding: 22px;
+      }
+    }
+
+
+    .result-placeholder {
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-style: dashed;
+      background: #FBFAF7;
+    }
+    .result-placeholder h3 {
+      margin-bottom: 8px;
+    }
+    .result-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .result-actions .btn {
+      min-height: 44px;
+    }
+    .simulate-note {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(239,159,39,.08);
+      border: 1px solid rgba(239,159,39,.22);
+      color: #716b63;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    @media (max-width: 860px) {
+      .result-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+      .result-actions .btn {
+        width: 100%;
+      }
+      .result-placeholder {
+        min-height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#inicio" aria-label="LGV Capital">
+        <svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="13" fill="#EF9F27"/><line x1="22" y1="12" x2="22" y2="82" stroke="#111" stroke-width="9" stroke-linecap="round"/><line x1="22" y1="82" x2="84" y2="82" stroke="#111" stroke-width="9" stroke-linecap="round"/><polyline points="22,82 40,48 52,58 82,14" stroke="#111" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        <span class="brand-text"><span class="lgv">LGV</span><span class="capital">CAPITAL</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="#sobre">Quem sou</a>
+        <a href="#servicos">Serviços</a>
+        <a href="#ferramentas">Ferramentas</a>
+        <a href="#contato">Contato</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div id="leadStatus" class="lead-status">Ferramentas liberadas</div>
+        <button id="resetLeadBtn" class="lead-reset" type="button" onclick="resetLeadAccess()">Trocar dados</button>
+        <a class="btn btn-primary" href="https://wa.me/5586999883823" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="badge">Consultoria financeira • investimentos • patrimônio</span>
+          <h1>Organize suas finanças. Invista com estratégia. Construa patrimônio com <em>clareza.</em></h1>
+          <p class="lead">A LGV Capital ajuda pessoas e empresas a tomarem decisões financeiras melhores, com planejamento, método e acompanhamento consultivo.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="openTool('pgbl')">Calcular eficiência PGBL</button>
+            <button class="btn btn-ghost" onclick="openTool('perfil')">Descobrir meu perfil</button>
+            <button class="btn btn-ghost" onclick="openTool('milhao')">Calcular primeiro milhão</button>
+          </div>
+        </div>
+        <aside class="hero-card">          <span class="badge">Lucas Gomes Viana</span>
+          <div class="profile-line">
+            <div class="small-title">Consultor Financeiro</div>
+            <p>Consultor de Investimentos registrado na CVM, com certificações CPA e C-PRO R pela ANBIMA, atuando em organização financeira, planejamento patrimonial e construção de carteiras.</p>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><strong>CVM</strong><span>Registro profissional para consultoria de investimentos.</span></div>
+            <div class="metric"><strong>ANBIMA</strong><span>Certificações CPA e C-PRO R, que reforçam a base técnica da consultoria.</span></div>
+            <div class="metric"><strong>PF & PJ</strong><span>Atendimento para pessoas físicas e empresas.</span></div>
+            <div class="metric"><strong>LGV</strong><span>Estratégia, clareza e acompanhamento.</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="sobre">
+      <div class="container about-grid">
+        <div class="card bio-card">
+          <div class="section-kicker">Quem sou eu</div>
+          <h2 class="section-title">Lucas Gomes Viana</h2>
+          <p>Sou formado em Engenharia Mecânica, sócio-proprietário da Escola Piaget e atuo há mais de seis anos na gestão financeira da empresa, lidando na prática com orçamento, fluxo de caixa, planejamento e tomada de decisão.</p>
+          <p>Como consultor financeiro e consultor de investimentos registrado na CVM, com certificações CPA e C-PRO R pela ANBIMA, ajudo pessoas e empresas a organizarem melhor seus recursos, entenderem seus números e construírem estratégias mais claras para proteger e desenvolver patrimônio.</p>
+          <p>Minha proposta é unir visão prática de gestão, educação financeira e acompanhamento consultivo para transformar decisões financeiras complexas em planos objetivos, compreensíveis e aplicáveis à realidade de cada cliente.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicos">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Como posso ajudar</div>
+            <h2 class="section-title">Serviços</h2>
+          </div>
+          <p class="muted" style="max-width:480px;">A consultoria pode atuar de forma pontual ou recorrente, conforme seu momento, seus objetivos e sua necessidade de organização.</p>
+        </div>
+        <div class="services-grid">
+          <div class="card service-card"><div><div class="service-num">01</div><h3>Consultoria Financeira Pessoal</h3><p>Organização de orçamento, metas, dívidas, reservas e planejamento de curto, médio e longo prazo.</p></div></div>
+          <div class="card service-card"><div><div class="service-num">02</div><h3>Consultoria Financeira Empresarial</h3><p>Diagnóstico financeiro, fluxo de caixa, rotinas, indicadores e suporte para tomada de decisão.</p></div></div>
+          <div class="card service-card"><div><div class="service-num">03</div><h3>Consultoria de Investimentos</h3><p>Análise de perfil, estruturação de carteira, diversificação e acompanhamento do patrimônio investido.</p></div></div>
+          <div class="card service-card"><div><div class="service-num">04</div><h3>Planejamento Patrimonial</h3><p>Estratégias para proteção, crescimento e organização do patrimônio ao longo do tempo.</p></div></div>
+          <div class="card service-card"><div><div class="service-num">05</div><h3>Organização de Carteira</h3><p>Revisão da alocação, identificação de riscos, sobreposições e oportunidades de ajuste.</p></div></div>
+          <div class="card service-card"><div><div class="service-num">06</div><h3>Acompanhamento Mensal</h3><p>Monitoramento contínuo, relatórios e ajustes periódicos de acordo com mercado e objetivos.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ferramentas">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Ferramentas gratuitas</div>
+            <h2 class="section-title">Comece pelo diagnóstico</h2>
+          </div>
+          <p class="muted" style="max-width:520px;">Preencha seus dados uma única vez para liberar as ferramentas gratuitas. Os resultados são educativos e ajudam a entender melhor sua realidade financeira.</p>
+        </div>
+        <div class="mobile-tool-rail" aria-label="Atalhos das ferramentas">
+          <button class="mobile-tool-chip" onclick="openTool('pgbl')">PGBL</button>
+          <button class="mobile-tool-chip" onclick="openTool('perfil')">Perfil</button>
+          <button class="mobile-tool-chip" onclick="openTool('milhao')">1º milhão</button>
+          <button class="mobile-tool-chip" onclick="openTool('cdb')">Renda fixa</button>
+          <button class="mobile-tool-chip" onclick="openTool('aposentadoria')">Aposentadoria</button>
+          <button class="mobile-tool-chip" onclick="openTool('reserva')">Reserva</button>
+        </div>
+        <div class="tools-grid">
+          <div class="card tool-card featured-tool"><span class="lock-pill">Destaque fiscal</span><h3>Calculadora de Eficiência PGBL</h3><p>Estime quanto poderia aportar em PGBL dentro do limite de 12% e qual seria a economia de IR.</p><button class="btn btn-primary" onclick="openTool('pgbl')">Abrir ferramenta</button></div>
+          <div class="card tool-card"><span class="lock-pill">Acesso gratuito</span><h3>Diagnóstico Inteligente de Perfil de Investidor</h3><p>Entenda seu perfil considerando comportamento, reserva, renda, idade, dependentes e horizonte.</p><button class="btn btn-primary" onclick="openTool('perfil')">Abrir ferramenta</button></div>
+          <div class="card tool-card"><span class="lock-pill">Calculadora</span><h3>Primeiro Milhão</h3><p>Descubra quando chega ao objetivo ou quanto precisa aportar por mês para alcançá-lo.</p><button class="btn btn-primary" onclick="openTool('milhao')">Abrir ferramenta</button></div>
+          <div class="card tool-card"><span class="lock-pill">Comparador</span><h3>Comparador de Renda Fixa</h3><p>Selecione 2 ou 3 investimentos de renda fixa e compare resultado líquido, bruto, IR e evolução.</p><button class="btn btn-primary" onclick="openTool('cdb')">Abrir ferramenta</button></div>
+          <div class="card tool-card"><span class="lock-pill">Planejamento</span><h3>Aposentadoria</h3><p>Projete patrimônio, renda, herança e aportes necessários com lógica real e nominal.</p><button class="btn btn-primary" onclick="openTool('aposentadoria')">Abrir ferramenta</button></div>
+          <div class="card tool-card"><span class="lock-pill">Segurança</span><h3>Reserva de Emergência</h3><p>Receba uma sugestão de 3 a 12 meses de reserva conforme renda, ocupação e dependentes.</p><button class="btn btn-primary" onclick="openTool('reserva')">Abrir ferramenta</button></div>
+        </div>
+
+        <div id="toolPgbl" class="tool-workspace"></div>
+        <div id="toolPerfil" class="tool-workspace"></div>
+        <div id="toolMilhao" class="tool-workspace"></div>
+        <div id="toolCdb" class="tool-workspace"></div>
+        <div id="toolAposentadoria" class="tool-workspace"></div>
+        <div id="toolReserva" class="tool-workspace"></div>
+      </div>
+    </section>
+
+    <section id="contato">
+      <div class="container">
+        <div class="cta-strip">
+          <div>
+            <h2>Quer transformar uma simulação em plano?</h2>
+            <p>Fale comigo para uma análise personalizada da sua realidade financeira, carteira ou empresa.</p>
+          </div>
+          <a class="btn btn-primary" href="https://wa.me/5586999883823" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div class="brand"><svg class="mark" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="13" fill="#EF9F27"/><line x1="22" y1="12" x2="22" y2="82" stroke="#111" stroke-width="9" stroke-linecap="round"/><line x1="22" y1="82" x2="84" y2="82" stroke="#111" stroke-width="9" stroke-linecap="round"/><polyline points="22,82 40,48 52,58 82,14" stroke="#111" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span class="brand-text"><span class="lgv">LGV</span><span class="capital">CAPITAL</span></span></div>
+      <div>Lucas Gomes Viana · Consultor Financeiro · Consultor de Investimentos CVM · ANBIMA: CPA e C-PRO R</div>
+      <div>lgv.financeira@gmail.com · @lucas.gviana · Teresina - PI</div>
+    </div>
+  </footer>
+
+  <div id="leadModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Acesse as ferramentas gratuitas</h2>
+        <p>Informe seus dados uma única vez. Depois disso, todas as ferramentas ficam liberadas neste navegador.</p>
+      </div>
+      <div class="modal-body">
+        <div class="field"><label>Nome</label><input id="leadName" placeholder="Seu nome" autocomplete="name" /></div>
+        <div class="field"><label>WhatsApp</label><input id="leadPhone" placeholder="86 99999-9999" autocomplete="tel" /></div>
+        <label class="consent"><input id="leadConsent" type="checkbox" /> <span>Autorizo o contato da LGV Capital pelo WhatsApp para envio de resultados, conteúdos financeiros e orientações relacionadas às ferramentas utilizadas.</span></label>
+        <button class="btn btn-primary" onclick="submitLead()">Liberar ferramentas</button>
+        <button class="btn btn-ghost" style="color:#111;border-color:#D3D1C7;" onclick="closeLeadModal()">Agora não</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    /*
+      LGV Capital Site V10
+      Configure EmailJS e Firebase nos objetos abaixo quando for publicar.
+      O site funciona sem configuração externa, salvando os registros localmente no navegador.
+    */
+    // CONFIGURAÇÃO DE CAPTAÇÃO
+    // Para testar sem integrações, mantenha enabled:false.
+    // Para captar leads/simulações, preencha Firebase e EmailJS conforme o README.md.
+    const LGV_CONFIG = {
+      emailTo: 'lgv.financeira@gmail.com',
+      whatsapp: '5586999883823',
+      emailjs: {
+        enabled: false,
+        publicKey: '',
+        serviceId: '',
+        templateId: ''
+      },
+      firebase: {
+        enabled: true,
+        config: {
+          apiKey: 'AIzaSyCmr-7IKTgxoeYlC-u_xn1BRQFZgmbqSpI',
+          authDomain: 'lgvcapital.firebaseapp.com',
+          projectId: 'lgvcapital',
+          storageBucket: 'lgvcapital.firebasestorage.app',
+          messagingSenderId: '881104254704',
+          appId: '1:881104254704:web:d5dae159cc21a833f0f435'
+        }
+      }
+    };
+
+    const STORAGE_KEYS = {
+      lead: 'lgv_capital_lead_v1',
+      events: 'lgv_capital_events_v1'
+    };
+
+    const profileLevels = ['Ultraconservador', 'Conservador', 'Moderado', 'Arrojado', 'Agressivo'];
+    const profileAllocations = {
+      'Ultraconservador': { 'Renda Fixa': 95, 'Ações BR': 0, 'FIIs': 0, 'Exterior': 0, 'Reserva de Valor': 5, 'Cripto': 0 },
+      'Conservador': { 'Renda Fixa': 80, 'Ações BR': 5, 'FIIs': 5, 'Exterior': 4, 'Reserva de Valor': 5, 'Cripto': 1 },
+      'Moderado': { 'Renda Fixa': 60, 'Ações BR': 13, 'FIIs': 10, 'Exterior': 10, 'Reserva de Valor': 5, 'Cripto': 2 },
+      'Arrojado': { 'Renda Fixa': 42, 'Ações BR': 18, 'FIIs': 12, 'Exterior': 17, 'Reserva de Valor': 7, 'Cripto': 4 },
+      'Agressivo': { 'Renda Fixa': 25, 'Ações BR': 25, 'FIIs': 20, 'Exterior': 20, 'Reserva de Valor': 5, 'Cripto': 5 }
+    };
+    const profileDescriptions = {
+      'Ultraconservador': 'Você prioriza segurança, liquidez e baixa oscilação. A carteira deve ser construída com foco em preservação e previsibilidade.',
+      'Conservador': 'Você valoriza segurança, mas pode aceitar pequenas oscilações para buscar retorno melhor que opções tradicionais.',
+      'Moderado': 'Você busca equilíbrio entre proteção e crescimento. Aceita oscilações controladas desde que exista estratégia e diversificação.',
+      'Arrojado': 'Você aceita oscilações relevantes para buscar crescimento maior no longo prazo, mantendo parte da carteira em ativos defensivos.',
+      'Agressivo': 'Você tem foco em longo prazo e aceita quedas fortes no caminho, buscando crescimento patrimonial com maior exposição a ativos de risco.'
+    };
+    const palette = ['#111111', '#EF9F27', '#BA7517', '#FAC775', '#D3D1C7', '#5F5E5A'];
+
+    let pendingTool = null;
+    let currentTool = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (new URLSearchParams(window.location.search).has('resetLead')) {
+        localStorage.removeItem(STORAGE_KEYS.lead);
+      }
+      renderTools();
+      updateLeadStatus();
+      initEmailJS();
+    });
+
+    function initEmailJS() {
+      if (LGV_CONFIG.emailjs.enabled && window.emailjs && LGV_CONFIG.emailjs.publicKey) {
+        try { emailjs.init({ publicKey: LGV_CONFIG.emailjs.publicKey }); } catch (e) { console.warn('EmailJS não inicializado', e); }
+      }
+    }
+
+    function getLead() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.lead) || 'null'); } catch { return null; }
+    }
+    function setLead(lead) { localStorage.setItem(STORAGE_KEYS.lead, JSON.stringify(lead)); updateLeadStatus(); }
+    function updateLeadStatus() {
+      const el = document.getElementById('leadStatus');
+      const resetBtn = document.getElementById('resetLeadBtn');
+      const lead = getLead();
+      if (lead) {
+        el.textContent = 'Ferramentas liberadas';
+        el.classList.add('active');
+        resetBtn?.classList.add('active');
+      } else {
+        el.classList.remove('active');
+        resetBtn?.classList.remove('active');
+      }
+    }
+    function resetLeadAccess() {
+      localStorage.removeItem(STORAGE_KEYS.lead);
+      updateLeadStatus();
+      showToast('Dados removidos. Ao abrir uma ferramenta, o formulário de acesso aparecerá novamente.');
+    }
+    function requireLead(toolId) {
+      const lead = getLead();
+      if (lead) return true;
+      pendingTool = toolId;
+      document.getElementById('leadModal').classList.add('active');
+      setTimeout(() => document.getElementById('leadName').focus(), 80);
+      return false;
+    }
+    function closeLeadModal() { document.getElementById('leadModal').classList.remove('active'); }
+    function submitLead() {
+      const name = document.getElementById('leadName').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+      const consent = document.getElementById('leadConsent').checked;
+      const cleanPhone = phone.replace(/\D/g, '');
+      if (!name || name.length < 3) return showToast('Informe seu nome para liberar as ferramentas.');
+      if (cleanPhone.length < 10) return showToast('Informe um WhatsApp válido.');
+      if (!consent) return showToast('Confirme a autorização de contato para continuar.');
+      const lead = {
+        id: `lead_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+        name,
+        phone,
+        cleanPhone,
+        consent: true,
+        source: 'Site LGV Capital',
+        createdAt: new Date().toISOString()
+      };
+      setLead(lead);
+      closeLeadModal();
+      trackEvent('Novo cadastro', { lead }, { resumo: 'Cadastro realizado no site LGV Capital.' });
+      showToast('Ferramentas liberadas. Agora você pode usar todas as simulações.');
+      if (pendingTool) openTool(pendingTool);
+    }
+
+    function openTool(toolId) {
+      if (!requireLead(toolId)) return;
+      currentTool = toolId;
+      const map = { pgbl: 'toolPgbl', perfil: 'toolPerfil', milhao: 'toolMilhao', cdb: 'toolCdb', aposentadoria: 'toolAposentadoria', reserva: 'toolReserva' };
+      Object.values(map).forEach(id => document.getElementById(id).classList.remove('active'));
+      const el = document.getElementById(map[toolId]);
+      el.classList.add('active');
+      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    }
+
+    const fixedIncomeProducts = {
+      cdb: { label: 'CDB', tax: 'regressivo', defaultIndexer: 'cdi', defaultRate: 100, hint: 'Tributado pela tabela regressiva de renda fixa sobre os rendimentos.' },
+      lci_lca: { label: 'LCI / LCA', tax: 'isento', defaultIndexer: 'cdi', defaultRate: 92, hint: 'Considerado isento de IR para pessoa física nesta simulação.' },
+      tesouro_selic: { label: 'Tesouro Selic', tax: 'regressivo', defaultIndexer: 'cdi', defaultRate: 100, hint: 'Tributado pela tabela regressiva de renda fixa; simulação não considera taxa de custódia.' },
+      tesouro_prefixado: { label: 'Tesouro Prefixado', tax: 'regressivo', defaultIndexer: 'pre', defaultRate: 11, hint: 'Tributado pela tabela regressiva; marcação a mercado não foi simulada.' },
+      tesouro_ipca: { label: 'Tesouro IPCA+', tax: 'regressivo', defaultIndexer: 'ipca', defaultRate: 6, hint: 'Tributado pela tabela regressiva; usa IPCA estimado + taxa real ao ano.' },
+      deb_incentivada: { label: 'Debênture incentivada', tax: 'isento', defaultIndexer: 'ipca', defaultRate: 6, hint: 'Considerada isenta para pessoa física; atenção ao risco de crédito e liquidez.' },
+      poupanca: { label: 'Poupança', tax: 'isento', defaultIndexer: 'poupanca', defaultRate: 6.17, hint: 'Considerada isenta de IR, com rentabilidade anual preenchida pelo usuário.' }
+    };
+
+    const irpfAnual2026 = [
+      { ate: 29145.60, aliquota: 0, deducao: 0 },
+      { ate: 33919.80, aliquota: 0.075, deducao: 2185.92 },
+      { ate: 45012.60, aliquota: 0.15, deducao: 4729.91 },
+      { ate: 55976.16, aliquota: 0.225, deducao: 8105.85 },
+      { ate: Infinity, aliquota: 0.275, deducao: 10904.66 }
+    ];
+
+
+    function resultPlaceholder(title='Pronto para simular', text='Revise as premissas e toque em Simular resultado para gerar a análise.') {
+      return `<div class="result-card result-placeholder"><h3>${title}</h3><div class="subtle">${text}</div></div>`;
+    }
+
+    function pdfResultAction(call) {
+      return `<div class="result-actions"><button class="btn btn-primary" onclick="${call}">Baixar resultado em PDF</button></div>`;
+    }
+
+    function markToolEdited(tool) {
+      const map = {
+        pgbl: 'pgblResult',
+        perfil: 'profileResult',
+        milhao: 'millionResult',
+        cdb: 'cdbResult',
+        aposentadoria: 'retirementResult',
+        reserva: 'emergencyResult'
+      };
+      const id = map[tool];
+      const el = id ? document.getElementById(id) : null;
+      if (el && !el.classList.contains('result-placeholder')) {
+        el.className = 'result-card result-placeholder';
+        el.innerHTML = '<h3>Dados alterados</h3><div class="subtle">Toque em <b>Simular resultado</b> para atualizar a análise com as novas premissas.</div>';
+      }
+    }
+
+    function showResultActions(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('result-placeholder');
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 70);
+      }
+    }
+
+    function renderTools() {
+      document.getElementById('toolPgbl').innerHTML = renderPgblTool();
+      document.getElementById('toolPerfil').innerHTML = renderProfileTool();
+      document.getElementById('toolMilhao').innerHTML = renderMillionTool();
+      document.getElementById('toolCdb').innerHTML = renderFixedIncomeTool();
+      document.getElementById('toolAposentadoria').innerHTML = renderRetirementTool();
+      document.getElementById('toolReserva').innerHTML = renderEmergencyTool();
+      setupMoneyMasks(); updateMillionMode(); updateFiCount(); togglePgblAlready();
+    }
+
+    function renderPgblTool() {
+      return `<div class="tool-panel"><div class="tool-header"><h2>Calculadora de Eficiência PGBL</h2><p>Estime quanto você ainda poderia aportar em PGBL dentro do limite fiscal de 12% e como isso poderia impactar seu imposto.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>Renda tributável anual</label><input id="g_income" data-money inputmode="decimal" value="R$ 180.000,00" oninput="markToolEdited('pgbl')"><div class="field-note">Exemplo inicial: renda tributável de aproximadamente R$ 15 mil por mês.</div></div><div class="field"><label>Declara no modelo completo?</label><select id="g_complete" onchange="markToolEdited('pgbl')"><option value="sim">Sim, modelo completo</option><option value="nao">Não / não tenho certeza</option></select></div><div class="field"><label>Já aplicou em PGBL no ano?</label><select id="g_has_pgbl" onchange="togglePgblAlready(); markToolEdited('pgbl')"><option value="nao">Não</option><option value="sim">Sim</option></select></div><div class="field" id="g_already_wrap" style="display:none;"><label>Valor já aplicado em PGBL no ano</label><input id="g_already" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('pgbl')"></div><div class="field"><label>Imposto devido na declaração</label><input id="g_tax_due" data-money inputmode="decimal" value="R$ 24.300,00" oninput="markToolEdited('pgbl')"></div><div class="inline-2"><div class="field"><label>Resultado atual da declaração</label><select id="g_result_type" onchange="markToolEdited('pgbl')"><option value="pagar">Imposto a pagar</option><option value="restituir">Imposto a restituir</option></select></div><div class="field"><label>Valor a pagar/restituir</label><input id="g_result_value" data-money inputmode="decimal" value="R$ 4.800,00" oninput="markToolEdited('pgbl')"></div></div><div class="field"><label>Aporte mensal desejado (opcional)</label><input id="g_monthly" data-money inputmode="decimal" placeholder="Deixe vazio para usar o máximo eficiente" oninput="markToolEdited('pgbl')"><div class="field-note">Se deixar vazio, a calculadora usa o espaço fiscal disponível dentro do limite de 12%.</div></div><button class="btn btn-primary" onclick="calcPgbl()">Simular resultado</button><div class="simulate-note">Após simular, o botão para baixar o PDF aparecerá junto ao resultado.</div></div><div id="pgblResult" class="result-card result-placeholder"><h3>Pronto para simular</h3><div class="subtle">Revise os dados da declaração e toque em <b>Simular resultado</b>.</div></div></div></div>`;
+    }
+
+    function renderProfileTool() {
+      const questions = [
+        ['p_age','Qual sua idade?', [['Até 25 anos',5],['26 a 35 anos',5],['36 a 45 anos',4],['46 a 60 anos',3],['Acima de 60 anos',2]]],
+        ['p_dependents','Quantas pessoas dependem financeiramente de você?', [['Nenhuma',5],['1 pessoa',4],['2 pessoas',3],['3 pessoas',2],['4 ou mais pessoas',1]]],
+        ['p_income','Sua renda mensal costuma ser estável?', [['Muito instável',1],['Parcialmente instável',2],['Estável',4],['Muito estável',5],['Tenho mais de uma fonte de renda',5]]],
+        ['p_reserve','Você já possui reserva de emergência?', [['Não tenho',1],['Menos de 3 meses de custo de vida',2],['Entre 3 e 6 meses',3],['Entre 6 e 12 meses',4],['Mais de 12 meses',5]]],
+        ['p_goal','Qual é seu principal objetivo hoje?', [['Montar reserva de emergência',1],['Proteger patrimônio',2],['Comprar imóvel, carro ou objetivo específico',2],['Aposentadoria',4],['Crescimento patrimonial',5],['Independência financeira',5]]],
+        ['p_horizon','Em quanto tempo você pretende usar esse dinheiro?', [['Menos de 1 ano',1],['Entre 1 e 3 anos',2],['Entre 3 e 5 anos',3],['Entre 5 e 10 anos',4],['Mais de 10 anos',5],['Mais de 20 anos',5]]],
+        ['p_experience','Qual sua experiência com investimentos?', [['Só poupança',1],['Tesouro, CDB, LCI, LCA ou renda fixa',2],['Fundos de investimento',3],['Ações e fundos imobiliários',4],['Exterior, cripto ou ativos de maior risco',5]]],
+        ['p_understand','Você entende que investimentos com maior potencial de retorno podem passar por quedas temporárias?', [['Não entendo bem',1],['Entendo pouco',2],['Entendo, mas tenho muito receio',3],['Entendo e aceito alguma oscilação',4],['Entendo e aceito oscilações fortes no longo prazo',5]]],
+        ['p_reaction','Se sua carteira caísse 10% em um mês, o que você faria?', [['Venderia tudo para evitar perder mais',1],['Ficaria preocupado e reduziria risco',2],['Não faria nada e aguardaria',3],['Aproveitaria para investir mais aos poucos',4],['Veria como oportunidade de longo prazo',5]]],
+        ['p_drawdown','Qual queda temporária você aceitaria suportar?', [['Nenhuma',1],['Até 5%',2],['Até 10%',3],['Até 20%',4],['Mais de 20%',5]]],
+        ['p_priority','O que é mais importante para você?', [['Segurança acima de tudo',1],['Previsibilidade',2],['Equilíbrio entre segurança e crescimento',3],['Crescimento patrimonial',4],['Alta rentabilidade no longo prazo',5]]]
+      ];
+      return `<div class="tool-panel"><div class="tool-header"><h2>Diagnóstico Inteligente de Perfil de Investidor</h2><p>Uma análise inicial que considera tolerância a risco, estrutura financeira, idade, dependentes, renda, reserva e horizonte.</p></div><div class="tool-body" style="grid-template-columns:1fr;"><div class="risk-questions">${questions.map(q => `<div class="question"><label>${q[1]}</label><select id="${q[0]}" onchange="markToolEdited('perfil')">${q[2].map((a, i) => `<option value="${a[1]}" data-label="${a[0]}" ${i===2?'selected':''}>${a[0]}</option>`).join('')}</select></div>`).join('')}</div><button class="btn btn-primary" onclick="calcProfile()" style="margin-top:14px;">Simular meu perfil</button><div class="simulate-note">Depois do resultado, você poderá baixar um PDF com o diagnóstico.</div><div id="profileResult" class="result-card result-placeholder"><h3>Pronto para simular</h3><div class="subtle">Responda ao questionário e toque em <b>Simular meu perfil</b>.</div></div></div></div>`;
+    }
+
+    function renderMillionTool() {
+      return `<div class="tool-panel"><div class="tool-header"><h2>Calculadora do Primeiro Milhão</h2><p>Escolha se quer descobrir em quanto tempo chega ao primeiro milhão ou quanto precisa aportar por mês para atingir a meta no prazo desejado.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>O que você quer estimar?</label><select id="m_mode" onchange="updateMillionMode(); markToolEdited('milhao')"><option value="tempo">Quando chego ao objetivo?</option><option value="aporte">Quanto preciso aportar por mês?</option></select></div><div class="field"><label>Objetivo financeiro</label><input id="m_goal" data-money inputmode="decimal" value="R$ 1.000.000,00" oninput="markToolEdited('milhao')"></div><div class="field"><label>Patrimônio inicial</label><input id="m_initial" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('milhao')"></div><div class="field"><label>Rentabilidade anual estimada (%)</label><input id="m_rate" inputmode="decimal" value="14,50" oninput="markToolEdited('milhao')"><div class="field-note">Todas as rentabilidades desta ferramenta são ao ano. Padrão atual: 14,5% a.a.</div></div><div id="m_time_fields" class="mode-block"><div class="field"><label>Aporte mensal</label><input id="m_monthly" data-money inputmode="decimal" value="R$ 1.000,00" oninput="markToolEdited('milhao')"></div></div><div id="m_contribution_fields" class="mode-block hidden"><div class="field"><label>Prazo desejado (anos)</label><input id="m_years" inputmode="decimal" value="20" oninput="markToolEdited('milhao')"></div></div><button class="btn btn-primary" onclick="calcMillion()">Simular resultado</button><div class="simulate-note">Depois do resultado, você poderá baixar um PDF com a simulação.</div></div><div id="millionResult" class="result-card result-placeholder"><h3>Pronto para simular</h3><div class="subtle">Preencha as premissas e toque em <b>Simular resultado</b>.</div></div></div></div>`;
+    }
+
+    function fixedInvestmentSlot(n, product='cdb') {
+      return `<div class="fi-item" id="fi_slot_${n}"><div class="fi-item-title"><b>Investimento ${n}</b><span class="tax-pill" id="fi_tax_${n}">IR regressivo</span></div><div class="form-grid"><div class="field"><label>Ativo</label><select id="fi_product_${n}" onchange="updateFiProduct(${n}); markToolEdited('cdb')">${Object.entries(fixedIncomeProducts).map(([key,p]) => `<option value="${key}" ${key===product?'selected':''}>${p.label}</option>`).join('')}</select></div><div class="inline-2"><div class="field"><label>Tipo de indexador</label><select id="fi_indexer_${n}" onchange="updateFiIndexer(${n}); markToolEdited('cdb')"><option value="cdi">% do CDI</option><option value="pre">Prefixado</option><option value="ipca">IPCA + taxa</option><option value="poupanca">Poupança / taxa anual direta</option></select></div><div class="field"><label id="fi_rate_label_${n}">Rentabilidade ao ano</label><input id="fi_rate_${n}" inputmode="decimal" value="100" oninput="markToolEdited('cdb')"></div></div><div class="field"><label>Vencimento fiscal</label><select id="fi_tax_term_${n}" onchange="markToolEdited('cdb')"><option value="auto">Usar prazo da simulação</option><option value="180">Até 180 dias</option><option value="360">181 a 360 dias</option><option value="720">361 a 720 dias</option><option value="721">Acima de 720 dias</option></select></div><div class="field-note" id="fi_hint_${n}"></div></div></div>`;
+    }
+
+    function renderFixedIncomeTool() {
+      return `<div class="tool-panel"><div class="tool-header"><h2>Comparador de Renda Fixa</h2><p>Selecione 2 ou 3 investimentos, informe valor inicial, aporte, rentabilidade anual e prazo. O resultado mostra bruto, líquido, IR, rendimento e uma leitura simples de cada ativo.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>Quantidade de investimentos</label><select id="c_count" onchange="updateFiCount(); markToolEdited('cdb')"><option value="2">Comparar 2 investimentos</option><option value="3">Comparar 3 investimentos</option></select></div><div class="field"><label>Valor inicial</label><input id="c_initial" data-money inputmode="decimal" value="R$ 10.000,00" oninput="markToolEdited('cdb')"></div><div class="field"><label>Aporte mensal</label><input id="c_monthly" data-money inputmode="decimal" value="R$ 500,00" oninput="markToolEdited('cdb')"></div><div class="inline-2"><div class="field"><label>Prazo da simulação (anos)</label><input id="c_years" inputmode="decimal" value="5" oninput="markToolEdited('cdb')"></div><div class="field"><label>CDI estimado ao ano (%)</label><input id="c_cdi" inputmode="decimal" value="14,50" oninput="markToolEdited('cdb')"></div></div><div class="field"><label>IPCA estimado ao ano (%)</label><input id="c_ipca" inputmode="decimal" value="5,50" oninput="markToolEdited('cdb')"></div><div class="fi-investments">${fixedInvestmentSlot(1,'cdb')}${fixedInvestmentSlot(2,'lci_lca')}${fixedInvestmentSlot(3,'tesouro_ipca')}</div><button class="btn btn-primary" onclick="calcFixedIncome()">Simular comparação</button><div class="simulate-note">Depois da comparação, você poderá baixar um PDF com os resultados.</div></div><div id="cdbResult" class="result-card result-placeholder"><h3>Pronto para comparar</h3><div class="subtle">Escolha os investimentos e toque em <b>Simular comparação</b>.</div></div></div></div>`;
+    }
+
+    function renderRetirementTool() {
+      return `<div class="tool-panel"><div class="tool-header"><h2>Calculadora de Aposentadoria</h2><p>Projete patrimônio, renda real e nominal, herança e aportes necessários com base na lógica da planilha LGV. Agora a projeção considera um IR estimado sobre os rendimentos.</p></div><div class="tool-body"><div class="form-grid"><div class="inline-3"><div class="field"><label>Idade atual</label><input id="r_age" value="30" inputmode="numeric" oninput="markToolEdited('aposentadoria')"></div><div class="field"><label>Idade de aposentadoria</label><input id="r_retire" value="60" inputmode="numeric" oninput="markToolEdited('aposentadoria')"></div><div class="field"><label>Idade final do plano</label><input id="r_final_age" value="90" inputmode="numeric" oninput="markToolEdited('aposentadoria')"></div></div><div class="field"><label>Patrimônio atual</label><input id="r_initial" data-money inputmode="decimal" value="R$ 100.000,00" oninput="markToolEdited('aposentadoria')"></div><div class="field"><label>Aporte mensal</label><input id="r_monthly" data-money inputmode="decimal" value="R$ 1.000,00" oninput="markToolEdited('aposentadoria')"></div><div class="field"><label>Aporte anual extra</label><input id="r_extra" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('aposentadoria')"><div class="field-note">Para simplificar no site, o aporte anual extra é convertido em equivalente mensal.</div></div><div class="inline-2"><div class="field"><label>Meta de patrimônio real</label><input id="r_goal_wealth" data-money inputmode="decimal" value="R$ 1.000.000,00" oninput="markToolEdited('aposentadoria')"></div><div class="field"><label>Meta de renda mensal real</label><input id="r_goal_income" data-money inputmode="decimal" value="R$ 5.000,00" oninput="markToolEdited('aposentadoria')"></div></div><div class="inline-2"><div class="field"><label>Inflação anual (%)</label><input id="r_inflation" value="5,50" inputmode="decimal" oninput="markToolEdited('aposentadoria')"></div><div class="field"><label>IR estimado sobre rendimentos (%)</label><input id="r_tax_rate" value="20,00" inputmode="decimal" oninput="markToolEdited('aposentadoria')"><div class="field-note">Sugestão conservadora: 20%. Você pode editar conforme a estratégia, produto e prazo.</div></div></div><div class="inline-2"><div class="field"><label>Rentabilidade bruta acumulação a.a. (%)</label><input id="r_accum_rate" value="14,50" inputmode="decimal" oninput="markToolEdited('aposentadoria')"></div><div class="field"><label>Rentabilidade bruta aposentadoria a.a. (%)</label><input id="r_ret_rate" value="14,50" inputmode="decimal" oninput="markToolEdited('aposentadoria')"></div></div><button class="btn btn-primary" onclick="calcRetirement()">Simular aposentadoria</button><div class="simulate-note">Depois do resultado, você poderá baixar um PDF com a projeção.</div></div><div id="retirementResult" class="result-card result-placeholder"><h3>Pronto para projetar</h3><div class="subtle">Confira idade, aportes e taxas. Depois toque em <b>Simular aposentadoria</b>.</div></div></div></div>`;
+    }
+
+    function renderEmergencyTool() {
+      return `<div class="tool-panel"><div class="tool-header"><h2>Reserva de Emergência</h2><p>Calcule uma reserva recomendada de 3 a 12 meses conforme ocupação, estabilidade de renda e dependentes.</p></div><div class="tool-body"><div class="form-grid"><div class="field"><label>Tipo de ocupação</label><select id="e_occupation" onchange="markToolEdited('reserva')"><option value="0">Servidor público / renda muito previsível</option><option value="1">CLT com boa estabilidade</option><option value="2">CLT comum / setor privado</option><option value="3">Autônomo / profissional liberal</option><option value="4">Empresário / comissionado / renda variável</option></select></div><div class="field"><label>Estabilidade salarial</label><select id="e_stability" onchange="markToolEdited('reserva')"><option value="0">Muito estável</option><option value="1">Estável</option><option value="2">Oscila um pouco</option><option value="3">Oscila muito</option></select></div><div class="field"><label>Número de dependentes</label><select id="e_dependents" onchange="markToolEdited('reserva')"><option value="0">Nenhum</option><option value="1">1 dependente</option><option value="2">2 dependentes</option><option value="3">3 ou mais dependentes</option></select></div><div class="field"><label>Renda mensal</label><input id="e_income" data-money inputmode="decimal" value="R$ 8.000,00" oninput="markToolEdited('reserva')"></div><div class="field"><label>Custo de vida mensal</label><input id="e_cost" data-money inputmode="decimal" value="R$ 5.000,00" oninput="markToolEdited('reserva')"></div><div class="field"><label>Reserva atual</label><input id="e_current" data-money inputmode="decimal" value="R$ 0,00" oninput="markToolEdited('reserva')"></div><button class="btn btn-primary" onclick="calcEmergency()">Simular reserva</button><div class="simulate-note">Depois do resultado, você poderá baixar um PDF com a recomendação.</div></div><div id="emergencyResult" class="result-card result-placeholder"><h3>Pronto para calcular</h3><div class="subtle">Informe renda, custo e perfil de estabilidade. Depois toque em <b>Simular reserva</b>.</div></div></div></div>`;
+    }
+
+    function calcPgbl(save=false) {
+      if (!document.getElementById('g_income')) return;
+      const rendaTributavel = money('g_income');
+      const modeloCompleto = document.getElementById('g_complete')?.value === 'sim';
+      const pgblJaAportado = document.getElementById('g_has_pgbl')?.value === 'sim' ? money('g_already') : 0;
+      const impostoDevido = money('g_tax_due');
+      const tipoResultado = document.getElementById('g_result_type')?.value || 'pagar';
+      const valorResultado = money('g_result_value');
+      const aporteMensalDesejado = money('g_monthly');
+      if (!modeloCompleto) {
+        document.getElementById('pgblResult').classList.remove('result-placeholder'); document.getElementById('pgblResult').innerHTML = `<h3>Atenção ao modelo de declaração</h3><div class="big-number">—</div><div class="notice">O PGBL costuma gerar benefício fiscal para quem faz declaração completa. No modelo simplificado, a dedução pode não gerar economia.</div>`;
+        return;
+      }
+      if (rendaTributavel <= 0 || impostoDevido <= 0) {
+        document.getElementById('pgblResult').classList.remove('result-placeholder'); document.getElementById('pgblResult').innerHTML = `<h3>Preencha os dados</h3><div class="big-number">—</div><div class="notice">Informe renda tributável anual e imposto devido para estimar a eficiência do PGBL.</div>`;
+        return;
+      }
+      const limitePgbl = rendaTributavel * 0.12;
+      const espacoDisponivel = Math.max(0, limitePgbl - pgblJaAportado);
+      const aporteDesejadoAnual = aporteMensalDesejado > 0 ? aporteMensalDesejado * 12 : espacoDisponivel;
+      const aporteSimulado = Math.min(espacoDisponivel, aporteDesejadoAnual);
+      const baseAtual = inferBaseByTax(impostoDevido, rendaTributavel);
+      const baseNova = Math.max(0, baseAtual - aporteSimulado);
+      const impostoNovo = impostoProgressivoAnual2026(baseNova, rendaTributavel);
+      const economiaFiscal = Math.max(0, impostoDevido - impostoNovo);
+      const impostoRetido = tipoResultado === 'pagar' ? impostoDevido - valorResultado : impostoDevido + valorResultado;
+      const novoSaldo = impostoNovo - impostoRetido;
+      const fraseResultado = novoSaldo > 1 ? `Com PGBL, seu imposto a pagar poderia cair para aproximadamente ${brl(novoSaldo)}.` : novoSaldo < -1 ? `Com PGBL, você poderia ter aproximadamente ${brl(Math.abs(novoSaldo))} a restituir.` : 'Com PGBL, sua guia poderia ficar praticamente zerada.';
+      const semEspaco = espacoDisponivel <= 0;
+      document.getElementById('pgblResult').classList.remove('result-placeholder'); document.getElementById('pgblResult').innerHTML = `<div class="pgbl-impact"><h3>${semEspaco ? 'Limite já utilizado' : 'Economia fiscal estimada'}</h3><div class="big-number">${brl(economiaFiscal)}</div><p class="subtle" style="color:rgba(248,247,244,.72);">Você poderia transformar parte do imposto em patrimônio, respeitando o limite fiscal eficiente.</p></div><div class="result-grid"><div class="mini-result"><span>Limite PGBL 12%</span><b>${brl(limitePgbl)}</b></div><div class="mini-result"><span>Espaço disponível</span><b>${brl(espacoDisponivel)}</b></div><div class="mini-result"><span>Aporte simulado</span><b>${brl(aporteSimulado)}</b></div><div class="mini-result"><span>Aporte mensal equivalente</span><b>${brl(aporteSimulado/12)}</b></div></div><div class="notice"><b>Resultado prático:</b> ${fraseResultado}</div><div class="notice">Simulação ilustrativa. O resultado pode variar conforme deduções, retenções, contribuição previdenciária, modelo de declaração, valores já aportados em PGBL e informações completas da declaração.</div>${save ? '' : pdfResultAction('calcPgbl(true)')}`; showResultActions('pgblResult');
+      if (save) trackEvent('Calculadora PGBL', { rendaTributavel, modeloCompleto, pgblJaAportado, impostoDevido, tipoResultado, valorResultado, limitePgbl, espacoDisponivel, aporteSimulado, economiaFiscal, novoSaldo }, { resumo: `Economia fiscal estimada: ${brl(economiaFiscal)} | aporte eficiente: ${brl(aporteSimulado)}` });
+    }
+
+    function togglePgblAlready() {
+      const wrap = document.getElementById('g_already_wrap');
+      if (wrap) wrap.style.display = document.getElementById('g_has_pgbl')?.value === 'sim' ? '' : 'none';
+    }
+
+    function impostoProgressivoAnual2026(base, rendaTributavel) {
+      const faixa = irpfAnual2026.find(f => base <= f.ate) || irpfAnual2026[irpfAnual2026.length - 1];
+      let imposto = Math.max(0, base * faixa.aliquota - faixa.deducao);
+      const reducao = reducaoAnualIR2026(rendaTributavel, imposto);
+      return Math.max(0, imposto - reducao);
+    }
+
+    function reducaoAnualIR2026(rendaTributavel, imposto) {
+      if (rendaTributavel <= 60000) return Math.min(imposto, 2694.15);
+      if (rendaTributavel <= 88200) return Math.min(imposto, Math.max(0, 8429.73 - 0.095575 * rendaTributavel));
+      return 0;
+    }
+
+    function inferBaseByTax(impostoDevido, rendaTributavel) {
+      let low = 0, high = Math.max(rendaTributavel, 1000000);
+      for (let i=0; i<80; i++) {
+        const mid = (low + high) / 2;
+        const tax = impostoProgressivoAnual2026(mid, rendaTributavel);
+        if (tax < impostoDevido) low = mid; else high = mid;
+      }
+      return (low + high) / 2;
+    }
+
+    function calcProfile(save=false) {
+      const ids = ['p_age','p_dependents','p_income','p_reserve','p_goal','p_horizon','p_experience','p_understand','p_reaction','p_drawdown','p_priority'];
+      if (!document.getElementById('p_age')) return;
+      const v = id => Number(document.getElementById(id).value);
+      const label = id => document.getElementById(id).selectedOptions[0].dataset.label;
+      const behavior = avg([v('p_understand'), v('p_reaction'), v('p_drawdown'), v('p_priority')]);
+      const capacity = avg([v('p_age'), v('p_dependents'), v('p_income'), v('p_reserve')]);
+      const horizon = avg([v('p_goal'), v('p_horizon'), v('p_experience')]);
+      let score = behavior * .40 + capacity * .35 + horizon * .25;
+      let idx = score < 1.8 ? 0 : score < 2.6 ? 1 : score < 3.4 ? 2 : score < 4.2 ? 3 : 4;
+      const notes = [];
+      if (v('p_reserve') <= 2) { idx = Math.min(idx, 1); notes.push('Sua reserva de emergência ainda parece insuficiente. Por isso, o risco sugerido foi limitado.'); }
+      if (v('p_horizon') === 1) { idx = Math.min(idx, 0); notes.push('Como o prazo é menor que 1 ano, a sugestão prioriza liquidez e segurança.'); }
+      if (v('p_horizon') === 2) { idx = Math.min(idx, 1); notes.push('Para prazos entre 1 e 3 anos, a sugestão evita exposição elevada a ativos voláteis.'); }
+      if (v('p_drawdown') === 1) { idx = Math.min(idx, 1); notes.push('Como você informou não aceitar quedas temporárias, o perfil foi limitado a uma faixa mais conservadora.'); }
+      if (v('p_income') === 1 && v('p_dependents') <= 2) { idx = Math.max(0, idx - 1); notes.push('Renda muito instável combinada com dependentes exige uma carteira mais prudente.'); }
+      const profile = profileLevels[idx];
+      const alloc = applyCryptoRules(profileAllocations[profile], v, notes);
+      const payload = { profile, score: Number(score.toFixed(2)), allocations: alloc, answers: Object.fromEntries(ids.map(id => [id, label(id)])), notes };
+      renderProfileResult(payload);
+      if (save) trackEvent('Perfil de Investidor', payload, { resumo: `Perfil identificado: ${profile}` });
+    }
+    function applyCryptoRules(base, v, notes) {
+      const alloc = { ...base };
+      const canCrypto = v('p_horizon') >= 4 && v('p_reserve') >= 3 && v('p_drawdown') >= 3 && v('p_understand') >= 4;
+      if (!canCrypto && alloc.Cripto > 0) { notes.push('A exposição a cripto foi redirecionada para renda fixa por causa de prazo, reserva, tolerância a oscilação ou compreensão de risco.'); alloc['Renda Fixa'] += alloc.Cripto; alloc.Cripto = 0; }
+      return alloc;
+    }
+    function renderProfileResult(payload) {
+      const res = document.getElementById('profileResult');
+      const legend = Object.entries(payload.allocations).map(([k, val], i) => `<div class="legend-item"><span class="legend-left"><span class="swatch" style="background:${palette[i]}"></span>${k}</span><b>${val}%</b></div>`).join('');
+      let start = 0;
+      const gradient = Object.values(payload.allocations).map((val, i) => { const end = start + val; const part = `${palette[i]} ${start}% ${end}%`; start = end; return part; }).join(', ');
+      const notes = payload.notes.length ? `<div class="notice"><b>Ajustes aplicados:</b><br>${payload.notes.map(n => `• ${n}`).join('<br>')}</div>` : '';
+      res.innerHTML = `<div class="profile-result-layout"><div class="donut-wrap"><div class="donut" style="background:conic-gradient(${gradient})"></div><div class="legend">${legend}</div></div><div><span class="risk-tag">Perfil inicial</span><div class="profile-name">${payload.profile}</div><p class="profile-desc">${profileDescriptions[payload.profile]}</p>${notes}<div class="notice"><b>Importante:</b> este diagnóstico tem caráter educativo e não substitui uma análise individual completa. A carteira adequada depende de entrevista, objetivos, patrimônio, renda, liquidez, horizonte de investimento e tolerância real a risco.</div><a class="btn btn-primary" style="margin-top:16px;" href="https://wa.me/${LGV_CONFIG.whatsapp}?text=${encodeURIComponent('Olá, Lucas. Fiz o diagnóstico de perfil no site da LGV Capital e gostaria de uma análise personalizada.') }" target="_blank">Quero uma análise personalizada</a>${save ? '' : pdfResultAction('calcProfile(true)')}</div></div>`; showResultActions('profileResult');
+    }
+
+    function updateMillionMode() {
+      const modeEl = document.getElementById('m_mode');
+      if (!modeEl) return;
+      const mode = modeEl.value;
+      const timeFields = document.getElementById('m_time_fields');
+      const contributionFields = document.getElementById('m_contribution_fields');
+      if (timeFields) timeFields.classList.toggle('hidden', mode !== 'tempo');
+      if (contributionFields) contributionFields.classList.toggle('hidden', mode !== 'aporte');
+    }
+
+    function calcMillion(save=false) {
+      if (!document.getElementById('m_initial')) return;
+      const mode = document.getElementById('m_mode')?.value || 'tempo';
+      const initial = money('m_initial'), annualRate = percentAnnual('m_rate'), rate = annualToMonthly(annualRate), goal = money('m_goal') || 1000000;
+      let payload = { mode, initial, annualRate, goal };
+      let html = '';
+      if (initial >= goal) { html = `<h3>Objetivo já atingido</h3><div class="big-number">${brl(initial)}</div><div class="notice">Seu patrimônio inicial informado já é maior ou igual ao objetivo.</div>`; document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)'); showResultActions('millionResult'); if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: 'Objetivo já atingido.' }); return; }
+      if (mode === 'aporte') {
+        const yearsTarget = Math.max(0.1, num('m_years'));
+        const months = Math.max(1, Math.round(yearsTarget * 12));
+        const futureInitial = initial * Math.pow(1 + rate, months);
+        let requiredMonthly = rate === 0 ? (goal - initial) / months : (goal - futureInitial) * rate / (Math.pow(1 + rate, months) - 1);
+        requiredMonthly = Math.max(0, requiredMonthly);
+        const totalContrib = initial + requiredMonthly * months;
+        const finalBalance = compound(initial, requiredMonthly, rate, months);
+        const interest = finalBalance - totalContrib;
+        const y = Math.floor(months / 12), rem = months % 12;
+        html = `<h3>Aporte mensal necessário</h3><div class="big-number">${brl(requiredMonthly)}</div><div class="subtle">Para chegar a ${brl(goal)} em ${y} anos${rem ? ` e ${rem} meses` : ''}, usando rentabilidade anual de ${(annualRate*100).toFixed(2).replace('.',',')}%.</div><div class="result-grid"><div class="mini-result"><span>Patrimônio projetado</span><b>${brl(finalBalance)}</b></div><div class="mini-result"><span>Total investido</span><b>${brl(totalContrib)}</b></div><div class="mini-result"><span>Juros acumulados</span><b>${brl(interest)}</b></div><div class="mini-result"><span>Prazo desejado</span><b>${y}a ${rem}m</b></div></div><div class="notice">Simulação educativa com rentabilidade anual constante. A rentabilidade futura não é garantida.</div>`;
+        payload = { ...payload, yearsTarget, months, requiredMonthly, finalBalance, totalContrib, interest };
+        if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: `Aporte necessário: ${brl(requiredMonthly)}` });
+      } else {
+        const monthly = money('m_monthly'); let balance = initial, months = 0, totalContrib = initial;
+        if (monthly <= 0 && rate <= 0) { html = `<h3>Simulação indisponível</h3><div class="big-number">—</div><div class="notice">Informe um aporte mensal ou uma rentabilidade positiva para estimar o tempo até o objetivo.</div>`; document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)'); showResultActions('millionResult'); return; }
+        while (balance < goal && months < 1200) { balance = balance * (1 + rate) + monthly; totalContrib += monthly; months++; }
+        const years = Math.floor(months / 12), rem = months % 12, interest = balance - totalContrib, reached = balance >= goal;
+        html = `<h3>${reached ? 'Tempo estimado' : 'Prazo acima de 100 anos'}</h3><div class="big-number">${reached ? `${years} anos e ${rem} meses` : '—'}</div><div class="result-grid"><div class="mini-result"><span>Patrimônio final</span><b>${brl(balance)}</b></div><div class="mini-result"><span>Total investido</span><b>${brl(totalContrib)}</b></div><div class="mini-result"><span>Juros acumulados</span><b>${brl(interest)}</b></div><div class="mini-result"><span>Rentabilidade anual</span><b>${(annualRate*100).toFixed(2).replace('.',',')}%</b></div></div><div class="notice">Simulação educativa com rentabilidade anual constante. Na prática, investimentos oscilam e a rentabilidade futura não é garantida.</div>`;
+        payload = { ...payload, monthly, years, months: rem, totalMonths: months, balance, totalContrib, interest };
+        if (save) trackEvent('Calculadora do Primeiro Milhão', payload, { resumo: `Tempo estimado: ${years} anos e ${rem} meses` });
+      }
+      document.getElementById('millionResult').innerHTML = save ? html : html + pdfResultAction('calcMillion(true)'); showResultActions('millionResult');
+    }
+
+    function updateFiCount() {
+      const count = Number(document.getElementById('c_count')?.value || 2);
+      [1,2,3].forEach(i => { const slot = document.getElementById(`fi_slot_${i}`); if (slot) slot.style.display = i <= count ? '' : 'none'; updateFiProduct(i); });
+    }
+
+    function updateFiProduct(n) {
+      const product = document.getElementById(`fi_product_${n}`)?.value || 'cdb';
+      const cfg = fixedIncomeProducts[product] || fixedIncomeProducts.cdb;
+      const indexerEl = document.getElementById(`fi_indexer_${n}`);
+      const rateEl = document.getElementById(`fi_rate_${n}`);
+      if (indexerEl && indexerEl.dataset.manual !== '1') indexerEl.value = cfg.defaultIndexer;
+      if (rateEl && !rateEl.value) rateEl.value = String(cfg.defaultRate).replace('.', ',');
+      if (rateEl && product === 'poupanca') rateEl.value = String(cfg.defaultRate).replace('.', ',');
+      updateFiIndexer(n);
+      const tax = document.getElementById(`fi_tax_${n}`); if (tax) tax.textContent = cfg.tax === 'isento' ? 'Isento para PF' : 'IR regressivo';
+      const hint = document.getElementById(`fi_hint_${n}`); if (hint) hint.textContent = cfg.hint;
+    }
+
+    function updateFiIndexer(n) {
+      const indexerEl = document.getElementById(`fi_indexer_${n}`); if (!indexerEl) return;
+      const label = document.getElementById(`fi_rate_label_${n}`);
+      const map = { cdi: 'Rentabilidade (% do CDI)', pre: 'Taxa prefixada ao ano (%)', ipca: 'Taxa acima do IPCA ao ano (%)', poupanca: 'Rentabilidade ao ano (%)' };
+      if (label) label.textContent = map[indexerEl.value] || 'Rentabilidade ao ano (%)';
+    }
+
+    function calcFixedIncome(save=false) {
+      if (!document.getElementById('c_initial')) return;
+      const count = Number(document.getElementById('c_count')?.value || 2), initial = money('c_initial'), monthly = money('c_monthly'), years = Math.max(0.01, num('c_years'));
+      const months = Math.max(1, Math.round(years * 12)), cdi = percentAnnual('c_cdi'), ipca = percentAnnual('c_ipca'), contrib = initial + monthly * months;
+      const items = [];
+      for (let i=1; i<=count; i++) {
+        const product = document.getElementById(`fi_product_${i}`)?.value || 'cdb';
+        const cfg = fixedIncomeProducts[product] || fixedIncomeProducts.cdb;
+        const indexer = document.getElementById(`fi_indexer_${i}`)?.value || cfg.defaultIndexer;
+        const rateInput = num(`fi_rate_${i}`);
+        const annualRate = fixedAnnualRateFrom(indexer, rateInput, cdi, ipca);
+        const monthlyRate = annualToMonthly(annualRate);
+        const gross = compound(initial, monthly, monthlyRate, months);
+        const taxRate = cfg.tax === 'isento' ? 0 : taxRateByTerm(document.getElementById(`fi_tax_term_${i}`)?.value || 'auto', months);
+        const net = contrib + Math.max(0, gross - contrib) * (1 - taxRate);
+        items.push({ i, product, label: cfg.label, indexer, annualRate, gross, net, taxRate, contrib });
+      }
+      const best = items.reduce((a,b) => b.net > a.net ? b : a, items[0]);
+      const maxNet = Math.max(...items.map(x => x.net));
+      const rows = items.map(x => {
+        const grossIncome = Math.max(0, x.gross - x.contrib);
+        const taxValue = Math.max(0, x.gross - x.net);
+        const netIncome = Math.max(0, x.net - x.contrib);
+        const taxText = x.taxRate > 0 ? `IR estimado de ${(x.taxRate*100).toFixed(1).replace('.',',')}% sobre o rendimento` : 'Isento de IR para pessoa física nesta simulação';
+        return `<div class="comparison-row expanded-row"><div><b>${x.label}</b><br><span>${fixedIndexerText(x.indexer, x.annualRate)} · ${taxText}</span><div class="field-note">Bruto: ${brl(x.gross)} · Líquido: ${brl(x.net)} · Rendimento bruto: ${brl(grossIncome)} · IR estimado: ${brl(taxValue)} · Rendimento líquido: ${brl(netIncome)}</div></div><b>${brl(x.net)}</b></div>`;
+      }).join('');
+      const bars = items.map(x => `<div class="bar-line"><span>${x.label}</span><div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, (x.net/maxNet)*100)}%"></div></div><div class="field-note">Líquido: ${brl(x.net)}</div></div></div>`).join('');
+      const ranking = [...items].sort((a,b)=>b.net-a.net).map((x,idx)=>`${idx+1}º ${x.label}: ${brl(x.net)}`).join(' · ');
+      document.getElementById('cdbResult').classList.remove('result-placeholder'); document.getElementById('cdbResult').innerHTML = `<h3>Comparação líquida estimada</h3><div class="big-number">${best.label}</div><div class="subtle">Maior valor líquido estimado no prazo informado: ${brl(best.net)}. Ranking: ${ranking}.</div><div class="comparison-table">${rows}</div><div class="bar-chart">${bars}</div><div class="result-grid"><div class="mini-result"><span>Valor investido</span><b>${brl(contrib)}</b></div><div class="mini-result"><span>Prazo</span><b>${years.toFixed(1).replace('.',',')} anos</b></div><div class="mini-result"><span>Maior bruto</span><b>${brl(Math.max(...items.map(x=>x.gross)))}</b></div><div class="mini-result"><span>Diferença 1º x último</span><b>${brl(Math.max(...items.map(x=>x.net))-Math.min(...items.map(x=>x.net)))}</b></div></div><div class="notice"><b>Como ler:</b> valor bruto é o saldo antes de imposto; valor líquido é o saldo estimado depois do IR, quando houver. Produtos tributáveis usam IR regressivo sobre os rendimentos; produtos isentos foram tratados com IR zero para pessoa física. Não considera taxas, spread de compra/venda, marcação a mercado, risco de crédito ou liquidez.</div>${save ? '' : pdfResultAction('calcFixedIncome(true)')}`; showResultActions('cdbResult');
+      if (save) trackEvent('Comparador de Renda Fixa', { initial, monthly, years, cdi, ipca, items, best }, { resumo: `Melhor resultado: ${best.label} com ${brl(best.net)}` });
+    }
+
+    function fixedIndexerText(indexer, annualRate) {
+      const pct = (annualRate * 100).toFixed(2).replace('.', ',') + '% a.a.';
+      if (indexer === 'cdi') return `Resultado indexado ao CDI estimado, equivalente a ${pct}`;
+      if (indexer === 'ipca') return `Resultado indexado ao IPCA estimado + taxa, equivalente a ${pct}`;
+      if (indexer === 'pre') return `Taxa prefixada anual equivalente a ${pct}`;
+      if (indexer === 'poupanca') return `Taxa anual direta equivalente a ${pct}`;
+      return `Rentabilidade anual equivalente a ${pct}`;
+    }
+
+    function fixedAnnualRateFrom(indexer, rateInput, cdi, ipca) {
+      const r = rateInput / 100;
+      if (indexer === 'cdi') return cdi * (rateInput / 100);
+      if (indexer === 'pre' || indexer === 'poupanca') return r;
+      if (indexer === 'ipca') return (1 + ipca) * (1 + r) - 1;
+      return 0;
+    }
+
+    function taxRateByTerm(term, months) {
+      if (term === '180') return .225;
+      if (term === '360') return .20;
+      if (term === '720') return .175;
+      if (term === '721') return .15;
+      return taxRateByMonths(months);
+    }
+
+    function calcRetirement(save=false) {
+      if (!document.getElementById('r_age')) return;
+      const age = num('r_age'), retire = num('r_retire'), finalAge = num('r_final_age');
+      const monthsAccum = Math.max(1, Math.round((retire - age) * 12));
+      const monthsUse = Math.max(1, Math.round((finalAge - retire) * 12));
+      const monthsFinal = Math.max(1, Math.round((finalAge - age) * 12));
+      const initial = money('r_initial'), monthly = money('r_monthly') + money('r_extra') / 12, goalWealth = money('r_goal_wealth'), goalIncome = money('r_goal_income');
+      const inflation = percentAnnual('r_inflation'), grossAccumRate = percentAnnual('r_accum_rate'), grossRetRate = percentAnnual('r_ret_rate');
+      const taxEstimate = Math.max(0, Math.min(0.99, percentAnnual('r_tax_rate')));
+      const accumRate = Math.max(-0.99, grossAccumRate * (1 - taxEstimate));
+      const retRate = Math.max(-0.99, grossRetRate * (1 - taxEstimate));
+      const realAnnualAccum = (1 + accumRate) / (1 + inflation) - 1;
+      const realMonthlyAccum = annualToMonthly(realAnnualAccum);
+      const realAnnualRet = (1 + retRate) / (1 + inflation) - 1;
+      const realMonthlyRet = annualToMonthly(realAnnualRet);
+      const inflationFactorRet = Math.pow(1 + inflation, monthsAccum / 12);
+      const inflationFactorFinal = Math.pow(1 + inflation, monthsFinal / 12);
+      const futureReal = compound(initial, monthly, realMonthlyAccum, monthsAccum);
+      const futureNominal = futureReal * inflationFactorRet;
+      const incomeConsumeReal = paymentFromCapital(futureReal, realMonthlyRet, monthsUse);
+      const incomePreserveReal = realMonthlyRet > 0 ? futureReal * realMonthlyRet : 0;
+      const incomeConsumeNom = incomeConsumeReal * inflationFactorRet;
+      const incomePreserveNom = incomePreserveReal * inflationFactorRet;
+      const requiredMonthlyWealth = requiredMonthlyForGoal(goalWealth, initial, realMonthlyAccum, monthsAccum);
+      const incomeFromGoalConsume = paymentFromCapital(goalWealth, realMonthlyRet, monthsUse);
+      const incomeFromGoalPreserve = realMonthlyRet > 0 ? goalWealth * realMonthlyRet : 0;
+      const capitalIncomeConsume = capitalForIncome(goalIncome, realMonthlyRet, monthsUse, false);
+      const capitalIncomePreserve = capitalForIncome(goalIncome, realMonthlyRet, monthsUse, true);
+      const monthlyIncomeConsume = requiredMonthlyForGoal(capitalIncomeConsume, initial, realMonthlyAccum, monthsAccum);
+      const monthlyIncomePreserve = requiredMonthlyForGoal(capitalIncomePreserve, initial, realMonthlyAccum, monthsAccum);
+      const pct = v => `${(v * 100).toFixed(2).replace('.', ',')}% a.a.`;
+      const yearsUse = Math.round(monthsUse / 12);
+      document.getElementById('retirementResult').classList.remove('result-placeholder'); document.getElementById('retirementResult').innerHTML = `<h3>Situação atual projetada</h3><div class="big-number">${brl(futureReal)}</div><div class="subtle">Patrimônio real estimado na aposentadoria. Valor nominal estimado: ${brl(futureNominal)}.</div><div class="result-hero-note"><b>Premissa líquida usada:</b> rentabilidade bruta de ${pct(grossAccumRate)} na acumulação e ${pct(grossRetRate)} na aposentadoria, com IR estimado de ${(taxEstimate*100).toFixed(2).replace('.', ',')}% sobre os rendimentos. Rentabilidades líquidas aproximadas: ${pct(accumRate)} e ${pct(retRate)}.</div><div class="result-grid"><div class="mini-result"><span>Renda real - consumo</span><b>${brl(incomeConsumeReal)}</b><em class="explain">Renda em reais de hoje, consumindo gradualmente o patrimônio até os ${finalAge} anos.</em></div><div class="mini-result"><span>Renda real - preservar</span><b>${brl(incomePreserveReal)}</b><em class="explain">Renda em reais de hoje, buscando viver apenas da rentabilidade real líquida.</em></div><div class="mini-result"><span>Renda nominal - consumo</span><b>${brl(incomeConsumeNom)}</b><em class="explain">Valor futuro estimado já corrigido pela inflação até a aposentadoria.</em></div><div class="mini-result"><span>Renda nominal - preservar</span><b>${brl(incomePreserveNom)}</b><em class="explain">Renda futura estimada tentando manter o capital principal preservado.</em></div></div><div class="explain-pair"><div class="explain-card"><b>Consumo planejado</b>Considera uma retirada mensal com juros durante ${yearsUse} anos de aposentadoria. O patrimônio continua rendendo, mas pode ser consumido gradualmente até a idade final do plano.</div><div class="explain-card"><b>Preservação patrimonial</b>Considera retirar apenas o juro real líquido estimado. A ideia é preservar o capital principal em termos reais, gerando uma renda mais conservadora.</div></div><div class="comparison-table"><div class="comparison-row"><div><b>Para atingir a meta patrimonial</b><br><span>Meta real: ${brl(goalWealth)} · renda real consumo: ${brl(incomeFromGoalConsume)} · renda real preservação: ${brl(incomeFromGoalPreserve)}</span></div><b>${brl(requiredMonthlyWealth)}/mês</b></div><div class="comparison-row"><div><b>Para atingir a renda desejada</b><br><span>Capital real necessário no consumo planejado: ${brl(capitalIncomeConsume)} · preservando patrimônio: ${brl(capitalIncomePreserve)}</span></div><b>${brl(monthlyIncomeConsume)} a ${brl(monthlyIncomePreserve)}/mês</b></div></div><div class="notice"><b>Importante:</b> esta projeção usa uma estimativa simplificada de IR sobre os rendimentos. Custos, taxas, tipo de produto, regime tributário, mudanças de legislação e comportamento real dos mercados podem alterar o resultado.</div>${save ? '' : pdfResultAction('calcRetirement(true)')}`; showResultActions('retirementResult');
+      if (save) trackEvent('Calculadora de Aposentadoria', { age, retire, finalAge, initial, monthly, extra: money('r_extra'), goalWealth, goalIncome, inflation, grossAccumRate, grossRetRate, taxEstimate, accumRate, retRate, realAnnualAccum, realAnnualRet, futureReal, futureNominal, incomeConsumeReal, incomePreserveReal, incomeConsumeNom, incomePreserveNom, requiredMonthlyWealth, capitalIncomeConsume, capitalIncomePreserve, monthlyIncomeConsume, monthlyIncomePreserve }, { resumo: `Patrimônio real projetado: ${brl(futureReal)} | renda real consumo: ${brl(incomeConsumeReal)} | IR estimado: ${(taxEstimate*100).toFixed(2).replace('.', ',')}%` });
+    }
+
+    function paymentFromCapital(capital, monthlyRate, months) {
+      if (monthlyRate === 0) return capital / months;
+      return capital * monthlyRate / (1 - Math.pow(1 + monthlyRate, -months));
+    }
+    function requiredMonthlyForGoal(goal, initial, monthlyRate, months) {
+      if (goal <= initial) return 0;
+      if (monthlyRate === 0) return Math.max(0, (goal - initial) / months);
+      return Math.max(0, (goal - initial * Math.pow(1 + monthlyRate, months)) * monthlyRate / (Math.pow(1 + monthlyRate, months) - 1));
+    }
+    function capitalForIncome(income, monthlyRate, months, preserve) {
+      if (income <= 0) return 0;
+      if (preserve) return monthlyRate > 0 ? income / monthlyRate : income * months;
+      if (monthlyRate === 0) return income * months;
+      return income * (1 - Math.pow(1 + monthlyRate, -months)) / monthlyRate;
+    }
+
+    function calcEmergency(save=false) {
+      if (!document.getElementById('e_cost')) return;
+      const occupationRisk = Number(document.getElementById('e_occupation')?.value || 0), stabilityRisk = Number(document.getElementById('e_stability')?.value || 0), dependentsRisk = Number(document.getElementById('e_dependents')?.value || 0);
+      const income = money('e_income'), cost = money('e_cost'), current = money('e_current');
+      const monthsGoal = recommendedEmergencyMonths(occupationRisk, stabilityRisk, dependentsRisk);
+      const target = cost * monthsGoal;
+      const missing = Math.max(0, target - current);
+      const suggestedMonthly = Math.max(0, income * 0.10);
+      const months = suggestedMonthly > 0 ? Math.ceil(missing / suggestedMonthly) : Infinity;
+      const years = Number.isFinite(months) ? Math.floor(months / 12) : 0, rem = Number.isFinite(months) ? months % 12 : 0;
+      const profileLabel = emergencyProfileLabel(monthsGoal);
+      document.getElementById('emergencyResult').classList.remove('result-placeholder'); document.getElementById('emergencyResult').innerHTML = `<h3>Reserva recomendada</h3><div class="big-number">${brl(target)}</div><div class="subtle">Mini perfil: ${profileLabel}. Recomendação de ${monthsGoal} meses de custo de vida.</div><div class="result-grid"><div class="mini-result"><span>Falta formar</span><b>${brl(missing)}</b></div><div class="mini-result"><span>Aporte mínimo sugerido</span><b>${brl(suggestedMonthly)}</b></div><div class="mini-result"><span>Prazo estimado para formar</span><b>${Number.isFinite(months) ? `${years}a ${rem}m` : '—'}</b></div><div class="mini-result"><span>Reserva atual</span><b>${brl(current)}</b></div></div><div class="asset-list"><div><b>CDB DI com liquidez diária:</b> alternativa comum para reserva, priorizando liquidez e baixo risco de mercado.</div><div><b>Tesouro Selic:</b> pode ser usado como parte da reserva, respeitando prazos operacionais de resgate.</div><div><b>Fundo DI simples com taxa baixa:</b> pode facilitar gestão, desde que tenha liquidez adequada e baixo custo.</div></div><div class="notice"><b>Prazo estimado para formar:</b> mostra em quanto tempo a reserva recomendada seria completada se você direcionasse pelo menos 10% da renda mensal para esse objetivo. A reserva de emergência deve priorizar liquidez, segurança e baixa oscilação.</div>${save ? '' : pdfResultAction('calcEmergency(true)')}`; showResultActions('emergencyResult');
+      if (save) trackEvent('Reserva de Emergência', { occupationRisk, stabilityRisk, dependentsRisk, income, cost, monthsGoal, current, target, missing, suggestedMonthly, estimatedMonths: months, profileLabel }, { resumo: `Reserva recomendada: ${brl(target)} (${monthsGoal} meses) | aporte sugerido: ${brl(suggestedMonthly)}` });
+    }
+
+    function recommendedEmergencyMonths(occupationRisk, stabilityRisk, dependentsRisk) { return Math.max(3, Math.min(12, 3 + occupationRisk + stabilityRisk + dependentsRisk)); }
+    function emergencyProfileLabel(monthsGoal) { if (monthsGoal <= 4) return 'baixo risco de renda'; if (monthsGoal <= 6) return 'risco moderado'; if (monthsGoal <= 9) return 'risco elevado'; return 'risco alto de oscilação de renda e dependência financeira'; }
+
+    function annualToMonthly(annualRate) { return Math.pow(1 + annualRate, 1/12) - 1; }
+
+    function setupMoneyMasks() {
+      document.querySelectorAll('input[data-money]').forEach(input => {
+        if (input.dataset.maskReady === '1') return;
+        input.dataset.maskReady = '1';
+        if (input.value && !input.value.includes('R$')) input.value = brl(parseMoney(input.value));
+        input.addEventListener('blur', () => { input.value = brl(parseMoney(input.value)); });
+        input.addEventListener('focus', () => { setTimeout(() => input.select(), 0); });
+      });
+    }
+
+    function trackEvent(toolName, data, meta={}) {
+      const lead = getLead();
+      const event = {
+        id: `evt_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+        tool: toolName,
+        lead,
+        data,
+        resumo: meta.resumo || '',
+        createdAt: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      };
+      saveEventLocal(event);
+      sendEmail(event);
+      saveFirebase(event);
+      if (event.tool !== 'Novo cadastro') generateSimulationPdf(event);
+      showToast(event.tool === 'Novo cadastro' ? 'Ferramentas liberadas. Você pode continuar usando as simulações.' : 'Seu PDF foi gerado. Confira seus downloads.');
+    }
+
+    const COMPLIANCE_TEXT = 'Esta simulação tem caráter educativo e ilustrativo. Não constitui recomendação individual de investimento, consultoria tributária definitiva, promessa de rentabilidade ou garantia de resultado. A decisão adequada depende de análise individual completa, perfil de risco, objetivos, prazo, liquidez, patrimônio, renda, tributação, custos, documentação e condições vigentes no momento da contratação.';
+
+    function generateSimulationPdf(event) {
+      try {
+        const jsPDFLib = window.jspdf && window.jspdf.jsPDF;
+        if (!jsPDFLib) {
+          console.warn('jsPDF não carregado. O PDF não foi gerado.');
+          return;
+        }
+
+        const doc = new jsPDFLib({ unit: 'mm', format: 'a4', compress: true });
+        const pageW = 210, pageH = 297, margin = 12;
+        const content = buildPdfContent(event);
+        const now = new Date(event.createdAt || new Date().toISOString()).toLocaleString('pt-BR');
+        const leadName = event.lead?.name || 'Visitante';
+        const leadPhone = event.lead?.phone || 'WhatsApp não informado';
+
+        const fileSafeTool = String(event.tool || 'simulacao').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+        if ((event.tool || '') === 'Calculadora de Aposentadoria') {
+          renderRetirementPdf();
+          doc.save(`lgv_capital_${fileSafeTool}_${Date.now()}.pdf`);
+          return;
+        }
+
+        // Fundo e cabeçalho
+        doc.setFillColor(248, 247, 244);
+        doc.rect(0, 0, pageW, pageH, 'F');
+        doc.setFillColor(17, 17, 17);
+        doc.rect(0, 0, pageW, 24, 'F');
+        doc.setFillColor(239, 159, 39);
+        doc.rect(0, 0, pageW, 2.4, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(239, 159, 39);
+        doc.setFontSize(15);
+        doc.text('LGV CAPITAL', margin, 11);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(211, 209, 199);
+        doc.setFontSize(7.8);
+        doc.text('Resultado educativo gerado pelas ferramentas gratuitas', margin, 17);
+        doc.text(`${leadName} · ${leadPhone}`, pageW - margin, 10.5, { align: 'right' });
+        doc.text(now, pageW - margin, 16.7, { align: 'right' });
+
+        let y = 35;
+        doc.setTextColor(186, 117, 23);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.text(String(event.tool || 'SIMULAÇÃO').toUpperCase(), margin, y);
+        y += 7;
+        doc.setTextColor(17, 17, 17);
+        doc.setFontSize(18);
+        doc.text(content.title || 'Seu resultado financeiro', margin, y);
+        y += 5;
+        y = drawWrapped(content.subtitle || content.intro || event.resumo || '', margin, y + 5, pageW - margin * 2, 8.1, [82,76,69], 'normal', 4.1, 2) + 3;
+
+        // Card principal semelhante ao resultado da ferramenta
+        const heroH = content.mainNote ? 34 : 29;
+        drawHeroCard(margin, y, pageW - margin * 2, heroH, content.mainLabel || 'Resultado principal', content.mainValue || '—', content.mainNote || '');
+        y += heroH + 9;
+
+        // Premissas em cards compactos
+        if (content.premises && content.premises.length) {
+          drawSectionTitle('Premissas utilizadas', margin, y);
+          y += 5;
+          y = drawCardGrid(content.premises, margin, y, pageW - margin * 2, { cols: content.premises.length > 6 ? 3 : 2, h: 14.5, valueFont: 8.7, noteLines: 0 });
+          y += 6;
+        }
+
+        // Resultados principais em cards com notas próximas dos números
+        if (content.results && content.results.length) {
+          drawSectionTitle('Resultado da simulação', margin, y);
+          y += 5;
+          const resultCols = content.results.length > 6 ? 3 : 2;
+          y = drawCardGrid(content.results, margin, y, pageW - margin * 2, { cols: resultCols, h: resultCols === 3 ? 18 : 21, valueFont: resultCols === 3 ? 8.4 : 9.4, noteLines: resultCols === 3 ? 1 : 2 });
+          y += 6;
+        }
+
+        // Tabela de comparação/detalhes quando fizer sentido
+        if (content.table && content.table.rows && content.table.rows.length) {
+          drawSectionTitle(content.table.title || 'Detalhamento', margin, y);
+          y += 5;
+          y = drawCompactTable(content.table, margin, y, pageW - margin * 2, Math.min(6, content.table.rows.length));
+          y += 6;
+        }
+
+        // Explicações didáticas próximas dos resultados, mas sem estourar uma página
+        const complianceY = 244;
+        if (content.explanations && content.explanations.length && y < complianceY - 34) {
+          const available = complianceY - y - 7;
+          const maxExp = available > 38 ? Math.min(3, content.explanations.length) : Math.min(2, content.explanations.length);
+          y = drawExplanationGrid(content.explanations.slice(0, maxExp), margin, y, pageW - margin * 2, available);
+        } else if (content.note && y < complianceY - 20) {
+          drawNoticeBox(margin, y, pageW - margin * 2, 16, content.note);
+          y += 20;
+        }
+
+        // Aviso importante com destaque fixo no rodapé
+        drawComplianceBlock(247);
+        drawFooter();
+
+        doc.save(`lgv_capital_${fileSafeTool}_${Date.now()}.pdf`);
+
+        function renderRetirementPdf() {
+          const rd = event.data || {};
+          const realMonthlyRet = annualToMonthly(((1 + (Number(rd.retRate) || 0)) / (1 + (Number(rd.inflation) || 0)) - 1));
+          const monthsUse = Math.max(1, Math.round(((Number(rd.finalAge) || 0) - (Number(rd.retire) || 0)) * 12));
+          const incomeFromGoalConsume = paymentFromCapital(Number(rd.goalWealth) || 0, realMonthlyRet, monthsUse);
+          const incomeFromGoalPreserve = realMonthlyRet > 0 ? (Number(rd.goalWealth) || 0) * realMonthlyRet : 0;
+          const inflationFactorToRetire = Math.pow(1 + (Number(rd.inflation) || 0), Math.max(0, (Number(rd.retire) || 0) - (Number(rd.age) || 0)));
+          const incomeConsumeNomPdf = Number(rd.incomeConsumeNom) || ((Number(rd.incomeConsumeReal) || 0) * inflationFactorToRetire);
+          const incomePreserveNomPdf = Number(rd.incomePreserveNom) || ((Number(rd.incomePreserveReal) || 0) * inflationFactorToRetire);
+
+          doc.setFillColor(248, 247, 244);
+          doc.rect(0, 0, pageW, pageH, 'F');
+          doc.setFillColor(17, 17, 17);
+          doc.rect(0, 0, pageW, 24, 'F');
+          doc.setFillColor(239, 159, 39);
+          doc.rect(0, 0, pageW, 2.4, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(239, 159, 39);
+          doc.setFontSize(15);
+          doc.text('LGV CAPITAL', margin, 11);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(211, 209, 199);
+          doc.setFontSize(7.8);
+          doc.text('Projeção de aposentadoria', margin, 17);
+          doc.text(`${leadName} · ${leadPhone}`, pageW - margin, 10.5, { align: 'right' });
+          doc.text(now, pageW - margin, 16.7, { align: 'right' });
+
+          let y = 35;
+          drawHeroCard(margin, y, pageW - margin * 2, 28, 'Situação atual projetada', brl(Number(rd.futureReal) || 0), `Patrimônio real estimado na aposentadoria. Valor nominal estimado: ${brl(Number(rd.futureNominal) || 0)}.`);
+          y += 33;
+
+          const grossAccum = ((Number(rd.grossAccumRate) || 0) * 100).toFixed(2).replace('.', ',');
+          const grossRet = ((Number(rd.grossRetRate) || 0) * 100).toFixed(2).replace('.', ',');
+          const taxPct = ((Number(rd.taxEstimate) || 0) * 100).toFixed(2).replace('.', ',');
+          const netAccum = ((Number(rd.accumRate) || 0) * 100).toFixed(2).replace('.', ',');
+          const netRet = ((Number(rd.retRate) || 0) * 100).toFixed(2).replace('.', ',');
+          drawNoticeBox(margin, y, pageW - margin * 2, 17, `Premissa líquida usada: rentabilidade bruta de ${grossAccum}% a.a. na acumulação e ${grossRet}% a.a. na aposentadoria, com IR estimado de ${taxPct}% sobre os rendimentos. Rentabilidades líquidas aproximadas: ${netAccum}% e ${netRet}% a.a.`);
+          y += 21;
+
+          const gap = 6;
+          const half = (pageW - margin * 2 - gap) / 2;
+          drawSectionTitle('Premissas da simulação', margin, y);
+          drawSectionTitle('Resultado da simulação', margin + half + gap, y);
+          const premItems = [
+            { label: 'Idade atual', value: `${rd.age || '—'} anos` },
+            { label: 'Aposentadoria', value: `${rd.retire || '—'} anos` },
+            { label: 'Idade final', value: `${rd.finalAge || '—'} anos` },
+            { label: 'Patrimônio atual', value: brl(Number(rd.initial) || 0) },
+            { label: 'Aporte mensal', value: brl(Number(rd.monthly) || 0) },
+            { label: 'Meta patrimonial', value: brl(Number(rd.goalWealth) || 0) },
+            { label: 'Meta renda real', value: brl(Number(rd.goalIncome) || 0) },
+            { label: 'Inflação anual', value: `${((Number(rd.inflation) || 0) * 100).toFixed(2).replace('.', ',')}% a.a.` },
+            { label: 'Rentab. líquida acum.', value: `${((Number(rd.accumRate) || 0) * 100).toFixed(2).replace('.', ',')}% a.a.` },
+            { label: 'Rentab. líquida aposent.', value: `${((Number(rd.retRate) || 0) * 100).toFixed(2).replace('.', ',')}% a.a.` }
+          ];
+          const resultItems = [
+            { label: 'Renda real - consumo', value: brl(Number(rd.incomeConsumeReal) || 0), note: `Renda em reais de hoje, consumindo gradualmente o patrimônio até os ${rd.finalAge || '—'} anos.` },
+            { label: 'Renda real - preservar', value: brl(Number(rd.incomePreserveReal) || 0), note: 'Renda em reais de hoje, buscando viver apenas da rentabilidade real líquida.' },
+            { label: 'Renda nominal - consumo', value: brl(incomeConsumeNomPdf), note: 'Valor futuro estimado já corrigido pela inflação até a aposentadoria.' },
+            { label: 'Renda nominal - preservar', value: brl(incomePreserveNomPdf), note: 'Renda futura estimada tentando manter o capital principal preservado.' }
+          ];
+          const leftEnd = drawCardGrid(premItems, margin, y + 5, half, { cols: 2, h: 12.5, valueFont: 7.2, noteLines: 0 });
+          const rightEnd = drawCardGrid(resultItems, margin + half + gap, y + 5, half, { cols: 2, h: 20.5, valueFont: 8.6, noteLines: 2 });
+          y = Math.max(leftEnd, rightEnd) + 6;
+
+          y = drawExplanationGrid([
+            { title: 'Consumo planejado', text: `Considera uma retirada mensal com juros durante ${Math.max(0, (Number(rd.finalAge) || 0) - (Number(rd.retire) || 0))} anos de aposentadoria. O patrimônio continua rendendo, mas pode ser consumido gradualmente.` },
+            { title: 'Preservação patrimonial', text: 'Considera retirar apenas o juro real líquido estimado. A ideia é preservar o capital principal em termos reais, gerando uma renda mais conservadora.' }
+          ], margin, y, pageW - margin * 2, 26) + 6;
+
+          y = drawSummaryRow('Para atingir a meta patrimonial', `Meta real: ${brl(Number(rd.goalWealth) || 0)} · renda real consumo: ${brl(incomeFromGoalConsume)} · renda real preservação: ${brl(incomeFromGoalPreserve)}`, `${brl(Number(rd.requiredMonthlyWealth) || 0)}/mês`, margin, y, pageW - margin * 2);
+          y += 4;
+          y = drawSummaryRow('Para atingir a renda desejada', `Capital real necessário no consumo planejado: ${brl(Number(rd.capitalIncomeConsume) || 0)} · preservando patrimônio: ${brl(Number(rd.capitalIncomePreserve) || 0)}`, `${brl(Number(rd.monthlyIncomeConsume) || 0)} a ${brl(Number(rd.monthlyIncomePreserve) || 0)}/mês`, margin, y, pageW - margin * 2);
+
+          drawComplianceBlock(246);
+          drawFooter();
+        }
+
+        function drawSummaryRow(title, text, value, x, yy, w) {
+          doc.setFillColor(255, 255, 255);
+          doc.setDrawColor(232, 226, 215);
+          doc.roundedRect(x, yy, w, 17, 3, 3, 'FD');
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(17, 17, 17);
+          doc.setFontSize(7.5);
+          doc.text(title, x + 4, yy + 6);
+          drawWrapped(text, x + 4, yy + 10.4, w - 62, 6.05, [113,107,99], 'normal', 2.95, 2);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(fitFont(String(value), 10.2, 46));
+          doc.text(String(value), x + w - 4, yy + 10.5, { align: 'right' });
+          return yy + 17;
+        }
+
+        function drawSectionTitle(label, x, yy) {
+          doc.setTextColor(186, 117, 23);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8.2);
+          doc.text(String(label).toUpperCase(), x, yy);
+        }
+
+        function drawWrapped(text, x, yy, width, fontSize=8, color=[55,51,47], weight='normal', lineH=4, maxLines=3) {
+          doc.setFont('helvetica', weight);
+          doc.setFontSize(fontSize);
+          doc.setTextColor(color[0], color[1], color[2]);
+          let lines = doc.splitTextToSize(String(text || ''), width);
+          if (maxLines && lines.length > maxLines) lines = lines.slice(0, maxLines - 1).concat([String(lines[maxLines - 1]).replace(/\.*$/, '') + '…']);
+          lines.forEach((line, i) => doc.text(line, x, yy + i * lineH));
+          return yy + Math.max(1, lines.length) * lineH;
+        }
+
+        function drawHeroCard(x, yy, w, h, label, value, note) {
+          doc.setFillColor(255, 255, 255);
+          doc.setDrawColor(227, 220, 207);
+          doc.roundedRect(x, yy, w, h, 4, 4, 'FD');
+          doc.setFillColor(239, 159, 39);
+          doc.roundedRect(x, yy, 3.2, h, 4, 4, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7.2);
+          doc.setTextColor(186, 117, 23);
+          doc.text(String(label).toUpperCase(), x + 6, yy + 8);
+          doc.setTextColor(17, 17, 17);
+          doc.setFontSize(fitFont(String(value), 25, w - 14));
+          doc.text(String(value), x + 6, yy + 20);
+          if (note) drawWrapped(note, x + 6, yy + 27, w - 12, 7.3, [82,76,69], 'normal', 3.7, 2);
+        }
+
+        function drawCardGrid(items, x, yy, w, opts) {
+          const cols = opts.cols || 2;
+          const gap = 4;
+          const cardW = (w - gap * (cols - 1)) / cols;
+          const h = opts.h || 18;
+          const valueFont = opts.valueFont || 9;
+          const noteLines = opts.noteLines || 0;
+          items.forEach((item, i) => {
+            const cx = x + (i % cols) * (cardW + gap);
+            const cy = yy + Math.floor(i / cols) * (h + 4);
+            doc.setFillColor(255, 255, 255);
+            doc.setDrawColor(232, 226, 215);
+            doc.roundedRect(cx, cy, cardW, h, 3, 3, 'FD');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(6.1);
+            doc.setTextColor(113, 107, 99);
+            doc.text(String(item.label || '').toUpperCase().slice(0, 34), cx + 4, cy + 5);
+            doc.setFontSize(fitFont(String(item.value || '—'), valueFont, cardW - 8));
+            doc.setTextColor(17, 17, 17);
+            doc.text(String(item.value || '—'), cx + 4, cy + 10.8);
+            if (item.note && noteLines) drawWrapped(item.note, cx + 4, cy + 15, cardW - 8, 5.8, [113,107,99], 'italic', 2.8, noteLines);
+          });
+          return yy + Math.ceil(items.length / cols) * (h + 4) - 4;
+        }
+
+        function drawExplanationGrid(items, x, yy, w, available) {
+          const cols = items.length > 1 ? 2 : 1;
+          const gap = 4;
+          const boxW = (w - gap * (cols - 1)) / cols;
+          const rows = Math.ceil(items.length / cols);
+          const h = Math.max(16, Math.min(24, (available - (rows - 1) * 4) / rows));
+          items.forEach((item, i) => {
+            const cx = x + (i % cols) * (boxW + gap);
+            const cy = yy + Math.floor(i / cols) * (h + 4);
+            doc.setFillColor(255, 248, 238);
+            doc.setDrawColor(239, 159, 39);
+            doc.roundedRect(cx, cy, boxW, h, 3, 3, 'FD');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7.2);
+            doc.setTextColor(17, 17, 17);
+            doc.text(String(item.title || 'Leitura').slice(0, 38), cx + 4, cy + 6);
+            drawWrapped(item.text || '', cx + 4, cy + 11, boxW - 8, 6.1, [82,76,69], 'normal', 3.1, Math.max(2, Math.floor((h - 10) / 3.1)));
+          });
+          return yy + rows * (h + 4) - 4;
+        }
+
+        function drawCompactTable(table, x, yy, w, maxRows=6) {
+          const headers = table.headers || [];
+          const rows = (table.rows || []).slice(0, maxRows);
+          const colCount = headers.length || (rows[0] ? rows[0].length : 2);
+          const colW = w / colCount;
+          doc.setFillColor(17, 17, 17);
+          doc.roundedRect(x, yy, w, 8, 2, 2, 'F');
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(6.5);
+          doc.setTextColor(239, 159, 39);
+          headers.forEach((h, i) => doc.text(String(h).slice(0, 22), x + 3 + i * colW, yy + 5.3));
+          let cy = yy + 8;
+          rows.forEach((r, ri) => {
+            if (ri % 2 === 0) { doc.setFillColor(255, 255, 255); doc.rect(x, cy, w, 7.6, 'F'); }
+            doc.setTextColor(55, 51, 47);
+            doc.setFont('helvetica', ri === 0 ? 'bold' : 'normal');
+            doc.setFontSize(6.35);
+            r.forEach((cell, i) => doc.text(String(cell || '—').slice(0, 24), x + 3 + i * colW, cy + 5));
+            cy += 7.6;
+          });
+          if ((table.rows || []).length > rows.length) {
+            doc.setTextColor(113, 107, 99);
+            doc.setFont('helvetica', 'italic');
+            doc.setFontSize(6.2);
+            doc.text(`+ ${(table.rows || []).length - rows.length} item(ns) adicionais resumidos no resultado da ferramenta.`, x, cy + 4);
+            cy += 5;
+          }
+          return cy;
+        }
+
+        function drawNoticeBox(x, yy, w, h, text) {
+          doc.setFillColor(255, 248, 238);
+          doc.setDrawColor(243, 212, 162);
+          doc.roundedRect(x, yy, w, h, 3, 3, 'FD');
+          drawWrapped(text, x + 5, yy + 6, w - 10, 7.2, [77,70,63], 'normal', 3.6, 3);
+        }
+
+        function drawComplianceBlock(y0) {
+          doc.setFillColor(255, 248, 238);
+          doc.setDrawColor(239, 159, 39);
+          doc.setLineWidth(.55);
+          doc.roundedRect(margin, y0, pageW - margin * 2, 28, 3, 3, 'FD');
+          doc.setFillColor(239, 159, 39);
+          doc.roundedRect(margin, y0, 3, 28, 3, 3, 'F');
+          doc.setTextColor(17, 17, 17);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7.8);
+          doc.text('AVISO IMPORTANTE', margin + 6, y0 + 7);
+          drawWrapped(COMPLIANCE_TEXT, margin + 6, y0 + 12, pageW - margin * 2 - 12, 6.2, [70,64,58], 'normal', 3.0, 5);
+        }
+
+        function drawFooter() {
+          doc.setTextColor(95, 94, 90);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(6.2);
+          doc.text('Lucas Gomes Viana · Consultor Financeiro · Consultor de Investimentos CVM · ANBIMA: CPA e C-PRO R', margin, 287);
+          doc.text('lgv.financeira@gmail.com · @lucas.gviana · WhatsApp: (86) 99988-3823 · Teresina - PI', margin, 291.5);
+        }
+
+        function fitFont(text, maxSize, maxWidth) {
+          let size = maxSize;
+          doc.setFont('helvetica', 'bold');
+          while (size > 6) {
+            doc.setFontSize(size);
+            if (doc.getTextWidth(String(text)) <= maxWidth) return size;
+            size -= .5;
+          }
+          return size;
+        }
+      } catch (err) {
+        console.warn('Falha ao gerar PDF', err);
+      }
+    }
+
+    function buildPdfContent(event) {
+      const d = event.data || {};
+      const tool = event.tool || 'Simulação';
+      const moneyFmt = v => brl(Number(v) || 0);
+      const pctFmt = v => `${((Number(v) || 0) * 100).toFixed(2).replace('.', ',')}%`;
+      const pctAa = v => `${((Number(v) || 0) * 100).toFixed(2).replace('.', ',')}% a.a.`;
+
+      if (tool === 'Calculadora PGBL') {
+        const novo = Number(d.novoSaldo || 0);
+        return {
+          title: 'Eficiência fiscal com PGBL',
+          subtitle: 'Estimativa rápida de quanto imposto poderia ser direcionado para previdência dentro do limite fiscal eficiente.',
+          mainLabel: 'Economia fiscal estimada',
+          mainValue: moneyFmt(d.economiaFiscal),
+          mainNote: 'Você poderia transformar parte do imposto em patrimônio, respeitando o limite fiscal eficiente.',
+          premises: [
+            { label: 'Renda tributável anual', value: moneyFmt(d.rendaTributavel) },
+            { label: 'Modelo completo', value: d.modeloCompleto ? 'Sim' : 'Não / dúvida' },
+            { label: 'PGBL já aportado', value: moneyFmt(d.pgblJaAportado) },
+            { label: 'Imposto devido atual', value: moneyFmt(d.impostoDevido) },
+            { label: 'Resultado informado', value: `${d.tipoResultado === 'a_pagar' ? 'A pagar' : 'A restituir'}` },
+            { label: 'Valor informado', value: moneyFmt(d.valorResultado) }
+          ],
+          results: [
+            { label: 'Limite PGBL 12%', value: moneyFmt(d.limitePgbl), note: 'Limite fiscal estimado' },
+            { label: 'Espaço disponível', value: moneyFmt(d.espacoDisponivel), note: 'Dentro do limite anual' },
+            { label: 'Aporte simulado', value: moneyFmt(d.aporteSimulado), note: 'Valor usado na conta' },
+            { label: 'Aporte mensal equivalente', value: moneyFmt((Number(d.aporteSimulado)||0)/12), note: 'Divisão em 12 meses' },
+            { label: novo < 0 ? 'Restituição estimada' : 'Novo saldo estimado', value: moneyFmt(Math.abs(novo)), note: novo < 0 ? 'Possível restituição' : 'Possível imposto a pagar' },
+            { label: 'Economia fiscal', value: moneyFmt(d.economiaFiscal), note: 'Estimativa ilustrativa' }
+          ],
+          explanations: [
+            { title: 'Leitura prática', text: 'O PGBL pode reduzir a base tributável quando usado dentro do limite fiscal e no modelo completo.' },
+            { title: 'Atenção', text: 'O resultado depende dos dados completos da declaração, retenções, deduções e valores já aplicados.' }
+          ]
+        };
+      }
+
+      if (tool === 'Perfil de Investidor') {
+        const alloc = d.allocations || {};
+        return {
+          title: 'Diagnóstico de perfil de investidor',
+          subtitle: `Resultado inicial: ${d.profile || 'perfil identificado'}.`,
+          mainLabel: 'Perfil inicial',
+          mainValue: d.profile || '—',
+          mainNote: 'Diagnóstico educativo que considera comportamento, estrutura financeira, reserva, horizonte e conhecimento.',
+          premises: [
+            { label: 'Pontuação interna', value: String(d.score || '—') },
+            { label: 'Ajustes aplicados', value: d.notes && d.notes.length ? `${d.notes.length} ajuste(s)` : 'Nenhum' }
+          ],
+          results: Object.entries(alloc).map(([k, v]) => ({ label: k, value: `${v}%`, note: k === 'Renda Fixa' ? 'Base defensiva' : k === 'Cripto' ? 'Alternativo' : 'Diversificação' })),
+          explanations: [
+            { title: 'Como interpretar', text: (d.notes && d.notes[0]) || 'A alocação apresentada é apenas uma referência educativa inicial.' },
+            { title: 'Próximo passo', text: 'A carteira adequada depende de entrevista, objetivos, patrimônio, prazo e tolerância real a risco.' }
+          ]
+        };
+      }
+
+      if (tool === 'Calculadora do Primeiro Milhão') {
+        const tempo = d.mode !== 'aporte';
+        return {
+          title: 'Caminho até o objetivo financeiro',
+          subtitle: 'Estimativa para alcançar seu objetivo com juros compostos e aportes mensais.',
+          mainLabel: tempo ? 'Tempo estimado' : 'Aporte mensal necessário',
+          mainValue: tempo ? `${d.years || 0} anos e ${d.months || 0} meses` : moneyFmt(d.requiredMonthly),
+          mainNote: tempo ? `Para alcançar ${moneyFmt(d.goal)} com o aporte informado.` : `Para alcançar ${moneyFmt(d.goal)} no prazo desejado.`,
+          premises: [
+            { label: 'Objetivo financeiro', value: moneyFmt(d.goal) },
+            { label: 'Patrimônio inicial', value: moneyFmt(d.initial) },
+            { label: 'Rentabilidade anual', value: pctAa(d.annualRate) },
+            { label: tempo ? 'Aporte mensal' : 'Prazo desejado', value: tempo ? moneyFmt(d.monthly) : `${d.yearsTarget || d.years || '—'} anos` }
+          ],
+          results: [
+            { label: tempo ? 'Tempo estimado' : 'Aporte necessário', value: tempo ? `${d.years || 0}a ${d.months || 0}m` : moneyFmt(d.requiredMonthly), note: 'Estimativa aproximada' },
+            { label: 'Patrimônio projetado', value: moneyFmt(d.finalBalance || d.balance || d.goal), note: 'No fim da simulação' },
+            { label: 'Total investido', value: moneyFmt(d.totalContrib), note: 'Inicial + aportes' },
+            { label: 'Juros estimados', value: moneyFmt(d.interest), note: 'Efeito dos juros compostos' }
+          ],
+          explanations: [
+            { title: 'Juros compostos', text: 'Prazo, aporte e rentabilidade têm grande impacto no resultado final.' },
+            { title: 'Importante', text: 'A rentabilidade futura não é garantida e pode variar ao longo do tempo.' }
+          ]
+        };
+      }
+
+      if (tool === 'Comparador de Renda Fixa') {
+        const items = d.items || [];
+        const best = d.best || items[0] || {};
+        const contrib = Number(d.initial || 0) + Number(d.monthly || 0) * Math.round(Number(d.years || 0) * 12);
+        return {
+          title: 'Comparação de renda fixa',
+          subtitle: `Comparação líquida estimada entre ${items.length || 0} investimento(s) de renda fixa.`,
+          mainLabel: 'Melhor resultado líquido',
+          mainValue: best.label || '—',
+          mainNote: best.net ? `Valor líquido estimado: ${moneyFmt(best.net)}.` : 'Resultado conforme premissas informadas.',
+          premises: [
+            { label: 'Valor inicial', value: moneyFmt(d.initial) },
+            { label: 'Aporte mensal', value: moneyFmt(d.monthly) },
+            { label: 'Prazo', value: `${String(d.years || '—').replace('.', ',')} anos` },
+            { label: 'CDI estimado', value: pctAa(d.cdi) },
+            { label: 'IPCA estimado', value: pctAa(d.ipca) },
+            { label: 'Valor investido', value: moneyFmt(contrib) }
+          ],
+          results: items.map((x, i) => ({ label: `${i+1}º · ${x.label}`, value: moneyFmt(x.net), note: `Bruto ${moneyFmt(x.gross)} · IR ${moneyFmt(x.tax)}` })),
+          table: {
+            title: 'Detalhe dos ativos comparados',
+            headers: ['Ativo', 'Bruto', 'IR', 'Líquido'],
+            rows: items.map(x => [x.label, moneyFmt(x.gross), moneyFmt(x.tax), moneyFmt(x.net)])
+          },
+          explanations: [
+            { title: 'Líquido x bruto', text: 'O valor líquido considera a tributação quando aplicável. Produtos isentos foram simulados com IR zero para pessoa física.' }
+          ]
+        };
+      }
+
+      if (tool === 'Calculadora de Aposentadoria') {
+        return {
+          title: 'Projeção de aposentadoria',
+          subtitle: 'Estimativa de patrimônio e renda futura considerando inflação e IR estimado sobre rendimentos.',
+          mainLabel: 'Situação atual projetada',
+          mainValue: moneyFmt(d.futureReal),
+          mainNote: `Patrimônio real estimado na aposentadoria. Valor nominal estimado: ${moneyFmt(d.futureNominal)}.`,
+          premises: [
+            { label: 'Idade atual', value: `${d.age || '—'} anos` },
+            { label: 'Aposentadoria', value: `${d.retire || '—'} anos` },
+            { label: 'Idade final', value: `${d.finalAge || '—'} anos` },
+            { label: 'Patrimônio atual', value: moneyFmt(d.initial) },
+            { label: 'Aporte mensal', value: moneyFmt(d.monthly) },
+            { label: 'Aporte anual extra', value: moneyFmt(d.extra) },
+            { label: 'Inflação anual', value: pctAa(d.inflation) },
+            { label: 'IR estimado', value: pctFmt(d.taxEstimate) },
+            { label: 'Rentab. líquida acum.', value: pctAa(d.accumRate) },
+            { label: 'Rentab. líquida aposent.', value: pctAa(d.retRate) }
+          ],
+          results: [
+            { label: 'Patrimônio real', value: moneyFmt(d.futureReal), note: 'Em reais de hoje' },
+            { label: 'Patrimônio nominal', value: moneyFmt(d.futureNominal), note: 'Valor futuro estimado' },
+            { label: 'Renda real consumo', value: moneyFmt(d.incomeConsumeReal), note: 'Consumindo gradualmente' },
+            { label: 'Renda real preservar', value: moneyFmt(d.incomePreserveReal), note: 'Preservando capital' },
+            { label: 'Renda nominal consumo', value: moneyFmt(d.incomeConsumeNom), note: 'Corrigida pela inflação' },
+            { label: 'Renda nominal preservar', value: moneyFmt(d.incomePreserveNom), note: 'Renda futura estimada' },
+            { label: 'Aporte meta patrimonial', value: `${moneyFmt(d.requiredMonthlyWealth)}/mês`, note: 'Para atingir patrimônio' },
+            { label: 'Aporte renda desejada', value: `${moneyFmt(d.monthlyIncomeConsume)} a ${moneyFmt(d.monthlyIncomePreserve)}/mês`, note: 'Faixa estimada' }
+          ],
+          explanations: [
+            { title: 'Consumo planejado', text: `Considera retirada mensal com juros durante ${d.yearsUse || Math.max(0,(d.finalAge||0)-(d.retire||0))} anos. O patrimônio continua rendendo, mas pode ser consumido gradualmente.` },
+            { title: 'Preservação patrimonial', text: 'Considera retirar apenas o juro real líquido estimado, buscando preservar o capital principal em termos reais.' }
+          ]
+        };
+      }
+
+      if (tool === 'Reserva de Emergência') {
+        const months = Number.isFinite(d.estimatedMonths) ? `${Math.floor(d.estimatedMonths / 12)}a ${d.estimatedMonths % 12}m` : '—';
+        return {
+          title: 'Reserva de emergência',
+          subtitle: 'Estimativa de reserva mínima baseada em ocupação, estabilidade de renda, dependentes e custo mensal.',
+          mainLabel: 'Reserva recomendada',
+          mainValue: moneyFmt(d.target),
+          mainNote: `Equivale a aproximadamente ${d.monthsGoal || 0} meses do seu custo de vida mensal.`,
+          premises: [
+            { label: 'Renda mensal', value: moneyFmt(d.income) },
+            { label: 'Custo mensal', value: moneyFmt(d.cost) },
+            { label: 'Reserva atual', value: moneyFmt(d.current) },
+            { label: 'Perfil do risco', value: d.profileLabel || '—' }
+          ],
+          results: [
+            { label: 'Reserva recomendada', value: moneyFmt(d.target), note: `${d.monthsGoal || 0} meses de custo` },
+            { label: 'Falta formar', value: moneyFmt(d.missing), note: 'Diferença para a meta' },
+            { label: 'Aporte sugerido', value: moneyFmt(d.suggestedMonthly), note: 'Mínimo de 10% da renda' },
+            { label: 'Prazo estimado', value: months, note: 'Até completar a reserva' }
+          ],
+          explanations: [
+            { title: 'Onde manter', text: 'A reserva deve priorizar liquidez, segurança e baixa oscilação. Exemplos: CDB DI liquidez diária, Tesouro Selic ou fundo DI simples de baixa taxa.' },
+            { title: 'Como interpretar', text: 'Quanto maior a oscilação da renda e o número de dependentes, maior tende a ser a reserva necessária.' }
+          ]
+        };
+      }
+
+      const entries = Object.entries(d || {}).filter(([k]) => !['id','lead','userAgent'].includes(k));
+      return {
+        title: tool,
+        subtitle: event.resumo || 'Resultado gerado pelas ferramentas gratuitas da LGV Capital.',
+        mainLabel: 'Resultado',
+        mainValue: 'Simulação salva',
+        mainNote: event.resumo || '',
+        premises: entries.slice(0, 6).map(([k,v]) => ({ label: humanizeKey(k), value: formatGenericPdfValue(v) })),
+        results: entries.slice(6, 12).map(([k,v]) => ({ label: humanizeKey(k), value: formatGenericPdfValue(v) })),
+        explanations: [{ title: 'Leitura', text: event.resumo || 'Use este resultado como referência educativa inicial.' }]
+      };
+    }
+    function humanizeKey(key) {
+      return String(key).replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, c => c.toUpperCase());
+    }
+    function formatGenericPdfValue(value) {
+      if (typeof value === 'number') {
+        if (Math.abs(value) < 1 && Math.abs(value) > 0) return `${(value * 100).toFixed(2).replace('.', ',')}%`;
+        return Math.abs(value) >= 1000 ? brl(value) : String(value).replace('.', ',');
+      }
+      if (Array.isArray(value)) return `${value.length} item(ns)`;
+      if (value && typeof value === 'object') return 'ver resumo';
+      return value ?? '—';
+    }
+
+    function saveEventLocal(event) {
+      const events = JSON.parse(localStorage.getItem(STORAGE_KEYS.events) || '[]');
+      events.push(event);
+      localStorage.setItem(STORAGE_KEYS.events, JSON.stringify(events.slice(-80)));
+    }
+    let emailJsInitialized = false;
+    function sendEmail(event) {
+      if (!LGV_CONFIG.emailjs.enabled || !window.emailjs || !LGV_CONFIG.emailjs.publicKey || !LGV_CONFIG.emailjs.serviceId || !LGV_CONFIG.emailjs.templateId) {
+        console.info('EmailJS não configurado. Evento salvo localmente:', event);
+        return;
+      }
+      try {
+        if (!emailJsInitialized) {
+          emailjs.init({ publicKey: LGV_CONFIG.emailjs.publicKey });
+          emailJsInitialized = true;
+        }
+        const params = {
+          to_email: LGV_CONFIG.emailTo,
+          lead_nome: event.lead?.name || 'Sem cadastro',
+          lead_whatsapp: event.lead?.phone || 'Sem telefone',
+          ferramenta: event.tool,
+          resumo: event.resumo,
+          detalhes: JSON.stringify(event.data, null, 2),
+          data_hora: new Date(event.createdAt).toLocaleString('pt-BR')
+        };
+        emailjs.send(LGV_CONFIG.emailjs.serviceId, LGV_CONFIG.emailjs.templateId, params)
+          .catch(err => console.warn('Falha ao enviar e-mail', err));
+      } catch (err) {
+        console.warn('Falha ao inicializar/enviar EmailJS', err);
+      }
+    }
+    async function saveFirebase(event) {
+      if (!LGV_CONFIG.firebase.enabled || !LGV_CONFIG.firebase.config.projectId) return;
+      try {
+        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+        const { getFirestore, collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+        const app = initializeApp(LGV_CONFIG.firebase.config);
+        const db = getFirestore(app);
+        if (event.tool === 'Novo cadastro') await addDoc(collection(db, 'leads'), { ...event.lead, createdAtServer: serverTimestamp() });
+        else await addDoc(collection(db, 'simulacoes'), { ...event, createdAtServer: serverTimestamp() });
+      } catch (err) { console.warn('Falha ao salvar no Firebase', err); }
+    }
+
+    function money(id) { return parseMoney(document.getElementById(id).value); }
+    function num(id) { return parseNumber(document.getElementById(id).value); }
+    function percentMonth(id) { return parseNumber(document.getElementById(id).value) / 100; }
+    function percentAnnual(id) { return parseNumber(document.getElementById(id).value) / 100; }
+    function parseMoney(value) { return parseNumber(String(value).replace(/R\$|\s/g, '')); }
+    function parseNumber(value) {
+      const raw = String(value || '0').trim().replace(/\./g, '').replace(',', '.').replace(/[^0-9.-]/g, '');
+      const n = Number(raw);
+      return Number.isFinite(n) ? n : 0;
+    }
+    function brl(value) { return (Number(value) || 0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' }); }
+    function avg(arr) { return arr.reduce((a,b) => a+b, 0) / arr.length; }
+    function compound(initial, monthly, rate, months) {
+      let balance = initial;
+      for (let i=0; i<months; i++) balance = balance * (1 + rate) + monthly;
+      return balance;
+    }
+    function taxRateByMonths(months) {
+      if (months <= 6) return .225;
+      if (months <= 12) return .20;
+      if (months <= 24) return .175;
+      return .15;
+    }
+    function showToast(message) {
+      const el = document.getElementById('toast');
+      el.textContent = message;
+      el.classList.add('active');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => el.classList.remove('active'), 3600);
+    }
+  </script>
+
+  <nav class="mobile-dock" aria-label="Navegação mobile">
+    <a href="#inicio"><span class="dock-ico">⌂</span><span>Início</span></a>
+    <a href="#ferramentas"><span class="dock-ico">◈</span><span>Ferramentas</span></a>
+    <button type="button" onclick="openTool('pgbl')"><span class="dock-ico">◆</span><span>PGBL</span></button>
+    <a href="https://wa.me/5586999883823" target="_blank" rel="noopener"><span class="dock-ico">☏</span><span>WhatsApp</span></a>
+  </nav>
+
+</body>
+</html>
